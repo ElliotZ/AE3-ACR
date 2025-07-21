@@ -41,10 +41,4 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Rpr\QtUI\Hotkey\" />
-    <Folder Include="Rpr\SlotResolvers\FixedSeq\" />
-    <Folder Include="Rpr\Triggers\" />
-  </ItemGroup>
-
 </Project>

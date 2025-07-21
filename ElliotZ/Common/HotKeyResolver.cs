@@ -4,12 +4,7 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ElliotZ.Common;
 
