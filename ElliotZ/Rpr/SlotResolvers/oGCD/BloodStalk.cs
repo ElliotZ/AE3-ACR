@@ -2,14 +2,8 @@
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using ElliotZ.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ElliotZ.Rpr.SlotResolvers.oGCD;
 
@@ -17,8 +11,8 @@ public class BloodStalk : ISlotResolver
 {
     public int Check()
     {
-        if (SpellsDef.BloodStalk.IsUnlock() == false) return -99;
-        if (Core.Resolve<JobApi_Reaper>().SoulGauge < 50) return -1;
+        if (SpellsDef.BloodStalk.GetSpell().IsReadyWithCanCast() == false) { return -99; }
+        //if (Core.Resolve<JobApi_Reaper>().SoulGauge < 50) return -1;
         // add QT
         // may be more conditions
         return 0;
@@ -28,7 +22,7 @@ public class BloodStalk : ISlotResolver
     {
         var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 8, 180);
 
-        if (enemyCount >= 4 && SpellsDef.GrimSwathe.IsUnlock()) return SpellsDef.GrimSwathe;
+        if (enemyCount >= 4 && SpellsDef.GrimSwathe.IsUnlock()) { return SpellsDef.GrimSwathe; }
         return SpellsDef.BloodStalk;
     }
 

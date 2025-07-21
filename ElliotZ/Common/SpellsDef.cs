@@ -1118,6 +1118,11 @@ namespace ElliotZ.Common
         public const uint ArcaneCrest = 24404;
         public const uint ArcaneCircle = 24405;
 
+        // DT
+        public const uint Perfectio = 39673;
+        public const uint Sacrificium = 36969;
+
+
         #endregion
 
         //PVP

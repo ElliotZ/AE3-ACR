@@ -5,11 +5,6 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using ElliotZ.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ElliotZ.Rpr.SlotResolvers.GCD;
 
@@ -27,7 +22,7 @@ public class Base : ISlotResolver
     {
         if (Core.Me.Distance(Core.Me.GetCurrTarget()) > SettingMgr.GetSetting<GeneralSettings>().AttackRange)
         {
-            return -1;
+            return -2;  // -2 for not in range
         }
         return 0;
     }
@@ -38,12 +33,12 @@ public class Base : ISlotResolver
 
         if (enemyCount >= 3 && aoe_1.IsUnlock() && PrevCombo != st_2 && PrevCombo != st_1) // TODO: add AOE QT
         {
-            if (PrevCombo == aoe_1) return aoe_2;
+            if (PrevCombo == aoe_1) { return aoe_2; }
             return aoe_1;
         }
 
-        if (st_3.IsUnlock() && PrevCombo == st_2) return st_3;
-        if (st_2.IsUnlock() && PrevCombo == st_1) return st_2;
+        if (st_3.IsUnlock() && PrevCombo == st_2) { return st_3; }
+        if (st_2.IsUnlock() && PrevCombo == st_1) { return st_2; }
         return st_1;
     }
 

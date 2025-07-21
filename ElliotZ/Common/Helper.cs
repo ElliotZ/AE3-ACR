@@ -5,11 +5,6 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ElliotZ.Common;
 
@@ -26,14 +21,14 @@ public static class Helper
     /// </summary>
     /// <param name="buffId"></param>
     /// <returns></returns>
-    public static int GetAuraTimeLeft(uint buffID) => 
+    public static int GetAuraTimeLeft(uint buffID) =>
             Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me, buffID, true);
 
     /// <summary>显示一个文本提示，用于在游戏中显示简短的消息。</summary>
     /// <param name="msg">要显示的消息文本。</param>
     /// <param name="s">文本提示的样式。支持蓝色提示（1）和红色提示（2）两种</param>
     /// <param name="time">文本提示显示的时间（单位毫秒）。如显示3秒，填写3000即可</param>
-    public static void SendTips(string msg, int s = 1, int time = 3000) => 
+    public static void SendTips(string msg, int s = 1, int time = 3000) =>
             Core.Resolve<MemApiChatMessage>().Toast2(msg, s, time);
 
     public static bool IsMoving => MoveHelper.IsMoving();
@@ -137,7 +132,7 @@ public static class Helper
         List<uint> TgtDebuff = [背刺, 连环计];
         //检测自身团辅
         List<uint> SelfBuff = [灼热之光, 星空, 占卜, 义结金兰, 战斗连祷, 大舞, 战斗之声, 鼓励, 神秘环];
-        return TgtDebuff.Any(buff => AuraTimerLessThan(buff, 15000)) || 
+        return TgtDebuff.Any(buff => AuraTimerLessThan(buff, 15000)) ||
                SelfBuff.Any(buff => TgtAuraTimerLessThan(buff, 15000));
     }
 
