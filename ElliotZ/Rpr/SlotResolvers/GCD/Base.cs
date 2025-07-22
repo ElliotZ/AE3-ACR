@@ -5,18 +5,20 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using ElliotZ.Common;
+using ElliotZ.Rpr.QtUI;
 
 namespace ElliotZ.Rpr.SlotResolvers.GCD;
 
 public class Base : ISlotResolver
 {
-    private static uint PrevCombo => Core.Resolve<MemApiSpell>().GetLastComboSpellId();
+    //private static uint PrevCombo => Core.Resolve<MemApiSpell>().GetLastComboSpellId();
     private static uint
         st_1 = SpellsDef.Slice,
         st_2 = SpellsDef.WaxingSlice,
         st_3 = SpellsDef.InfernalSlice,
         aoe_1 = SpellsDef.SpinningScythe,
         aoe_2 = SpellsDef.NightmareScythe;
+    private static uint currBloodStalk => Core.Resolve<MemApiSpell>().CheckActionChange(SpellsDef.BloodStalk);
 
     public int Check()
     {
@@ -24,6 +26,7 @@ public class Base : ISlotResolver
         {
             return -2;  // -2 for not in range
         }
+        if (currBloodStalk.RecentlyUsed() || SpellsDef.Gluttony.RecentlyUsed()) { return -10; }
         return 0;
     }
 
@@ -31,14 +34,18 @@ public class Base : ISlotResolver
     {
         var enemyCount = TargetHelper.GetNearbyEnemyCount(5);
 
-        if (enemyCount >= 3 && aoe_1.IsUnlock() && PrevCombo != st_2 && PrevCombo != st_1) // TODO: add AOE QT
+        if (Qt.Instance.GetQt("AOE") &&
+            enemyCount >= 3 && 
+            aoe_1.GetSpell().IsReadyWithCanCast() && 
+            RprHelper.PrevCombo != st_2 && 
+            RprHelper.PrevCombo != st_1) 
         {
-            if (PrevCombo == aoe_1) { return aoe_2; }
+            if (aoe_2.GetSpell().IsReadyWithCanCast() && RprHelper.PrevCombo == aoe_1) { return aoe_2; }
             return aoe_1;
         }
 
-        if (st_3.IsUnlock() && PrevCombo == st_2) { return st_3; }
-        if (st_2.IsUnlock() && PrevCombo == st_1) { return st_2; }
+        if (st_3.GetSpell().IsReadyWithCanCast() && RprHelper.PrevCombo == st_2) { return st_3; }
+        if (st_2.GetSpell().IsReadyWithCanCast() && RprHelper.PrevCombo == st_1) { return st_2; }
         return st_1;
     }
 

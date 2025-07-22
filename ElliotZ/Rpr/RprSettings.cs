@@ -50,7 +50,7 @@ public class RprSettings
     public JobViewSave JobViewSave = new()
     {
         QtLineCount = 2,
-        QtUnVisibleList = ["挥割/爪", "暴食", "灵魂割", "真北"]
+        QtUnVisibleList = ["挥割/爪", "暴食", "灵魂割", "真北", "播魂种"]
     }; // QT设置存档
 
     public bool TripleWeavePot = false;

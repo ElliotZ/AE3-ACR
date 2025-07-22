@@ -41,8 +41,8 @@ public static class Qt
         Instance.AddQt("单魂衣", false, "单魂衣爆发窗");
         Instance.AddQt("神秘环", true);
         Instance.AddQt("大丰收", true);
-        Instance.AddQt("灵魂割", true);
-        Instance.AddQt("挥割/爪", true);
+        Instance.AddQt("灵魂割", true, "灵魂切割以及AOE灵魂钐割");
+        Instance.AddQt("挥割/爪", true, "隐匿挥割以及派生的缢杀爪/绞决爪，以及AOE束缚挥割");
         Instance.AddQt("暴食", true);
         Instance.AddQt("魂衣", true);
         Instance.AddQt("完人", true);

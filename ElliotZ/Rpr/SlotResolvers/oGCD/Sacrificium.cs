@@ -8,21 +8,22 @@ using ElliotZ.Rpr.QtUI;
 
 namespace ElliotZ.Rpr.SlotResolvers.oGCD;
 
-public class Gluttony : ISlotResolver
+public class Sacrificum : ISlotResolver
 {
     public int Check()
     {
-        if (SpellsDef.Gluttony.GetSpell().IsReadyWithCanCast() == false)
+        if (SpellsDef.Sacrificium.GetSpell().IsReadyWithCanCast() == false)
         {
             return -99;
         }
-        if (Qt.Instance.GetQt("暴食") == false) { return -98; }
-        
-        if (Core.Me.HasAura(AurasDef.Executioner) ||
-                Core.Me.HasAura(AurasDef.SoulReaver))
+
+        if (Qt.Instance.GetQt("神秘环") &&
+                !Core.Me.HasAura(AurasDef.ArcaneCircle) &&
+                 SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 10000)
         {
-            return -4;  // -4 for Overcapped Resources
+            return -6;  // -6 for delaying for burst prep
         }
+        
         // add QT
         // might need to check for death's design
         return 0;
@@ -30,6 +31,6 @@ public class Gluttony : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(SpellsDef.Gluttony.GetSpell());
+        slot.Add(SpellsDef.Sacrificium.GetSpell());
     }
 }

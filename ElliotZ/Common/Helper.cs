@@ -88,7 +88,8 @@ public static class Helper
     }
 
     /// <summary>
-    /// 目标有buff且时间小于，有buff参数如果为false，则当目标没有玩家的buff是也返回true
+    /// 目标有buff且时间小于等于，有buff参数如果为false，则当目标没有玩家的buff是也返回true
+    /// 以毫秒计算
     /// </summary>
     public static bool TgtAuraTimerLessThan(uint buffId, int timeLeft, bool 有buff = true)
     {
@@ -106,6 +107,28 @@ public static class Helper
 
         var time = Core.Resolve<MemApiBuff>().GetAuraTimeleft(target, buffId, true);
         return time <= timeLeft;
+    }
+
+    /// <summary>
+    /// 目标有buff且时间大于，有buff参数如果为false，则当目标没有玩家的buff且timeLeft为0也返回true
+    /// 以毫秒计算
+    /// </summary>
+    public static bool TgtAuraTimerMoreThan(uint buffId, int timeLeft, bool 有buff = true)
+    {
+        var target = Core.Me.GetCurrTarget();
+        if (target == null) return false;
+
+        if (有buff)
+        {
+            if (!target.HasLocalPlayerAura(buffId)) return false;
+        }
+        else
+        {
+            if (!target.HasLocalPlayerAura(buffId) && timeLeft == 0) return true;
+        }
+
+        var time = Core.Resolve<MemApiBuff>().GetAuraTimeleft(target, buffId, true);
+        return time > timeLeft;
     }
 
     /// <summary>

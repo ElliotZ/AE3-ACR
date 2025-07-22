@@ -29,10 +29,12 @@ public class RprRotationEntry : IRotationEntry, IDisposable
         new(new Perfectio(), SlotMode.Gcd),
         new(new PlentifulHarvest(), SlotMode.Gcd),
         new(new Base(), SlotMode.Gcd),
-        new(new Ranged(), SlotMode.Gcd),
+        new(new HarvestMoon(), SlotMode.Gcd),
+        new(new Harpe(), SlotMode.Gcd),
 
         // oGCD
         new(new EnshroudAb(), SlotMode.OffGcd),
+        new(new Sacrificum(), SlotMode.OffGcd),
         new(new EnshroudHighPrio(), SlotMode.OffGcd),
         new(new ArcaneCircle(), SlotMode.OffGcd),
         new(new TrueNorth(), SlotMode.OffGcd),

@@ -4,6 +4,7 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using ElliotZ.Common;
+using ElliotZ.Rpr.QtUI;
 
 namespace ElliotZ.Rpr.SlotResolvers.GCD;
 
@@ -15,8 +16,12 @@ public class EnshroudSk : ISlotResolver
         {
             return -3;  // -3 for Unmet Prereq Conditions
         }
-        if (SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 5000 &&
-                Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 30000))
+        if (Qt.Instance.GetQt("单魂衣") && Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 10000, false))
+        {
+            return -6;
+        }
+        if (//SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 5500 &&
+                Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 30000, false))
         {
             return -6;  // -6 for delaying for burst prep
         }
@@ -32,14 +37,16 @@ public class EnshroudSk : ISlotResolver
         {
             return SpellsDef.Communio;
         }
-        if (enemyCount >= 3 && !(Core.Me.HasAura(AurasDef.EnhancedCrossReaping) ||
-                                 Core.Me.HasAura(AurasDef.EnhancedVoidReaping)))
+        if (Qt.Instance.GetQt("AOE"))
         {
-            return SpellsDef.GrimReaping;
-        }
-        if (enemyCount >= 4)
-        {
-            return SpellsDef.GrimReaping;
+            if (enemyCount >= 4 || 
+                (enemyCount >= 3 && !(Core.Me.HasAura(AurasDef.EnhancedCrossReaping) ||
+                                      Core.Me.HasAura(AurasDef.EnhancedVoidReaping))
+                )
+               )
+            {
+                return SpellsDef.GrimReaping;
+            }
         }
         if (Core.Me.HasAura(AurasDef.EnhancedCrossReaping))
         {
