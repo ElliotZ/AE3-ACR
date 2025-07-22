@@ -1,10 +1,14 @@
-﻿using ElliotZ.Common;
+﻿using AEAssist;
+using AEAssist.MemoryApi;
+using ElliotZ.Common;
 
 namespace ElliotZ.Rpr;
 
 public static class RprHelper
 {
     public static int GetGcdDuration => BattleData.Instance.GcdDuration;
+    public static uint PrevCombo => Core.Resolve<MemApiSpell>().GetLastComboSpellId();
+    public static int ComboTimer => (int)Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds;
 
     /// <summary>
     /// 自身buff剩余时间是否在x个gcd内

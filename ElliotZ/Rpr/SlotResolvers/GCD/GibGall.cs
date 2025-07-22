@@ -2,31 +2,36 @@
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
+using AEAssist.MemoryApi;
 using ElliotZ.Common;
+using ElliotZ.Rpr.QtUI;
 
 namespace ElliotZ.Rpr.SlotResolvers.GCD;
 
 public class GibGall : ISlotResolver
 {
+    private static uint currGibbet => Core.Resolve<MemApiSpell>().CheckActionChange(SpellsDef.Gibbet);
+    private static uint currGallows => Core.Resolve<MemApiSpell>().CheckActionChange(SpellsDef.Gallows);
+    private static uint currGuillotine => Core.Resolve<MemApiSpell>().CheckActionChange(SpellsDef.Guillotine);
     public int Check()
     {
-        if (SpellsDef.Gibbet.GetSpell().IsReadyWithCanCast() == false) { return -99; }
+        if (currGibbet.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         return 0;
     }
 
     private static uint Solve()
     {
         var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 8, 180);
-        if (enemyCount >= 3) return SpellsDef.Guillotine;
-        if (Core.Me.HasAura(AurasDef.EnhancedGallows)) { return SpellsDef.Gallows; }
-        if (Core.Me.HasAura(AurasDef.EnhancedGibbet)) { return SpellsDef.Gibbet; }
+        if (Qt.Instance.GetQt("AOE") && enemyCount >= 3) { return currGuillotine; }
+        if (Core.Me.HasAura(AurasDef.EnhancedGallows)) { return currGallows; }
+        if (Core.Me.HasAura(AurasDef.EnhancedGibbet)) { return currGibbet; }
         if (Helper.AtRear)
         {
-            return SpellsDef.Gallows;
+            return currGallows;
         }
         else
         {
-            return SpellsDef.Gibbet;
+            return currGibbet;
         }
     }
 

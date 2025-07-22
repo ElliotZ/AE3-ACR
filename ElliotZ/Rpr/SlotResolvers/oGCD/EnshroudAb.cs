@@ -4,6 +4,7 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using ElliotZ.Common;
+using ElliotZ.Rpr.QtUI;
 
 namespace ElliotZ.Rpr.SlotResolvers.oGCD;
 
@@ -28,7 +29,7 @@ public class EnshroudAb : ISlotResolver
     {
         var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 8, 180);
 
-        if (enemyCount >= 3) { return SpellsDef.LemuresScythe; }
+        if (Qt.Instance.GetQt("AOE") && enemyCount >= 3) { return SpellsDef.LemuresScythe; }
         return SpellsDef.LemuresSlice;
     }
 
