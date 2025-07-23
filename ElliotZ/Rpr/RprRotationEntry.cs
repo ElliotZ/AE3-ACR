@@ -55,7 +55,7 @@ public class RprRotationEntry : IRotationEntry, IDisposable
             MaxLevel = _maxLevel,
             Description = _description,
         };
-        rot.AddOpener(level => level < 100 ? null : new Opener100());
+        rot.AddOpener(level => level < 88 ? null : new Opener100());
         rot.SetRotationEventHandler(new EventHandler());
         rot.AddTriggerAction(new TriggerActionQt(), new TriggerActionHotkey());
         rot.AddTriggerCondition(new TriggerCondQt());

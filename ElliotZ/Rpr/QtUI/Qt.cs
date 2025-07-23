@@ -38,7 +38,7 @@ public static class Qt
         Instance.AddQt("爆发药", false);
         Instance.AddQt("爆发药2分", true);
         Instance.AddQt("起手", true);
-        Instance.AddQt("单魂衣", false, "单魂衣爆发窗");
+        Instance.AddQt("单魂衣", false, "不给爆发留魂衣，爆发只会有1个大丰收送的魂衣");
         Instance.AddQt("神秘环", true);
         Instance.AddQt("大丰收", true);
         Instance.AddQt("灵魂割", true, "灵魂切割以及AOE灵魂钐割");
@@ -66,6 +66,10 @@ public static class Qt
         Instance.AddHotkey("播魂种", new HotKeyResolver(SpellsDef.Soulsow, SpellTargetType.Self));
         Instance.AddHotkey("疾跑", new HotKeyResolver_疾跑());
         Instance.AddHotkey("爆发药", new HotKeyResolver_Potion());
+
+        //其余tab窗口
+        ReadmeTab.Build(Instance);
+        SettingTab.Build(Instance);
 
     }
 }

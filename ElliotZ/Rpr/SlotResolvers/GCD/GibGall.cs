@@ -15,6 +15,7 @@ public class GibGall : ISlotResolver
     private static uint currGuillotine => Core.Resolve<MemApiSpell>().CheckActionChange(SpellsDef.Guillotine);
     public int Check()
     {
+        if (SpellsDef.Gluttony.GetSpell().RecentlyUsed()) { return 9; }  // 9 for server acq ignore
         if (currGibbet.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         return 0;
     }

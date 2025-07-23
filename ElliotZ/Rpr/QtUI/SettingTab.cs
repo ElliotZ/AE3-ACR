@@ -1,6 +1,9 @@
 ﻿using AEAssist.CombatRoutine.View.JobView;
+using AEAssist.GUI;
 using ElliotZ.Common;
 using ImGuiNET;
+using System.Numerics;
+using System.Runtime;
 
 namespace ElliotZ.Rpr.QtUI;
 
@@ -31,19 +34,20 @@ public static class SettingTab
             //    ImGui.Dummy(new Vector2(0, 10));
             //}
 
-            //if (ImGui.CollapsingHeader("舞伴窗口", ImGuiTreeNodeFlags.DefaultOpen))
-            //{
-            //    ImGui.Dummy(new Vector2(5, 0));
-            //    ImGui.SameLine();
-            //    ImGui.BeginGroup();
-            //    ImGui.Checkbox("显示舞伴窗口", ref DncSettings.Instance.DancePartnerPanelShow);
-            //    ImGui.Checkbox("4人本自动绑舞伴", ref DncSettings.Instance.AutoPartner);
-            //    ImGui.DragInt("舞伴窗口大小", ref DncSettings.Instance.DancePartnerPanelIconSize, 1, 20, 100);
-            //    ImGui.EndGroup();
-            //    ImGui.Dummy(new Vector2(0, 10));
-            //}
+            if (ImGui.CollapsingHeader("一般设定", ImGuiTreeNodeFlags.DefaultOpen))
+            {
+                ImGui.Dummy(new Vector2(5, 0));
+                ImGui.SameLine();
+                ImGui.BeginGroup();
+                ImGui.Checkbox("起手三插爆发药", ref RprSettings.Instance.TripleWeavePot);
+                ImGui.DragInt("倒数勾刃读条时间", ref RprSettings.Instance.PrepullCastTimeHarpe, 100, 500, 2000);
+                ImGui.DragInt("动画锁长度", ref RprSettings.Instance.AnimLock, 10, 10, 1000);
+                ImGui.Checkbox("Debug", ref RprSettings.Instance.Debug);
+                ImGui.EndGroup();
+                ImGui.Dummy(new Vector2(0, 10));
+            }
 
-            //ImGuiHelper.Separator();
+            ImGuiHelper.Separator();
 
             if (ImGui.Button("获取爆发药情况"))
             {

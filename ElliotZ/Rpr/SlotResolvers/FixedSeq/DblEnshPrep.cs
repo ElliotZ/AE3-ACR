@@ -29,12 +29,12 @@ public class DblEnshPrep : ISlotSequence
         return -1;
     }
 
-    public List<Action<Slot>> Sequence { get; } = new()
-    {
+    public List<Action<Slot>> Sequence { get; } = 
+    [
         Step0,
         Step1,
         Step2,
-    };
+    ];
 
     private static void Step0(Slot slot)
     {
@@ -54,8 +54,26 @@ public class DblEnshPrep : ISlotSequence
             slot.Add(new Spell(SpellsDef.HarvestMoon, SpellTargetType.Target));
         else
             slot.Add(new Spell(SpellsDef.ShadowOfDeath, SpellTargetType.Target));
-        
-        slot.Add(new SlotAction(SlotAction.WaitType.None, 0, Spell.CreatePotion()));
-        slot.Add(new Spell(SpellsDef.ArcaneCircle, SpellTargetType.Self));
+        if (Qt.Instance.GetQt("爆发药"))
+        {
+            if (BattleData.Instance.numBurstPhases == 0)
+            {
+                if (ItemHelper.CheckCurrJobPotion())
+                {
+                    slot.Add(new SlotAction(SlotAction.WaitType.None, 0, Spell.CreatePotion()));
+                    slot.Add(new Spell(SpellsDef.ArcaneCircle, SpellTargetType.Self));
+                }
+                else
+                {
+                    slot.Add(new SlotAction(SlotAction.WaitType.WaitForSndHalfWindow, 0, SpellsDef.ArcaneCircle.GetSpell()));
+                }
+            }
+            else
+            {
+                slot.Add(new Spell(SpellsDef.ArcaneCircle, SpellTargetType.Self));
+                slot.Add(new SlotAction(SlotAction.WaitType.None, 0, Spell.CreatePotion()));
+            }
+        }
+        BattleData.Instance.numBurstPhases++;
     }
 }
