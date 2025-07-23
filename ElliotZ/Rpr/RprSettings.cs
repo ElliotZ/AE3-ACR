@@ -54,6 +54,9 @@ public class RprSettings
     }; // QT设置存档
 
     public bool TripleWeavePot = false;
+    public int PrepullCastTimeHarpe = 1700;
+    public int AnimLock = 550;
+    public bool Debug = false;
     //public bool AutoUpdateTimeLines = true;
     //public bool TimeLinesDebug = false;
 }

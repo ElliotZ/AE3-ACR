@@ -20,7 +20,7 @@ public class TrueNorth : ISlotResolver
         if (Core.Me.HasAura(AurasDef.TrueNorth)) { return -5; }  // -5 for avoiding spam
 
         if (Core.Me.GetCurrTarget().HasPositional() &&
-                GCDHelper.GetGCDCooldown() < 650 &&
+                GCDHelper.GetGCDCooldown() < RprSettings.Instance.AnimLock &&
                 currGibbet.GetSpell().IsReadyWithCanCast())
         {
             if (Core.Me.HasAura(AurasDef.EnhancedGallows) && !Helper.AtRear) { return 0; }

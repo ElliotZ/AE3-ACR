@@ -9,6 +9,8 @@ public class BattleData
     /// </summary>
     public int GcdDuration = 2500;
 
+    public int numBurstPhases = 0;
+
     //public int 提拉纳阈值 = 30;
 
     //public int 上次自动舞伴时间 = -5000;
