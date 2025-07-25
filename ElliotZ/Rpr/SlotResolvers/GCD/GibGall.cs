@@ -1,8 +1,10 @@
 ﻿using AEAssist;
+using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
+using Dalamud.Game.ClientState.Objects.Types;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 
@@ -10,34 +12,44 @@ namespace ElliotZ.Rpr.SlotResolvers.GCD;
 
 public class GibGall : ISlotResolver
 {
-    private static uint currGibbet => Core.Resolve<MemApiSpell>().CheckActionChange(SpellsDef.Gibbet);
-    private static uint currGallows => Core.Resolve<MemApiSpell>().CheckActionChange(SpellsDef.Gallows);
-    private static uint currGuillotine => Core.Resolve<MemApiSpell>().CheckActionChange(SpellsDef.Guillotine);
+    private IBattleChara? Target {  get; set; }
     public int Check()
     {
         if (SpellsDef.Gluttony.GetSpell().RecentlyUsed()) { return 9; }  // 9 for server acq ignore
-        if (currGibbet.GetSpell().IsReadyWithCanCast() == false) { return -99; }
+        if (Core.Me.HasAura(AurasDef.Enshrouded)) { return -14; }
+        if (Helper.GetActionChange(SpellsDef.Gibbet).GetSpell().IsReadyWithCanCast() == false) { return -99; }
         return 0;
     }
 
-    private static uint Solve()
+    private Spell Solve()
     {
-        var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 8, 180);
-        if (Qt.Instance.GetQt("AOE") && enemyCount >= 3) { return currGuillotine; }
-        if (Core.Me.HasAura(AurasDef.EnhancedGallows)) { return currGallows; }
-        if (Core.Me.HasAura(AurasDef.EnhancedGibbet)) { return currGibbet; }
+        //var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 8, 180);
+        Target = SpellsDef.Guillotine.OptimalAOETarget(3, 180);
+
+        if (Qt.Instance.GetQt("AOE") && (Target is not null)) 
+        { 
+            return Helper.GetActionChange(SpellsDef.Guillotine).GetSpell(Target!); 
+        }
+        if (Core.Me.HasAura(AurasDef.EnhancedGallows)) 
+        { 
+            return Helper.GetActionChange(SpellsDef.Gallows).GetSpell(); 
+        }
+        if (Core.Me.HasAura(AurasDef.EnhancedGibbet)) 
+        { 
+            return Helper.GetActionChange(SpellsDef.Gibbet).GetSpell(); 
+        }
         if (Helper.AtRear)
         {
-            return currGallows;
+            return Helper.GetActionChange(SpellsDef.Gallows).GetSpell();
         }
         else
         {
-            return currGibbet;
+            return Helper.GetActionChange(SpellsDef.Gibbet).GetSpell();
         }
     }
 
     public void Build(Slot slot)
     {
-        slot.Add(Solve().GetSpell());
+        slot.Add(Solve());
     }
 }

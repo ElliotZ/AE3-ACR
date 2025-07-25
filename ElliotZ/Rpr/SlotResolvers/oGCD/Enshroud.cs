@@ -20,15 +20,27 @@ public class Enshroud : ISlotResolver
         //{ 
         //    return -6;  // burst prep
         //}
-        if (!Qt.Instance.GetQt("单魂衣") && // Qt.Instance.GetQt("神秘环") &&
-            SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 40000 &&
-            Core.Resolve<JobApi_Reaper>().ShroudGauge < 100) 
-        { 
-            return -6; 
+        if (Core.Resolve<JobApi_Reaper>().ShroudGauge < 100)
+        {
+            if (!Qt.Instance.GetQt("单魂衣") && // Qt.Instance.GetQt("神秘环") &&
+                SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 40000)
+            {
+                return -6;
+            }
+            if (Qt.Instance.GetQt("暴食") &&
+                    !Core.Me.HasAura(AurasDef.ArcaneCircle) && 
+                    SpellsDef.Gluttony.GetSpell().Cooldown.TotalMilliseconds <= 20000)
+            {
+                return -6;
+            }
         }
         if (Core.Me.HasAura(AurasDef.SoulReaver) || Core.Me.HasAura(AurasDef.Executioner))
         {
             return -10;  // protect Gib/Gallows
+        }
+        if (Helper.AoeTtkCheck() && TTKHelper.IsTargetTTK(Core.Me.GetCurrTarget())) 
+        { 
+            return -16;  // delay for next pack
         }
 
         //if (Core.Resolve<JobApi_Reaper>().ShroudGauge < 50 && !Core.Me.HasAura(AurasDef.IdealHost)) return -1;

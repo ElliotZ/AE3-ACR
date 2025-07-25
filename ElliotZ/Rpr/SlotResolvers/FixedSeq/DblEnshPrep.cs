@@ -16,7 +16,7 @@ public class DblEnshPrep : ISlotSequence
     public int StartCheck()
     {
         if (Core.Me.Level < 80) { return -99; }
-        if (SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds > 5500) { return -6; }
+        if (SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds > GCDHelper.GetGCDDuration() * 2 + 800) { return -6; }
         if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Qt.Instance.GetQt("神秘环") == false) { return -98; }
         if (Core.Resolve<JobApi_Reaper>().ShroudGauge < 50) { return -1; }

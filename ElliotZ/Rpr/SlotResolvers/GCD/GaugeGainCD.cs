@@ -10,14 +10,15 @@ namespace ElliotZ.Rpr.SlotResolvers.GCD;
 
 public class GaugeGainCD : ISlotResolver
 {
-    //private static uint PrevCombo => Core.Resolve<MemApiSpell>().GetLastComboSpellId();
+    private static int Soul => Core.Resolve<JobApi_Reaper>().SoulGauge;
 
     public int Check()
     {
         if (SpellsDef.SoulSlice.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Qt.Instance.GetQt("灵魂割") == false) { return -98;  }  // -98 for QT toggled off
-        if (Core.Resolve<JobApi_Reaper>().SoulGauge > 50) { return -4; }  // -4 for Overcapped Resources
-        if (RprHelper.ComboTimer <= GCDHelper.GetGCDDuration() && 
+        if (Soul > 50) { return -4; }  // -4 for Overcapped Resources
+        if (Soul == 50 && SpellsDef.Gluttony.CoolDownInGCDs(2)) { return -4; }
+        if (Helper.ComboTimer <= GCDHelper.GetGCDDuration() + 200 && 
                 (RprHelper.PrevCombo == SpellsDef.Slice || RprHelper.PrevCombo == SpellsDef.WaxingSlice))
         {
             return -9;  // -9 for combo protection

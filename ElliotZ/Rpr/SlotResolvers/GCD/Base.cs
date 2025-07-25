@@ -18,7 +18,6 @@ public class Base : ISlotResolver
         st_3 = SpellsDef.InfernalSlice,
         aoe_1 = SpellsDef.SpinningScythe,
         aoe_2 = SpellsDef.NightmareScythe;
-    private static uint currBloodStalk => Core.Resolve<MemApiSpell>().CheckActionChange(SpellsDef.BloodStalk);
 
     public int Check()
     {
@@ -26,7 +25,11 @@ public class Base : ISlotResolver
         {
             return -2;  // -2 for not in range
         }
-        if (currBloodStalk.RecentlyUsed() || SpellsDef.Gluttony.RecentlyUsed()) { return -10; }
+        if (Helper.GetActionChange(SpellsDef.BloodStalk).RecentlyUsed() ||
+                    SpellsDef.Gluttony.RecentlyUsed()) 
+        { 
+            return -10; 
+        }
         return 0;
     }
 
