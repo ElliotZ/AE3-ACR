@@ -31,6 +31,15 @@ public class BloodStalk : ISlotResolver
         { 
             return -14; 
         }
+        if (!Core.Me.HasAura(AurasDef.TrueNorth) &&
+                Core.Me.GetCurrTarget().HasPositional() &&
+                !SpellsDef.TrueNorth.IsMaxChargeReady(1.8f) &&
+                ((Core.Me.HasAura(AurasDef.EnhancedGallows) && !Helper.AtRear) ||
+                 (Core.Me.HasAura(AurasDef.EnhancedGibbet) && !Helper.AtFlank)) &&
+                Core.Resolve<JobApi_Reaper>().SoulGauge < 100)
+        {
+            return -13;  // TN Optimizations perhaps
+        }
         if (SpellsDef.Gluttony.IsUnlock() && 
                 SpellsDef.Gluttony.CoolDownInGCDs(3) && 
                 Core.Resolve<JobApi_Reaper>().SoulGauge < 100)
@@ -58,14 +67,7 @@ public class BloodStalk : ISlotResolver
         {
             return -12;
         }
-        if (!Core.Me.HasAura(AurasDef.TrueNorth) &&
-                Core.Me.GetCurrTarget().HasPositional() &&
-                ((Core.Me.HasAura(AurasDef.EnhancedGallows) && !Helper.AtRear) || 
-                  (Core.Me.HasAura(AurasDef.EnhancedGibbet) && !Helper.AtFlank)  ) &&
-                Core.Resolve<JobApi_Reaper>().SoulGauge < 100)
-        {
-            return -13;  // TN Optimizations perhaps
-        }
+
         return 0;
     }
 
@@ -84,19 +86,6 @@ public class BloodStalk : ISlotResolver
 
     public void Build(Slot slot)
     {
-        MeleePosHelper2.Clear();
-        if (Core.Me.HasAura(AurasDef.EnhancedGallows))
-        {
-            MeleePosHelper2.DrawMeleePosOffset(Pos.Behind, 
-                                               BattleData.Instance.GcdDuration, 
-                                               Helper.GetActionChange(SpellsDef.Gallows));
-        }
-        if (Core.Me.HasAura(AurasDef.EnhancedGibbet))
-        {
-            MeleePosHelper2.DrawMeleePosOffset(Pos.Flank,
-                                               BattleData.Instance.GcdDuration,
-                                               Helper.GetActionChange(SpellsDef.Gibbet));
-        }
         slot.Add(Solve());
     }
 }

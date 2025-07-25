@@ -33,7 +33,7 @@ public class Base : ISlotResolver
         return 0;
     }
 
-    private static uint Solve()
+    public static uint Solve()
     {
         var enemyCount = TargetHelper.GetNearbyEnemyCount(5);
 

@@ -22,7 +22,7 @@ public class Gluttony : ISlotResolver
 
         if (Core.Me.HasAura(AurasDef.Executioner) ||
                 Core.Me.HasAura(AurasDef.SoulReaver) ||
-                Core.Resolve<JobApi_Reaper>().ShroudGauge > 80)
+                Qt.Instance.GetQt("魂衣") && Core.Resolve<JobApi_Reaper>().ShroudGauge > 80)
         {
             return -4;  // -4 for Overcapped Resources
         }
@@ -42,19 +42,6 @@ public class Gluttony : ISlotResolver
 
     public void Build(Slot slot)
     {
-        MeleePosHelper2.Clear();
-        if (Core.Me.HasAura(AurasDef.EnhancedGallows))
-        {
-            MeleePosHelper2.DrawMeleePosOffset(Pos.Behind,
-                                               BattleData.Instance.GcdDuration,
-                                               Helper.GetActionChange(SpellsDef.Gallows));
-        }
-        if (Core.Me.HasAura(AurasDef.EnhancedGibbet))
-        {
-            MeleePosHelper2.DrawMeleePosOffset(Pos.Flank,
-                                               BattleData.Instance.GcdDuration,
-                                               Helper.GetActionChange(SpellsDef.Gibbet));
-        }
         slot.Add(SpellsDef.Gluttony.GetSpell());
     }
 }
