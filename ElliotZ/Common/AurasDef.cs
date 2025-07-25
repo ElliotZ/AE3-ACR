@@ -360,6 +360,7 @@
             CrestOfTimeBorrowed = 2597,
             Executioner = 3858,
             IdealHost = 3905,
+            PerfectioOculta = 3859,
             PerfectioParata = 3860,
             Oblatio = 3857
             ;

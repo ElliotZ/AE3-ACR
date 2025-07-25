@@ -1,5 +1,6 @@
 ﻿using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
+using AEAssist.Helper;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 using ElliotZ.Rpr.SlotResolvers.FixedSeq;

@@ -1119,7 +1119,7 @@ namespace ElliotZ.Common
         public const uint ArcaneCircle = 24405;
 
         // DT
-        public const uint Perfectio = 39673;
+        public const uint Perfectio = 36973;
         public const uint Sacrificium = 36969;
 
 

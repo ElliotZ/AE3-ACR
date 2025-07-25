@@ -10,10 +10,10 @@ namespace ElliotZ.Rpr.SlotResolvers.oGCD;
 
 public class EnshroudAb : ISlotResolver
 {
+    private int purpOrb => Core.Resolve<JobApi_Reaper>().VoidShroud;
+
     public int Check()
     {
-        var purpOrb = Core.Resolve<JobApi_Reaper>().VoidShroud;
-
         if (Core.Me.HasAura(AurasDef.Enshrouded) == false) { return -3; }  // -3 for Unmet Prereq Conditions
         //if (SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 5000 &&
         //        Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 30000))

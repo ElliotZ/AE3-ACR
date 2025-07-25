@@ -1,20 +1,23 @@
 ﻿using AEAssist;
+using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
+using Dalamud.Game.ClientState.Objects.Types;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
+using static AEAssist.CombatRoutine.View.MeleePosHelper;
 
 namespace ElliotZ.Rpr.SlotResolvers.oGCD;
 
 public class BloodStalk : ISlotResolver
 {
-    private static uint currBloodStalk => Core.Resolve<MemApiSpell>().CheckActionChange(SpellsDef.BloodStalk);
+    private IBattleChara? Target {  get; set; }
     public int Check()
     {
-        if (currBloodStalk.GetSpell().IsReadyWithCanCast() == false) { return -99; }
+        if (Helper.GetActionChange(SpellsDef.BloodStalk).GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Qt.Instance.GetQt("挥割/爪") == false) { return -98; }
         if (Core.Me.HasAura(AurasDef.Enshrouded)) { return -1; }  // not this slot resolver
         
@@ -24,18 +27,24 @@ public class BloodStalk : ISlotResolver
         { 
             return -4; 
         }
-        // maybe check for death's design, but probably not needed for now
-        if (SpellsDef.Gluttony.CoolDownInGCDs(3) && Core.Resolve<JobApi_Reaper>().SoulGauge < 100)
+        if (Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, GCDHelper.GetGCDDuration(), false)) 
+        { 
+            return -14; 
+        }
+        if (SpellsDef.Gluttony.IsUnlock() && 
+                SpellsDef.Gluttony.CoolDownInGCDs(3) && 
+                Core.Resolve<JobApi_Reaper>().SoulGauge < 100)
         {
             return -12;  // delay for gluttony gauge cost
         }
         if (Qt.Instance.GetQt("神秘环") && 
+                SpellsDef.ArcaneCircle.IsUnlock() &&
                 SpellsDef.ArcaneCircle.CoolDownInGCDs(5) && 
                 Core.Resolve<JobApi_Reaper>().ShroudGauge != 40)
         {
             return -12;  // delay for gluttony after burst window
         }
-        if (RprHelper.ComboTimer <= GCDHelper.GetGCDDuration() + 600 &&
+        if (Helper.ComboTimer <= GCDHelper.GetGCDDuration() + 2000 &&
                 (RprHelper.PrevCombo == SpellsDef.Slice || RprHelper.PrevCombo == SpellsDef.WaxingSlice))
         {
             return -9;  // -9 for combo protection
@@ -44,6 +53,10 @@ public class BloodStalk : ISlotResolver
                 SpellsDef.PlentifulHarvest.RecentlyUsed()) 
         { 
             return -12;  // delay for burst window
+        }
+        if (Helper.AuraTimerLessThan(AurasDef.ArcaneCircle, 5000) && Core.Me.HasAura(AurasDef.PerfectioParata))
+        {
+            return -12;
         }
         if (!Core.Me.HasAura(AurasDef.TrueNorth) &&
                 Core.Me.GetCurrTarget().HasPositional() &&
@@ -56,19 +69,34 @@ public class BloodStalk : ISlotResolver
         return 0;
     }
 
-    private uint Solve()
+    private Spell Solve()
     {
-        var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 8, 180);
+        //var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 8, 180);
+        Target = SpellsDef.GrimSwathe.OptimalAOETarget(4, 180);
 
-        if (Qt.Instance.GetQt("AOE") && enemyCount >= 4 && SpellsDef.GrimSwathe.GetSpell().IsReadyWithCanCast()) 
+        if (Qt.Instance.GetQt("AOE") && Target is not null &&
+                SpellsDef.GrimSwathe.GetSpell(Target!).IsReadyWithCanCast()) 
         { 
-            return SpellsDef.GrimSwathe; 
+            return SpellsDef.GrimSwathe.GetSpell(Target!); 
         }
-        return currBloodStalk;
+        return Helper.GetActionChange(SpellsDef.BloodStalk).GetSpell();
     }
 
     public void Build(Slot slot)
     {
-        slot.Add(Solve().GetSpell());
+        MeleePosHelper2.Clear();
+        if (Core.Me.HasAura(AurasDef.EnhancedGallows))
+        {
+            MeleePosHelper2.DrawMeleePosOffset(Pos.Behind, 
+                                               BattleData.Instance.GcdDuration, 
+                                               Helper.GetActionChange(SpellsDef.Gallows));
+        }
+        if (Core.Me.HasAura(AurasDef.EnhancedGibbet))
+        {
+            MeleePosHelper2.DrawMeleePosOffset(Pos.Flank,
+                                               BattleData.Instance.GcdDuration,
+                                               Helper.GetActionChange(SpellsDef.Gibbet));
+        }
+        slot.Add(Solve());
     }
 }

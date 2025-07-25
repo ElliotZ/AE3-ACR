@@ -1,6 +1,8 @@
 ﻿using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
+using AEAssist.CombatRoutine.Module.Target;
+using AEAssist.Define;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
@@ -61,7 +63,7 @@ public static class Helper
         return 1;
     }
 
-    public static double ComboTimeLeft => Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds;
+    public static double ComboTimer => Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds;
 
     public static bool AtRear => Core.Resolve<MemApiTarget>().IsBehind;
     public static bool AtFlank => Core.Resolve<MemApiTarget>().IsFlanking;
@@ -132,6 +134,20 @@ public static class Helper
     }
 
     /// <summary>
+    /// 周围8米内目标如果有超过三分之二会在设定TTK内死亡，则返回True
+    /// </summary>
+    /// <returns></returns>
+    public static bool AoeTtkCheck()
+    {
+        var enemyCount = TargetHelper.GetNearbyEnemyCount(8);
+        var enemyList = TargetMgr.Instance.EnemysIn12;
+        var lowHPCount = enemyList.Count(v => 
+                  Core.Me.Distance(v.Value, DistanceMode.IgnoreTargetHitbox | DistanceMode.IgnoreHeight) <= 8 &&
+                  TTKHelper.IsTargetTTK(v.Value));
+        return (lowHPCount / (double)enemyCount > 0.667);
+    }
+
+    /// <summary>
     /// 在list中添加一个唯一的元素
     /// </summary>
     public static bool AddUnique<T>(this List<T> list, T item)
@@ -147,6 +163,11 @@ public static class Helper
     public static IBattleChara? OptimalAOETarget(this uint spellId, int count)
     {
         return TargetHelper.GetMostCanTargetObjects(spellId, count);
+    }
+
+    public static IBattleChara? OptimalAOETarget(this uint spellId, int count, float angle)
+    {
+        return TargetHelper.GetMostCanTargetObjects(spellId, count, angle);
     }
 
     public static bool InAnyRaidBuff()

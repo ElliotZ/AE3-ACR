@@ -1,9 +1,13 @@
 ﻿using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
+using AEAssist.Extension;
 using AEAssist.Helper;
+using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using ElliotZ.Common;
+using ElliotZ.Rpr.QtUI;
+using static AEAssist.CombatRoutine.View.MeleePosHelper;
 using Task = System.Threading.Tasks.Task;
 
 namespace ElliotZ.Rpr;
@@ -46,7 +50,10 @@ public class EventHandler : IRotationEventHandler
     /// <returns></returns>
     public async Task OnPreCombat()
     {
-        await Task.CompletedTask;
+        if (SpellsDef.Soulsow.IsUnlock() && Core.Me.HasAura(AurasDef.Soulsow) == false)
+        {
+            await SpellsDef.Soulsow.GetSpell().Cast();
+        }
     }
 
     /// <summary>
@@ -72,6 +79,17 @@ public class EventHandler : IRotationEventHandler
 
     public void OnBattleUpdate(int currTime) //战斗中逐帧检测
     {
+        if (Core.Resolve<JobApi_Reaper>().SoulGauge >= 50)
+        {
+            if (Core.Me.HasAura(AurasDef.EnhancedGallows))
+            {
+                MeleePosHelper2.DrawMeleePos(Pos.Behind, 10000, Helper.GetActionChange(SpellsDef.Gallows));
+            }
+            else if (Core.Me.HasAura(AurasDef.EnhancedGibbet))
+            {
+                MeleePosHelper2.DrawMeleePos(Pos.Flank, 10000, Helper.GetActionChange(SpellsDef.Gibbet));
+            }
+        }
     }
 
     public void OnEnterRotation() //切换到当前ACR
@@ -85,6 +103,8 @@ public class EventHandler : IRotationEventHandler
         //检查全局设置
         if (!Helper.GlblSettings.NoClipGCD3)
             LogHelper.PrintError("建议在acr全局设置中勾选【全局能力技不卡GCD】选项");
+
+        MeleePosHelper2.Init(Qt.Instance, "真北");
 
         //更新时间轴
         //if (DncSettings.Instance.AutoUpdataTimeLines)

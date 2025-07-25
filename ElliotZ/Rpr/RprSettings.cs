@@ -50,12 +50,13 @@ public class RprSettings
     public JobViewSave JobViewSave = new()
     {
         QtLineCount = 2,
-        QtUnVisibleList = ["挥割/爪", "暴食", "灵魂割", "真北", "播魂种"]
+        QtUnVisibleList = ["挥割/爪", "暴食", "灵魂割", "真北", "播魂种", "祭牲"]
     }; // QT设置存档
 
     public bool TripleWeavePot = false;
     public int PrepullCastTimeHarpe = 1700;
     public int AnimLock = 550;
+    public bool ForceCast = false;
     public bool Debug = false;
     //public bool AutoUpdateTimeLines = true;
     //public bool TimeLinesDebug = false;

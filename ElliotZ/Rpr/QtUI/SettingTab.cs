@@ -42,6 +42,7 @@ public static class SettingTab
                 ImGui.Checkbox("起手三插爆发药", ref RprSettings.Instance.TripleWeavePot);
                 ImGui.DragInt("倒数勾刃读条时间", ref RprSettings.Instance.PrepullCastTimeHarpe, 100, 500, 2000);
                 ImGui.DragInt("动画锁长度", ref RprSettings.Instance.AnimLock, 10, 10, 1000);
+                ImGui.Checkbox("读条忽略移动状态", ref RprSettings.Instance.ForceCast);
                 ImGui.Checkbox("Debug", ref RprSettings.Instance.Debug);
                 ImGui.EndGroup();
                 ImGui.Dummy(new Vector2(0, 10));

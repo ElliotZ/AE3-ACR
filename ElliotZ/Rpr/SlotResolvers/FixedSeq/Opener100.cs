@@ -34,7 +34,7 @@ public class Opener100 : IOpener
         Qt.Reset();
 
         const int startTime = 15000;
-        if (Core.Me.HasAura(AurasDef.Soulsow))
+        if (!Core.Me.HasAura(AurasDef.Soulsow))
         {
             cdh.AddAction(startTime, SpellsDef.Soulsow);
         }
@@ -62,16 +62,17 @@ public class Opener100 : IOpener
         {
             slot.Add(new SlotAction(SlotAction.WaitType.WaitInMs,
                         GCDHelper.GetGCDDuration() - RprSettings.Instance.AnimLock * 3,
-                        SpellsDef.ArcaneCircle.GetSpell(SpellTargetType.Target)));
+                        SpellsDef.ArcaneCircle.GetSpell()));
             slot.Add(Spell.CreatePotion());
             slot.Add(new Spell(SpellsDef.Gluttony, SpellTargetType.Target));
         }
         else 
         {
             slot.Add(new SlotAction(SlotAction.WaitType.WaitInMs,
-                                    GCDHelper.GetGCDDuration() - RprSettings.Instance.AnimLock * 2,
-                                    SpellsDef.ArcaneCircle.GetSpell(SpellTargetType.Target)));
+                                    GCDHelper.GetGCDDuration() - 2000,
+                                    SpellsDef.ArcaneCircle.GetSpell()));
             slot.Add(new Spell(SpellsDef.Gluttony, SpellTargetType.Target));
+            //LogHelper.Error("why does this not work");
         }
     }
 
