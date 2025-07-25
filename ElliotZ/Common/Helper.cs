@@ -2,6 +2,7 @@
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Module.Target;
+using AEAssist.CombatRoutine.View;
 using AEAssist.Define;
 using AEAssist.Extension;
 using AEAssist.Helper;

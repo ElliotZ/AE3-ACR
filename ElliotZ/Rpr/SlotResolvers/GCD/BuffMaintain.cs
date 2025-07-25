@@ -43,12 +43,12 @@ public class BuffMaintain : ISlotResolver
         { 
             return 3;  // 3 for burst prep
         }
-        if (Qt.Instance.GetQt("神秘环") && 
-                SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds < 11000 && 
-                Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 11000 + GCDHelper.GetGCDDuration(), false))
-        {
-            return 3;
-        }
+        //if (Qt.Instance.GetQt("神秘环") && 
+        //        SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds < 11000 && 
+        //        Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 11000 + GCDHelper.GetGCDDuration(), false))
+        //{
+        //    return 3;
+        //}
         if (SpellsDef.WhorlOfDeath.IsUnlock() && AOEAuraCheck()) { return 4; };
         //if (Core.Resolve<JobApi_Reaper>().ShroudGauge >= 50 &&)
         return -1;  // -1 for general unmatch
@@ -72,7 +72,7 @@ public class BuffMaintain : ISlotResolver
         return (noDebuffEnemyCount / (double)enemyCount) > 0.5;
     }
 
-    private static uint Solve()
+    public static uint Solve()
     {
         var enemyCount = TargetHelper.GetNearbyEnemyCount(5);
         if (Qt.Instance.GetQt("AOE") && SpellsDef.WhorlOfDeath.GetSpell().IsReadyWithCanCast() && enemyCount >= 3)

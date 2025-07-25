@@ -1,13 +1,13 @@
 ﻿using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
+using AEAssist.CombatRoutine.View;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
-using static AEAssist.CombatRoutine.View.MeleePosHelper;
 using Task = System.Threading.Tasks.Task;
 
 namespace ElliotZ.Rpr;
@@ -79,16 +79,59 @@ public class EventHandler : IRotationEventHandler
 
     public void OnBattleUpdate(int currTime) //战斗中逐帧检测
     {
-        if (Core.Resolve<JobApi_Reaper>().SoulGauge >= 50)
+        var gcdProgPctg = (int)((GCDHelper.GetGCDCooldown() / (double)BattleData.Instance.GcdDuration) * 100);
+        var inTN = Core.Me.HasAura(AurasDef.TrueNorth);
+        var GibGallowsReady = Core.Me.HasAura(AurasDef.SoulReaver) || Core.Me.HasAura(AurasDef.Executioner);
+
+        if (!inTN && 
+                !Core.Me.HasAura(AurasDef.Enshrouded) && 
+                Core.Me.GetCurrTarget() is not null && 
+                Core.Me.GetCurrTarget().HasPositional())
         {
-            if (Core.Me.HasAura(AurasDef.EnhancedGallows))
+            if (GibGallowsReady)
             {
-                MeleePosHelper2.DrawMeleePos(Pos.Behind, 10000, Helper.GetActionChange(SpellsDef.Gallows));
+                if (Core.Me.HasAura(AurasDef.EnhancedGallows))
+                {
+                    MeleePosHelper.Draw(MeleePosHelper.Pos.Behind, gcdProgPctg);
+                    //LogHelper.Print("ready for enhanced gallows");
+                }
+                else if (Core.Me.HasAura(AurasDef.EnhancedGibbet))
+                {
+                    MeleePosHelper.Draw(MeleePosHelper.Pos.Flank, gcdProgPctg);
+                    //LogHelper.Print("ready for enhanced gibbet");
+                }
+                else
+                {
+                    MeleePosHelper.Clear();
+                    //LogHelper.Print("cleared");
+                }
             }
-            else if (Core.Me.HasAura(AurasDef.EnhancedGibbet))
+            else if (Core.Resolve<JobApi_Reaper>().SoulGauge >= 50 || SpellsDef.SoulSlice.GetSpell().IsReadyWithCanCast())
             {
-                MeleePosHelper2.DrawMeleePos(Pos.Flank, 10000, Helper.GetActionChange(SpellsDef.Gibbet));
+                if (Core.Me.HasAura(AurasDef.EnhancedGallows))
+                {
+                    MeleePosHelper.Draw(MeleePosHelper.Pos.Behind, 1);
+                    //LogHelper.Print("s>=50 or ss ready and enhanced gallows");
+                }
+                else if (Core.Me.HasAura(AurasDef.EnhancedGibbet))
+                {
+                    MeleePosHelper.Draw(MeleePosHelper.Pos.Flank, 1);
+                    //LogHelper.Print("s>=50 or ss ready and enhanced gibbet");
+                }
+                else
+                {
+                    MeleePosHelper.Clear();
+                    //LogHelper.Print("cleared");
+                }
             }
+            else
+            {
+                MeleePosHelper.Clear();
+            }
+        }
+        else
+        {
+            MeleePosHelper.Clear();
         }
     }
 
@@ -104,7 +147,7 @@ public class EventHandler : IRotationEventHandler
         if (!Helper.GlblSettings.NoClipGCD3)
             LogHelper.PrintError("建议在acr全局设置中勾选【全局能力技不卡GCD】选项");
 
-        MeleePosHelper2.Init(Qt.Instance, "真北");
+        //MeleePosHelper2.Init(Qt.Instance, "真北");
 
         //更新时间轴
         //if (DncSettings.Instance.AutoUpdataTimeLines)
