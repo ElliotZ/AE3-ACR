@@ -29,7 +29,8 @@ public class Enshroud : ISlotResolver
             }
             if (Qt.Instance.GetQt("±©Ê³") &&
                     !Core.Me.HasAura(AurasDef.ArcaneCircle) && 
-                    SpellsDef.Gluttony.GetSpell().Cooldown.TotalMilliseconds <= 20000)
+                    SpellsDef.Gluttony.GetSpell().Cooldown.TotalMilliseconds <= 20000 && 
+                    SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds >= 55000)
             {
                 return -6;
             }

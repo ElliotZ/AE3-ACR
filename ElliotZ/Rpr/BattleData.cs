@@ -11,6 +11,8 @@ public class BattleData
 
     public int numBurstPhases = 0;
 
+    public bool justCastAC = false;
+
     //public int 提拉纳阈值 = 30;
 
     //public int 上次自动舞伴时间 = -5000;

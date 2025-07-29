@@ -53,6 +53,7 @@ public static class Qt
         Instance.AddQt("播魂种", true);
         Instance.AddQt("祭牲", true);
         Instance.AddQt("倾泻资源", false);
+        Instance.AddQt("真北优化", true);
 
         Instance.AddHotkey("入境", new HotKeyResolver(SpellsDef.HellsIngress, SpellTargetType.Self));
         Instance.AddHotkey("出境", new HotKeyResolver(SpellsDef.HellsEgress, SpellTargetType.Self));
