@@ -14,12 +14,12 @@ public class DblEnshPrep : ISlotSequence
     public Action CompletedAction { get; set; }
 
     private static bool needShadow(int t) => Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, t, false);
+    public static double PreAcEnshTimer => GCDHelper.GetGCDDuration() * 2.5 + 800;
 
     public int StartCheck()
     {
         if (Core.Me.Level < 80) { return -99; }
-        if (SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds > 
-                GCDHelper.GetGCDDuration() * 2.5 + 800) 
+        if (SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds > PreAcEnshTimer) 
         { 
             return -6; 
         }
