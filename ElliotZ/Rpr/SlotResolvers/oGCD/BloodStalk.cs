@@ -15,7 +15,7 @@ namespace ElliotZ.Rpr.SlotResolvers.oGCD;
 public class BloodStalk : ISlotResolver
 {
     private IBattleChara? Target {  get; set; }
-    //private int Soul => Core.Resolve<JobApi_Reaper>().SoulGauge;
+    private int Soul => Core.Resolve<JobApi_Reaper>().SoulGauge;
 
     public int Check()
     {
@@ -58,11 +58,11 @@ public class BloodStalk : ISlotResolver
             {
                 return -21;
             }
-            if (Core.Resolve<JobApi_Reaper>().SoulGauge == 100) return 1;
+            if (Soul == 100) return 1;
             if (SpellsDef.Gluttony.IsUnlock() &&
-                    SpellsDef.Gluttony.RdyInGCDs(GcdsToOvercap())) //&&
-                    //!SpellsDef.SoulSlice.RdyInGCDs(GcdsToOvercap() - 1) &&
-                    //Core.Resolve<JobApi_Reaper>().SoulGauge < 100)
+                    SpellsDef.Gluttony.RdyInGCDs(GcdsToOvercap()) &&
+                    !(SpellsDef.Gluttony.RdyInGCDs(2) && SpellsDef.SoulSlice.GetSpell().Charges > 1.7f)) // &&
+                    //Soul < 100)
             {
                 return -22;  // delay for gluttony gauge cost
             }
@@ -72,14 +72,22 @@ public class BloodStalk : ISlotResolver
             if (Qt.Instance.GetQt("神秘环") &&
                     SpellsDef.ArcaneCircle.IsUnlock() &&
                     !SpellsDef.ArcaneCircle.RdyInGCDs(GcdsToOvercap() + 3))  // &&
-                    //Core.Resolve<JobApi_Reaper>().SoulGauge < 100)
+                    //Soul < 100)
             {
                 return -31;
             }
         }
-        if (Core.Resolve<JobApi_Reaper>().SoulGauge == 100) return 1;
         if (Qt.Instance.GetQt("神秘环") &&
-                //Core.Resolve<JobApi_Reaper>().SoulGauge < 100 &&
+                //Soul < 100 &&
+                SpellsDef.ArcaneCircle.IsUnlock() &&
+                SpellsDef.ArcaneCircle.RdyInGCDs(2) &&
+                Core.Resolve<JobApi_Reaper>().ShroudGauge != 40)
+        {
+            return -17;  // delay for gluttony after burst window
+        }
+        if (Soul == 100) return 1;
+        if (Qt.Instance.GetQt("神秘环") &&
+                //Soul < 100 &&
                 SpellsDef.ArcaneCircle.IsUnlock() &&
                 SpellsDef.ArcaneCircle.RdyInGCDs(Math.Min(6, GcdsToOvercap() + 3)) &&
                 Core.Resolve<JobApi_Reaper>().ShroudGauge != 40)
@@ -93,7 +101,7 @@ public class BloodStalk : ISlotResolver
                 !SpellsDef.TrueNorth.IsMaxChargeReady(1.8f) &&
                 ((Core.Me.HasAura(AurasDef.EnhancedGallows) && !Helper.AtRear) ||
                     (Core.Me.HasAura(AurasDef.EnhancedGibbet) && !Helper.AtFlank)))  // &&
-        //Core.Resolve<JobApi_Reaper>().SoulGauge < 100)
+                //Soul < 100)
         {
             return -13;  // TN Optimizations perhaps
         }
@@ -117,7 +125,8 @@ public class BloodStalk : ISlotResolver
     private static int GcdsToOvercap()
     {
         int res = (100 - Core.Resolve<JobApi_Reaper>().SoulGauge) / 10;
-        if (Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, BattleData.Instance.GcdDuration, false))
+        if (Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, BattleData.Instance.GcdDuration * (res + 3), false) ||
+            Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 30000 + BattleData.Instance.GcdDuration * res, false))
         {
             res++;
         }

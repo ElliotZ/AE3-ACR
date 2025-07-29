@@ -168,7 +168,7 @@ public static class Helper
     {
         double gcd = GCDHelper.GetGCDDuration() > 0 ? GCDHelper.GetGCDDuration() : 2500;
         int cdInMilliSecs = (int)Core.Resolve<MemApiSpell>().GetCooldown(spellID).TotalMilliseconds;
-        if (spellID.GetSpell().MaxCharges > 1 && spellID.GetSpell().Charges > 0) cdInMilliSecs = 0;
+        if (spellID.GetSpell().MaxCharges > 1 && spellID.GetSpell().Charges >= 1.0f) cdInMilliSecs = 0;
         return numOfGcds >= (int)Math.Ceiling(cdInMilliSecs / gcd);
     }
 
