@@ -75,6 +75,14 @@ public class EventHandler : IRotationEventHandler
             AI.Instance.BattleData.CurrGcdAbilityCount = 1;
         }
         else { AI.Instance.BattleData.CurrGcdAbilityCount = 2; }
+
+        if (spell.Id is SpellsDef.ArcaneCircle)
+        {
+            BattleData.Instance.justCastAC = true;
+        } else
+        {
+            BattleData.Instance.justCastAC = false;
+        }
     }
 
     public void OnBattleUpdate(int currTime) //战斗中逐帧检测

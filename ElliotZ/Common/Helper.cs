@@ -90,6 +90,12 @@ public static class Helper
         return GetAuraTimeLeft(buffId) <= timeLeft;
     }
 
+    public static bool AuraTimerMoreThan(uint buffId, int timeLeft)
+    {
+        if (!Core.Me.HasAura(buffId)) return false;
+        return GetAuraTimeLeft(buffId) > timeLeft;
+    }
+
     /// <summary>
     /// 目标有buff且时间小于等于，有buff参数如果为false，则当目标没有玩家的buff是也返回true
     /// 以毫秒计算
@@ -156,6 +162,14 @@ public static class Helper
         if (list.Contains(item)) return false;
         list.Add(item);
         return true;
+    }
+
+    public static bool RdyInGCDs(this uint spellID, int numOfGcds)
+    {
+        double gcd = GCDHelper.GetGCDDuration() > 0 ? GCDHelper.GetGCDDuration() : 2500;
+        int cdInMilliSecs = (int)Core.Resolve<MemApiSpell>().GetCooldown(spellID).TotalMilliseconds;
+        if (spellID.GetSpell().MaxCharges > 1 && spellID.GetSpell().Charges > 0) cdInMilliSecs = 0;
+        return numOfGcds >= (int)Math.Ceiling(cdInMilliSecs / gcd);
     }
 
     public static bool TgtHasAuraFromMe(List<uint> buffs) =>

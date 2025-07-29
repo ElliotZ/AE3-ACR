@@ -15,8 +15,11 @@ namespace ElliotZ.Rpr.SlotResolvers.oGCD;
 public class BloodStalk : ISlotResolver
 {
     private IBattleChara? Target {  get; set; }
+    //private int Soul => Core.Resolve<JobApi_Reaper>().SoulGauge;
+
     public int Check()
     {
+        
         if (Helper.GetActionChange(SpellsDef.BloodStalk).GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Qt.Instance.GetQt("挥割/爪") == false) { return -98; }
         if (Core.Me.HasAura(AurasDef.Enshrouded)) { return -1; }  // not this slot resolver
@@ -27,45 +30,72 @@ public class BloodStalk : ISlotResolver
         { 
             return -4; 
         }
-        if (Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, GCDHelper.GetGCDDuration(), false)) 
-        { 
-            return -14; 
-        }
-        if (!Core.Me.HasAura(AurasDef.TrueNorth) &&
-                Core.Me.GetCurrTarget().HasPositional() &&
-                !SpellsDef.TrueNorth.IsMaxChargeReady(1.8f) &&
-                ((Core.Me.HasAura(AurasDef.EnhancedGallows) && !Helper.AtRear) ||
-                 (Core.Me.HasAura(AurasDef.EnhancedGibbet) && !Helper.AtFlank)) &&
-                Core.Resolve<JobApi_Reaper>().SoulGauge < 100)
+        if (Helper.ComboTimer <= GCDHelper.GetGCDDuration() + RprSettings.Instance.AnimLock * 3 &&
+        (RprHelper.PrevCombo == SpellsDef.Slice || RprHelper.PrevCombo == SpellsDef.WaxingSlice))
         {
-            return -13;  // TN Optimizations perhaps
+            return -9;  // -9 for combo protection
         }
-        if (SpellsDef.Gluttony.IsUnlock() && 
-                SpellsDef.Gluttony.CoolDownInGCDs(3) && 
-                Core.Resolve<JobApi_Reaper>().SoulGauge < 100)
+        if (Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign,
+                                GCDHelper.GetGCDDuration() + RprSettings.Instance.AnimLock * 3,
+                                false))
         {
-            return -12;  // delay for gluttony gauge cost
+            return -14;
         }
-        if (Qt.Instance.GetQt("神秘环") && 
+        if (Core.Me.HasAura(AurasDef.ImmortalSacrifice) ||
+                SpellsDef.PlentifulHarvest.RecentlyUsed())
+        {
+            return -15;  // delay for burst window
+        }
+        if (Helper.AuraTimerLessThan(AurasDef.ArcaneCircle, 5000) && Core.Me.HasAura(AurasDef.PerfectioParata))
+        {
+            return -16;
+        }
+
+        if (Qt.Instance.GetQt("暴食"))
+        {
+            if (SpellsDef.Gluttony.IsUnlock() && 
+                    SpellsDef.Gluttony.GetSpell().Cooldown.TotalMilliseconds < GCDHelper.GetGCDDuration())
+            {
+                return -21;
+            }
+            if (Core.Resolve<JobApi_Reaper>().SoulGauge == 100) return 1;
+            if (SpellsDef.Gluttony.IsUnlock() &&
+                    SpellsDef.Gluttony.RdyInGCDs(GcdsToOvercap())) //&&
+                    //!SpellsDef.SoulSlice.RdyInGCDs(GcdsToOvercap() - 1) &&
+                    //Core.Resolve<JobApi_Reaper>().SoulGauge < 100)
+            {
+                return -22;  // delay for gluttony gauge cost
+            }
+        }
+        else
+        {
+            if (Qt.Instance.GetQt("神秘环") &&
+                    SpellsDef.ArcaneCircle.IsUnlock() &&
+                    !SpellsDef.ArcaneCircle.RdyInGCDs(GcdsToOvercap() + 3))  // &&
+                    //Core.Resolve<JobApi_Reaper>().SoulGauge < 100)
+            {
+                return -31;
+            }
+        }
+        if (Core.Resolve<JobApi_Reaper>().SoulGauge == 100) return 1;
+        if (Qt.Instance.GetQt("神秘环") &&
+                //Core.Resolve<JobApi_Reaper>().SoulGauge < 100 &&
                 SpellsDef.ArcaneCircle.IsUnlock() &&
-                SpellsDef.ArcaneCircle.CoolDownInGCDs(5) && 
+                SpellsDef.ArcaneCircle.RdyInGCDs(Math.Min(6, GcdsToOvercap() + 3)) &&
                 Core.Resolve<JobApi_Reaper>().ShroudGauge != 40)
         {
             return -12;  // delay for gluttony after burst window
         }
-        if (Helper.ComboTimer <= GCDHelper.GetGCDDuration() + 2000 &&
-                (RprHelper.PrevCombo == SpellsDef.Slice || RprHelper.PrevCombo == SpellsDef.WaxingSlice))
+        if (!Helper.AuraTimerMoreThan(AurasDef.TrueNorth,
+                              BattleData.Instance.GcdDuration - GCDHelper.GetGCDCooldown()) &&
+                Qt.Instance.GetQt("真北") && Qt.Instance.GetQt("真北优化") &&
+                Core.Me.GetCurrTarget().HasPositional() &&
+                !SpellsDef.TrueNorth.IsMaxChargeReady(1.8f) &&
+                ((Core.Me.HasAura(AurasDef.EnhancedGallows) && !Helper.AtRear) ||
+                    (Core.Me.HasAura(AurasDef.EnhancedGibbet) && !Helper.AtFlank)))  // &&
+        //Core.Resolve<JobApi_Reaper>().SoulGauge < 100)
         {
-            return -9;  // -9 for combo protection
-        }
-        if (Core.Me.HasAura(AurasDef.ImmortalSacrifice) || 
-                SpellsDef.PlentifulHarvest.RecentlyUsed()) 
-        { 
-            return -12;  // delay for burst window
-        }
-        if (Helper.AuraTimerLessThan(AurasDef.ArcaneCircle, 5000) && Core.Me.HasAura(AurasDef.PerfectioParata))
-        {
-            return -12;
+            return -13;  // TN Optimizations perhaps
         }
 
         return 0;
@@ -82,6 +112,16 @@ public class BloodStalk : ISlotResolver
             return SpellsDef.GrimSwathe.GetSpell(Target!); 
         }
         return Helper.GetActionChange(SpellsDef.BloodStalk).GetSpell();
+    }
+
+    private static int GcdsToOvercap()
+    {
+        int res = (100 - Core.Resolve<JobApi_Reaper>().SoulGauge) / 10;
+        if (Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, BattleData.Instance.GcdDuration, false))
+        {
+            res++;
+        }
+        return res;
     }
 
     public void Build(Slot slot)

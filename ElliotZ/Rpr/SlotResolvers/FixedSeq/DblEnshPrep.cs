@@ -18,7 +18,8 @@ public class DblEnshPrep : ISlotSequence
     public int StartCheck()
     {
         if (Core.Me.Level < 80) { return -99; }
-        if (SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds > GCDHelper.GetGCDDuration() * 2 + 800) 
+        if (SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds > 
+                GCDHelper.GetGCDDuration() * 2.5 + 800) 
         { 
             return -6; 
         }
@@ -83,6 +84,10 @@ public class DblEnshPrep : ISlotSequence
                 slot.Add(new Spell(SpellsDef.ArcaneCircle, SpellTargetType.Self));
                 slot.Add(new SlotAction(SlotAction.WaitType.None, 0, Spell.CreatePotion()));
             }
+        }
+        else
+        {
+            slot.Add(new SlotAction(SlotAction.WaitType.WaitForSndHalfWindow, 0, SpellsDef.ArcaneCircle.GetSpell()));
         }
         BattleData.Instance.numBurstPhases++;
     }
