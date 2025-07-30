@@ -20,11 +20,12 @@
 
   <PropertyGroup>
 	<DalamudLibPath>$(AppData)\XIVLauncherCN\addon\Hooks\dev\</DalamudLibPath>
+	<AEAssistLibPath>C:\etc\FFXIV_CN\Launcher\devplugins\AEAssistCNVersion\AEAssist\</AEAssistLibPath>
   </PropertyGroup>
 
   <ItemGroup>
     <Reference Include="AEAssist">
-      <HintPath>..\..\..\Launcher\devplugins\AEAssistCNVersion\AEAssist\AEAssist.dll</HintPath>
+      <HintPath>$(AEAssistLibPath)AEAssist.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Dalamud">
