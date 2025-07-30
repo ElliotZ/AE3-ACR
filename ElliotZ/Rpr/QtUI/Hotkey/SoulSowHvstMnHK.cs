@@ -5,26 +5,30 @@ using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
-using ElliotZ.Rpr;
+using ElliotZ.Common;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ElliotZ.Common;
+namespace ElliotZ.Rpr.QtUI.Hotkey;
 
-public class HotKeyResolver : IHotkeyResolver
+public class SoulSowHvstMnHK : IHotkeyResolver
 {
     private readonly uint SpellId;
-    private readonly SpellTargetType TargetType;
+    //private readonly SpellTargetType TargetType;
     private readonly bool UseHighPrioritySlot;
     private readonly bool WaitCoolDown;
 
     /// <summary>
     /// 只使用不卡gcd的强插
     /// </summary>
-    public HotKeyResolver(uint spellId, SpellTargetType targetType, bool useHighPrioritySlot = true,
-        bool waitCoolDown = true)
+    public SoulSowHvstMnHK(bool useHighPrioritySlot = true, bool waitCoolDown = true)
     {
-        SpellId = spellId;
-        TargetType = targetType;
+        SpellId = SpellsDef.Soulsow;
+        //TargetType = targetType;
         UseHighPrioritySlot = useHighPrioritySlot;
         WaitCoolDown = waitCoolDown;
     }
@@ -37,7 +41,7 @@ public class HotKeyResolver : IHotkeyResolver
     public void DrawExternal(Vector2 size, bool isActive)
     {
         var targetSpellId = Core.Resolve<MemApiSpell>().CheckActionChange(SpellId);
-        var spell = targetSpellId.GetSpell(TargetType);
+        var spell = targetSpellId.GetSpell();
 
         if (WaitCoolDown)
         {
@@ -68,7 +72,7 @@ public class HotKeyResolver : IHotkeyResolver
 
     public int Check()
     {
-        var s = SpellId.GetSpell(TargetType);
+        var s = SpellId.GetSpell();
         var isReady = WaitCoolDown ? s.Cooldown.TotalMilliseconds <= 5000 : s.IsReadyWithCanCast();
         return isReady ? 0 : -2;
     }
@@ -76,7 +80,7 @@ public class HotKeyResolver : IHotkeyResolver
     public void Run()
     {
         var targetSpellId = Core.Resolve<MemApiSpell>().CheckActionChange(SpellId);
-        var spell = targetSpellId.GetSpell(TargetType);
+        var spell = targetSpellId.GetSpell();
         var cooldown = spell.Cooldown.TotalMilliseconds;
 
         if (WaitCoolDown && cooldown > 0)
@@ -94,22 +98,21 @@ public class HotKeyResolver : IHotkeyResolver
         if (delay > 0) await Coroutine.Instance.WaitAsync(delay);
 
         if (UseHighPrioritySlot &&
-                !RprSettings.Instance.ForceNextSlotsOnHKs && 
+                !RprSettings.Instance.ForceNextSlotsOnHKs &&
                 Core.Me.GetCurrTarget() is not null &&
-                Core.Me.GetCurrTarget().CanAttack() &&
                 Core.Me.InCombat())
         {
             var slot = new Slot();
             slot.Add(spell);
-            if (spell.IsAbility()) 
-            { 
-                AI.Instance.BattleData.HighPrioritySlots_OffGCD.Enqueue(slot); 
+            if (spell.IsAbility())
+            {
+                AI.Instance.BattleData.HighPrioritySlots_OffGCD.Enqueue(slot);
             }
             else
             {
                 AI.Instance.BattleData.HighPrioritySlots_GCD.Enqueue(slot);
             }
-            
+
         }
         else
         {

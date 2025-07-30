@@ -39,6 +39,7 @@ public class Ingress : ISlotResolver
 
     public void Build(Slot slot)
     {
+        Core.Resolve<MemApiMoveControl>().Stop();
         Core.Resolve<MemApiMove>().SetRot(Helper.GetRotationToTarget(Core.Me.Position, 
                                                                      Core.Me.GetCurrTarget()!.Position));
         slot.Add(SpellsDef.HellsIngress.GetSpell(Core.Me.GetCurrTarget()));

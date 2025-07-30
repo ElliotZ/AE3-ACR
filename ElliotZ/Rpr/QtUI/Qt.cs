@@ -2,6 +2,7 @@
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
 using ElliotZ.Common;
+using ElliotZ.Rpr.QtUI.Hotkey;
 
 namespace ElliotZ.Rpr.QtUI;
 
@@ -60,8 +61,12 @@ public static class Qt
         Instance.AddQt("智能AOE", true);
         Instance.AddQt("自动突进", false);
 
-        Instance.AddHotkey("入境", new HotKeyResolver(SpellsDef.HellsIngress, SpellTargetType.Self));
-        Instance.AddHotkey("出境", new HotKeyResolver(SpellsDef.HellsEgress, SpellTargetType.Self));
+        Instance.AddHotkey("入境", new IngressHK(IngressHK.CurrDir));
+        Instance.AddHotkey("出境", new EgressHK(IngressHK.CurrDir));
+        Instance.AddHotkey("入境<t>", new IngressHK(IngressHK.FaceTarget));
+        Instance.AddHotkey("出境<t>", new EgressHK(IngressHK.FaceTarget));
+        Instance.AddHotkey("入境<cam>", new IngressHK(IngressHK.FaceCam));
+        Instance.AddHotkey("出境<cam>", new EgressHK(IngressHK.FaceCam));
         Instance.AddHotkey("神秘纹", new HotKeyResolver(SpellsDef.ArcaneCrest, SpellTargetType.Self));
         Instance.AddHotkey("LB", new HotKeyResolver_LB());
         Instance.AddHotkey("亲疏", new HotKeyResolver(SpellsDef.ArmsLength, SpellTargetType.Self));
@@ -69,13 +74,14 @@ public static class Qt
         Instance.AddHotkey("浴血", new HotKeyResolver(SpellsDef.Bloodbath, SpellTargetType.Self));
         Instance.AddHotkey("牵制", new HotKeyResolver(SpellsDef.Feint, SpellTargetType.Target));
         Instance.AddHotkey("真北", new HotKeyResolver(SpellsDef.TrueNorth, SpellTargetType.Self));
-        Instance.AddHotkey("播魂种", new HotKeyResolver(SpellsDef.Soulsow, SpellTargetType.Self));
+        Instance.AddHotkey("播魂种", new SoulSowHvstMnHK());
         Instance.AddHotkey("疾跑", new HotKeyResolver_疾跑());
         Instance.AddHotkey("爆发药", new HotKeyResolver_Potion());
 
         //其余tab窗口
         ReadmeTab.Build(Instance);
         SettingTab.Build(Instance);
+        DevTab.Build(Instance);
 
     }
 }

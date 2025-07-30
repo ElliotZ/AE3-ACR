@@ -19,6 +19,10 @@ public class Opener100 : IOpener
         if (Core.Me.Level < 88) { return -99; }  // might not need this
         if (SpellsDef.SoulSlice.IsMaxChargeReady(0.0f)== false) { return -99; }
         if (SpellsDef.ArcaneCircle.GetSpell().IsReadyWithCanCast() == false) { return -99; }
+        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > SettingMgr.GetSetting<GeneralSettings>().AttackRange)
+        {
+            return -2;  // -2 for not in range
+        }
         if (SpellsDef.Gluttony.CoolDownInGCDs(3) == false) { return -6; }
         if (TargetHelper.GetNearbyEnemyCount(5) > 2) { return -13; }  // opener is basically only meant for single target
         return 0;

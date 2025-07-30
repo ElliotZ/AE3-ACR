@@ -57,6 +57,7 @@ public class RprSettings
     public int PrepullCastTimeHarpe = 1700;
     public int AnimLock = 550;
     public bool ForceCast = false;
+    public bool ForceNextSlotsOnHKs = false;
     public bool Debug = false;
     //public bool AutoUpdateTimeLines = true;
     //public bool TimeLinesDebug = false;
