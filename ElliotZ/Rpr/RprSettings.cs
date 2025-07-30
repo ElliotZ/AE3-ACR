@@ -49,7 +49,7 @@ public class RprSettings
 
     public JobViewSave JobViewSave = new()
     {
-        QtLineCount = 2,
+        QtLineCount = 3,
         QtUnVisibleList = ["挥割/爪", "暴食", "灵魂割", "真北", "播魂种", "祭牲"]
     }; // QT设置存档
 

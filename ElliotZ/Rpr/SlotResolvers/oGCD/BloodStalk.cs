@@ -19,8 +19,17 @@ public class BloodStalk : ISlotResolver
 
     public int Check()
     {
-        
-        if (Helper.GetActionChange(SpellsDef.BloodStalk).GetSpell().IsReadyWithCanCast() == false) { return -99; }
+        Target = SpellsDef.GrimSwathe.OptimalAOETarget(4, 180, Qt.Instance.GetQt("智能AOE"));
+
+        if (Target is null && 
+                Helper.GetActionChange(SpellsDef.BloodStalk).GetSpell().IsReadyWithCanCast() == false) 
+        {
+            return -99; 
+        }
+        if (Target is not null && SpellsDef.GrimSwathe.GetSpell(Target!).IsReadyWithCanCast() == false)
+        {
+            return -99;
+        }
         if (Qt.Instance.GetQt("挥割/爪") == false) { return -98; }
         if (Core.Me.HasAura(AurasDef.Enshrouded)) { return -1; }  // not this slot resolver
         
@@ -112,7 +121,6 @@ public class BloodStalk : ISlotResolver
     private Spell Solve()
     {
         //var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 8, 180);
-        Target = SpellsDef.GrimSwathe.OptimalAOETarget(4, 180);
 
         if (Qt.Instance.GetQt("AOE") && Target is not null &&
                 SpellsDef.GrimSwathe.GetSpell(Target!).IsReadyWithCanCast()) 

@@ -8,6 +8,7 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
+using System.Numerics;
 
 namespace ElliotZ.Common;
 
@@ -175,14 +176,58 @@ public static class Helper
     public static bool TgtHasAuraFromMe(List<uint> buffs) =>
         buffs.Any(buff => Core.Me.GetCurrTarget()!.HasLocalPlayerAura(buff));
 
-    public static IBattleChara? OptimalAOETarget(this uint spellId, int count)
+    /// <summary>
+    /// 带开关的智能AOE选择器
+    /// </summary>
+    /// <param name="spellId"></param>
+    /// <param name="count"></param>
+    /// <param name="toggle">这里可以输入控制智能AOE的QT</param>
+    /// <param name="dmgRange">如果toggle有可能为false的话一定要填这个，不然就等死吧</param>
+    /// <returns></returns>
+    public static IBattleChara? OptimalAOETarget(this uint spellId, int count, bool toggle = true, int dmgRange = 0)
     {
-        return TargetHelper.GetMostCanTargetObjects(spellId, count);
+        if (toggle)
+        {
+            return TargetHelper.GetMostCanTargetObjects(spellId, count);
+        }
+        else
+        {
+            //var spellDmgRange = Core.Resolve<MemApiSpell>().
+            var enemyCount = TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 
+                                                              (int)spellId.GetSpell().ActionRange, dmgRange);
+            return (count >= enemyCount ? Core.Me.GetCurrTarget() : null);
+        }
     }
 
-    public static IBattleChara? OptimalAOETarget(this uint spellId, int count, float angle)
+    /// <summary>
+    /// 带开关的智能AOE选择器，扇形
+    /// </summary>
+    /// <param name="spellId"></param>
+    /// <param name="count"></param>
+    /// <param name="angle"></param>
+    /// <param name="toggle">这里可以输入控制智能AOE的QT</param>
+    /// <returns></returns>
+    public static IBattleChara? OptimalAOETarget(this uint spellId, int count, float angle, bool toggle = true)
     {
-        return TargetHelper.GetMostCanTargetObjects(spellId, count, angle);
+        if (toggle)
+        {
+            return TargetHelper.GetMostCanTargetObjects(spellId, count, angle);
+        }
+        else
+        {
+            var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me, 
+                                                                    Core.Me.GetCurrTarget(), 
+                                                                    (int)spellId.GetSpell().ActionRange, 
+                                                                    angle);
+            return (count >= enemyCount ? Core.Me.GetCurrTarget() : null);
+        }
+    }
+
+    public static float GetRotationToTarget(Vector3 from, Vector3 to)
+    {
+        float y = to.X - from.X;
+        float x = to.Z - from.Z;
+        return MathF.Atan2(y, x);
     }
 
     public static bool InAnyRaidBuff()

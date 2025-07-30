@@ -42,6 +42,9 @@ public class RprRotationEntry : IRotationEntry, IDisposable
         new(new Gluttony(), SlotMode.OffGcd),
         new(new Enshroud(), SlotMode.OffGcd),
         new(new BloodStalk(), SlotMode.OffGcd),
+
+        // Always
+        new(new Ingress(), SlotMode.Always),
     ];
 
     public Rotation? Build(string settingFolder)
