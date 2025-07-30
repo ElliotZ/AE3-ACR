@@ -50,7 +50,9 @@ public class EventHandler : IRotationEventHandler
     /// <returns></returns>
     public async Task OnPreCombat()
     {
-        if (SpellsDef.Soulsow.IsUnlock() && Core.Me.HasAura(AurasDef.Soulsow) == false)
+        if (SpellsDef.Soulsow.IsUnlock() &&
+                Core.Me.HasAura(AurasDef.Soulsow) == false &&
+                !SpellsDef.HarvestMoon.GetSpell().RecentlyUsed(1500))
         {
             await SpellsDef.Soulsow.GetSpell().Cast();
         }
@@ -83,6 +85,8 @@ public class EventHandler : IRotationEventHandler
         {
             BattleData.Instance.justCastAC = false;
         }
+
+        //clear HighPrio Queue?
     }
 
     public void OnBattleUpdate(int currTime) //战斗中逐帧检测

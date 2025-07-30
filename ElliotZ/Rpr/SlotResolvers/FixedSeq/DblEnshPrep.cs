@@ -30,6 +30,10 @@ public class DblEnshPrep : ISlotSequence
         //}
         if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Qt.Instance.GetQt("神秘环") == false) { return -98; }
+        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > SettingMgr.GetSetting<GeneralSettings>().AttackRange)
+        {
+            return -2;  // -2 for not in range
+        }
         if (Core.Resolve<JobApi_Reaper>().ShroudGauge < 50) { return -1; }
         if (Core.Me.HasAura(AurasDef.SoulReaver) || Core.Me.HasAura(AurasDef.Executioner)) { return -10; }
         return 0;

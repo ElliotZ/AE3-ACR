@@ -8,6 +8,8 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
+using FFXIVClientStructs.FFXIV.Client.UI;
+using CSFramework = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework;
 using System.Numerics;
 
 namespace ElliotZ.Common;
