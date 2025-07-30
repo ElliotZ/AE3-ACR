@@ -21,6 +21,12 @@ public class EnshroudSk : ISlotResolver
         {
             return -3;  // -3 for Unmet Prereq Conditions
         }
+        if ((SpellsDef.Communio.IsUnlock() ? blueOrb > 1 : true) &&
+                Core.Me.Distance(Core.Me.GetCurrTarget()) > SettingMgr.GetSetting<GeneralSettings>().AttackRange)
+        {
+            return -2;  // -2 for not in range
+        }
+
         if (Qt.Instance.GetQt("单魂衣") && Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 10000, false))
         {
             return -6;

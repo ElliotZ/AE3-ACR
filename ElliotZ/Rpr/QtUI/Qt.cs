@@ -30,6 +30,9 @@ public static class Qt
         Instance.SetQt("播魂种", true);
         Instance.SetQt("祭牲", true);
         Instance.SetQt("倾泻资源", false);
+        Instance.SetQt("真北优化", true);
+        Instance.SetQt("智能AOE", true);
+        Instance.SetQt("自动突进", false);
     }
 
     public static void Build()
@@ -54,6 +57,8 @@ public static class Qt
         Instance.AddQt("祭牲", true);
         Instance.AddQt("倾泻资源", false);
         Instance.AddQt("真北优化", true);
+        Instance.AddQt("智能AOE", true);
+        Instance.AddQt("自动突进", false);
 
         Instance.AddHotkey("入境", new HotKeyResolver(SpellsDef.HellsIngress, SpellTargetType.Self));
         Instance.AddHotkey("出境", new HotKeyResolver(SpellsDef.HellsEgress, SpellTargetType.Self));

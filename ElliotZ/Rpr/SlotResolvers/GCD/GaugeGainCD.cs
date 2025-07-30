@@ -18,6 +18,7 @@ public class GaugeGainCD : ISlotResolver
     {
         if (SpellsDef.SoulSlice.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Qt.Instance.GetQt("灵魂割") == false) { return -98;  }  // -98 for QT toggled off
+
         if (Soul > 50) { return -4; }  // -4 for Overcapped Resources
         if (Soul == 50 && SpellsDef.Gluttony.CoolDownInGCDs(3)) return -4;
         //if (Soul == 50 && SpellsDef.Gluttony.CoolDownInGCDs(2)) { return -4; }

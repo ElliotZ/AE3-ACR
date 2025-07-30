@@ -1,4 +1,5 @@
 using AEAssist;
+using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
@@ -41,6 +42,10 @@ public class Enshroud : ISlotResolver
     {
         if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Qt.Instance.GetQt("ªÍ“¬") == false) { return -98; }
+        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > SettingMgr.GetSetting<GeneralSettings>().AttackRange)
+        {
+            return -2;  // -2 for not in range
+        }
 
         //if (Qt.Instance.GetQt("µ•ªÍ“¬") && Qt.Instance.GetQt("…Ò√ÿª∑") &&
         //    SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 20000) 

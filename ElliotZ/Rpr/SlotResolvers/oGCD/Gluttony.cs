@@ -1,4 +1,5 @@
 ﻿using AEAssist;
+using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
@@ -19,6 +20,10 @@ public class Gluttony : ISlotResolver
             return -99;
         }
         if (Qt.Instance.GetQt("暴食") == false) { return -98; }
+        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > SettingMgr.GetSetting<GeneralSettings>().AttackRange)
+        {
+            return -2;  // -2 for not in range
+        }
 
         if (Core.Me.HasAura(AurasDef.Executioner) ||
                 Core.Me.HasAura(AurasDef.SoulReaver) ||
