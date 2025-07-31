@@ -242,6 +242,22 @@ public static class Helper
                SelfBuff.Any(buff => TgtAuraTimerLessThan(buff, 15000));
     }
 
+    public static bool isUnlockWithRoleSkills(this Spell spell)
+    {
+        List<uint> RoleSkills = [7531, 7533, 7535, 7537, 7538, 7540, 
+                                 7541, 7542, 7546, 7548, 7549, 
+                                 7551, 7553, 7554, 7557, 7559, 
+                                 7560, 7561, 7562, 7568, 7571, 16560, 7863, 846,];
+        if (RoleSkills.Contains(spell.Id))
+        {
+            return true;  // dirty fix for now; need better ways to detect if a role skill is unlocked
+        }
+        else
+        {
+            return spell.IsUnlock();
+        }
+    }
+
     private static uint
         背刺 = 3849,
         强化药 = 49,

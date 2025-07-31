@@ -55,7 +55,7 @@ public class IngressHK : IHotkeyResolver
         var targetSpellId = Core.Resolve<MemApiSpell>().CheckActionChange(SpellId);
         var spell = targetSpellId.GetSpell();
 
-        if (WaitCoolDown)
+        if (WaitCoolDown && spell.isUnlockWithRoleSkills())
         {
             if (spell.Cooldown.TotalMilliseconds <= 5000.0)
             {
@@ -86,6 +86,7 @@ public class IngressHK : IHotkeyResolver
     {
         if (HkType == 2 && Core.Me.GetCurrTarget() is null) return -9;
         var s = SpellId.GetSpell();
+        if (!s.isUnlockWithRoleSkills()) return -1;
         var isReady = WaitCoolDown ? s.Cooldown.TotalMilliseconds <= 5000 : s.IsReadyWithCanCast();
         return isReady ? 0 : -2;
     }
