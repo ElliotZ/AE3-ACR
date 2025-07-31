@@ -39,7 +39,7 @@ public class HotKeyResolver : IHotkeyResolver
         var targetSpellId = Core.Resolve<MemApiSpell>().CheckActionChange(SpellId);
         var spell = targetSpellId.GetSpell(TargetType);
 
-        if (WaitCoolDown)
+        if (WaitCoolDown && spell.isUnlockWithRoleSkills())
         {
             if (spell.Cooldown.TotalMilliseconds <= 5000.0)
             {
@@ -69,6 +69,7 @@ public class HotKeyResolver : IHotkeyResolver
     public int Check()
     {
         var s = SpellId.GetSpell(TargetType);
+        if (!s.isUnlockWithRoleSkills()) return -1;
         var isReady = WaitCoolDown ? s.Cooldown.TotalMilliseconds <= 5000 : s.IsReadyWithCanCast();
         return isReady ? 0 : -2;
     }

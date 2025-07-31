@@ -20,17 +20,17 @@ public class SoulSowHvstMnHK : IHotkeyResolver
     private readonly uint SpellId;
     //private readonly SpellTargetType TargetType;
     private readonly bool UseHighPrioritySlot;
-    private readonly bool WaitCoolDown;
+    //private readonly bool WaitCoolDown;
 
     /// <summary>
     /// 只使用不卡gcd的强插
     /// </summary>
-    public SoulSowHvstMnHK(bool useHighPrioritySlot = true, bool waitCoolDown = true)
+    public SoulSowHvstMnHK(bool useHighPrioritySlot = true)
     {
         SpellId = SpellsDef.Soulsow;
         //TargetType = targetType;
         UseHighPrioritySlot = useHighPrioritySlot;
-        WaitCoolDown = waitCoolDown;
+        //WaitCoolDown = waitCoolDown;
     }
 
     public void Draw(Vector2 size)
@@ -43,38 +43,40 @@ public class SoulSowHvstMnHK : IHotkeyResolver
         var targetSpellId = Core.Resolve<MemApiSpell>().CheckActionChange(SpellId);
         var spell = targetSpellId.GetSpell();
 
-        if (WaitCoolDown)
-        {
-            if (spell.Cooldown.TotalMilliseconds <= 5000.0)
-            {
-                if (isActive)
-                {
-                    HotkeyHelper.DrawActiveState(size);
-                }
-                else
-                {
-                    HotkeyHelper.DrawGeneralState(size);
-                }
-            }
-            else
-            {
-                HotkeyHelper.DrawDisabledState(size);
-            }
+        //if (true)
+        //{
+        //    if (spell.Cooldown.TotalMilliseconds <= 5000.0)
+        //    {
+        //        if (isActive)
+        //        {
+        //            HotkeyHelper.DrawActiveState(size);
+        //        }
+        //        else
+        //        {
+        //            HotkeyHelper.DrawGeneralState(size);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        HotkeyHelper.DrawDisabledState(size);
+        //    }
+        //    HotkeyHelper.DrawCooldownText(spell, size);
+        //    HotkeyHelper.DrawChargeText(spell, size);
+        //}
+        //else
+        //{
+        //    SpellHelper.DrawSpellInfo(spell, size, isActive);
+        //}
 
-            HotkeyHelper.DrawCooldownText(spell, size);
-            HotkeyHelper.DrawChargeText(spell, size);
-        }
-        else
-        {
-            SpellHelper.DrawSpellInfo(spell, size, isActive);
-        }
+        SpellHelper.DrawSpellInfo(spell, size, isActive);
     }
 
     public int Check()
     {
         var s = SpellId.GetSpell();
-        var isReady = WaitCoolDown ? s.Cooldown.TotalMilliseconds <= 5000 : s.IsReadyWithCanCast();
-        return isReady ? 0 : -2;
+        //if (!s.IsUnlock()) return -1;
+        //var isReady = WaitCoolDown ? s.Cooldown.TotalMilliseconds <= 5000 : s.IsReadyWithCanCast();
+        return s.IsReadyWithCanCast() ? 0 : -2;
     }
 
     public void Run()
@@ -83,14 +85,16 @@ public class SoulSowHvstMnHK : IHotkeyResolver
         var spell = targetSpellId.GetSpell();
         var cooldown = spell.Cooldown.TotalMilliseconds;
 
-        if (WaitCoolDown && cooldown > 0)
-        {
-            _ = Run1(spell, (int)cooldown);
-        }
-        else
-        {
-            _ = Run1(spell);
-        }
+        _ = Run1(spell);
+
+        //if (WaitCoolDown && cooldown > 0)
+        //{
+        //    _ = Run1(spell, (int)cooldown);
+        //}
+        //else
+        //{
+        //    _ = Run1(spell);
+        //}
     }
 
     private async Task Run1(Spell spell, int delay = 0)
