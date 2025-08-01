@@ -8,62 +8,86 @@ using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
+using System.Numerics;
 using Task = System.Threading.Tasks.Task;
 
 namespace ElliotZ.Rpr;
 
 public class EventHandler : IRotationEventHandler
 {
-    //private static int 舞步步骤 => Core.Resolve<JobApi_Dancer>().CompleteSteps;
-    //private static bool 大舞ing => Core.Me.HasAura(Data.Buffs.正在大舞);
-    //private static bool 小舞ing => Core.Me.HasAura(Data.Buffs.正在小舞);
+    private MobPullHelper? mobPullHelper;
+    //private static long _lastCheckTime = 0L;
 
-    /// <summary>
-    /// 重置战斗
-    /// </summary>
     public void OnResetBattle()
     {
+        // initializing MobPullHelper's static data and other data in BattleData
         BattleData.Instance = new BattleData();
+        MobPullHelper._lastCheckTime = 0L;
+        MobPullHelper._currentPosition = Vector3.Zero;
+        MobPullHelper._lastPosition = Vector3.Zero;
+
+        // initialize pull record
+        if (AI.Instance.BattleData.CurrBattleTimeInMs >= 0)
+        {
+            if (Core.Resolve<MemApiDuty>().InMission && 
+                Core.Resolve<MemApiDuty>().DutyMembersNumber() == 4 && 
+                RprSettings.Instance.PullingNoBurst)
+            {
+                BattleData.Instance.IsPulling = true;
+            }
+            //else
+            //{
+            //    BattleData.Instance.IsPulling = false;
+            //}
+
+            //MeleePosHelper.Clear();
+            if (RprSettings.Instance.RestoreQtSet) 
+            {
+                Qt.LoadQtStatesNoPot();
+            }
+        }
+        BattleData.Instance.IsPulling = false;
+        MeleePosHelper.Clear();
     }
 
-    /// <summary>
-    /// 进战且无目标时
-    /// </summary>
-    /// <returns></returns>
     public async Task OnNoTarget()
     {
+        // maybe add soulsow, idk
+        if (BattleData.Instance.IsStopped == false) 
+        { 
+            BattleData.Instance.NoTarget = true; 
+        }
+        StopHelper.StopActions(BattleData.Instance.GcdDuration);
+
         await Task.CompletedTask;
     }
 
-    /// <summary>
-    /// 施法成功判定可以滑步时
-    /// </summary>
-    /// <param name="slot"></param>
-    /// <param name="spell"></param>
     public void OnSpellCastSuccess(Slot slot, Spell spell)
     {
     }
 
-    /// <summary>
-    /// 脱战时
-    /// </summary>
-    /// <returns></returns>
     public async Task OnPreCombat()
     {
-        if (SpellsDef.Soulsow.IsUnlock() &&
+        if (!Core.Resolve<MemApiDuty>().IsOver && Core.Resolve<MemApiDuty>().InMission)
+        {
+            if (Core.Resolve<MemApiDuty>().DutyMembersNumber() == 8 && RprSettings.Instance.NoBurst)
+            {
+                LogHelper.Print("检测到你在8人本开了“小怪低血量不交爆发”，为防止出错已自动为你关闭该设置。");
+                RprSettings.Instance.NoBurst = false;
+            }
+        }
+
+        // out of combat soulsow
+        if (SpellsDef.Soulsow.IsUnlock() && Qt.Instance.GetQt("播魂种") &&
                 Core.Me.HasAura(AurasDef.Soulsow) == false &&
                 !SpellsDef.HarvestMoon.GetSpell().RecentlyUsed(1500))
         {
             await SpellsDef.Soulsow.GetSpell().Cast();
         }
+
+        StopHelper.StopActions(BattleData.Instance.GcdDuration);
     }
 
-    /// <summary>
-    /// 某个技能使用之后的处理,比如诗人在刷Dot之后记录这次是否是强化buff的Dot 
-    /// 如果是读条技能，则是服务器判定它释放成功的时间点，比上面的要慢一点
-    /// </summary>
-    /// <param name="slot"></param>
-    /// <param name="spell"></param>
     public void AfterSpell(Slot slot, Spell spell)
     {
         //记录复唱时间
@@ -71,69 +95,115 @@ public class EventHandler : IRotationEventHandler
         if (d > 0) BattleData.Instance.GcdDuration = d;
 
         //Single Weave Skills
-        if (spell.Id is SpellsDef.VoidReaping
-                     or SpellsDef.CrossReaping)
-        {
-            AI.Instance.BattleData.CurrGcdAbilityCount = 1;
-        }
-        else { AI.Instance.BattleData.CurrGcdAbilityCount = 2; }
+        AI.Instance.BattleData.CurrGcdAbilityCount = (spell.Id is SpellsDef.VoidReaping 
+                                                               or SpellsDef.CrossReaping) ? 1 : 2;
 
-        if (spell.Id is SpellsDef.ArcaneCircle)
-        {
-            BattleData.Instance.justCastAC = true;
-        } else
-        {
-            BattleData.Instance.justCastAC = false;
-        }
-
-        //clear HighPrio Queue?
+        BattleData.Instance.justCastAC = (spell.Id is SpellsDef.ArcaneCircle);
     }
 
-    public void OnBattleUpdate(int currTime) //战斗中逐帧检测
+    public void OnBattleUpdate(int currTime)
     {
         var gcdProgPctg = (int)((GCDHelper.GetGCDCooldown() / (double)BattleData.Instance.GcdDuration) * 100);
-        var inTN = Core.Me.HasAura(AurasDef.TrueNorth);
-        var GibGallowsReady = Core.Me.HasAura(AurasDef.SoulReaver) || Core.Me.HasAura(AurasDef.Executioner);
+        var inTN = Core.Me.HasAura(AurasDef.TrueNorth) &&
+                   !RprSettings.Instance.NoPosDrawInTN;
+        var GibGallowsReady = Core.Me.HasAura(AurasDef.SoulReaver) || 
+                              Core.Me.HasAura(AurasDef.Executioner);
+        var GibGallowsJustUsed = 
+                Core.Resolve<MemApiSpell>().CheckActionChange(SpellsDef.Gibbet).RecentlyUsed(500) ||
+                Core.Resolve<MemApiSpell>().CheckActionChange(SpellsDef.Gallows).RecentlyUsed(500);
 
+        // detect if tank is pulling in dungeons
+        mobPullHelper = new MobPullHelper();
+        if (mobPullHelper.CurrTank is not null && RprSettings.Instance.PullingNoBurst)
+        {
+            if (AI.Instance.BattleData.CurrBattleTimeInMs - MobPullHelper._lastCheckTime >= 1000)
+            {
+                mobPullHelper.CheckTankPosition();
+                MobPullHelper._lastCheckTime = AI.Instance.BattleData.CurrBattleTimeInMs;
+            }
+
+            if (mobPullHelper.IsPulling == false) 
+            { 
+                mobPullHelper.CheckEnemiesAroundTank();
+                if (mobPullHelper.ConcentrationPctg > RprSettings.Instance.ConcentrationThreshold)
+                {
+                    BattleData.Instance.IsPulling = false;
+                }
+            }
+        }
+        // exclude bosses
+        if (BattleData.Instance.IsPulling && Core.Me.GetCurrTarget().IsBoss())
+        {
+            BattleData.Instance.IsPulling = false;
+        }
+
+        // logic for holding bursts when mob pack is about to die
+        BattleData.Instance.TotalHpPercentage = MobPullHelper.GetTotalHealthPercentageOfNearbyEnemies();
+        BattleData.Instance.AverageTTK = MobPullHelper.GetAverageTTKOfNearbyEnemies();
+
+        if (RprSettings.Instance.NoBurst && 
+            !Core.Resolve<MemApiDuty>().InBossBattle &&  // exclude boss battles and msq ultima wep
+            Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() != 1048 &&
+            AI.Instance.BattleData.CurrBattleTimeInMs > 10000 && 
+                (BattleData.Instance.TotalHpPercentage < RprSettings.Instance.MinMobHpPercent || 
+                 BattleData.Instance.AverageTTK < (RprSettings.Instance.minTTK * 1000)))
+        {
+            Qt.Instance.SetQt("魂衣", false);
+            Qt.Instance.SetQt("神秘环", false);
+        }
+
+        // stop action during accel bombs, pyretics and/or when boss is invuln
+        if (Helper.AnyAuraTimerLessThan(StopHelper.AccelBomb, 3000) && 
+            PlayerOptions.Instance.Stop == false)
+        {
+            if (Core.Me.GetCurrTarget() is not null && 
+                    Qt.Instance.GetQt("收获月") && 
+                    Core.Me.HasAura(AurasDef.Soulsow))
+            {
+                if (AI.Instance.BattleData.NextSlot is null)
+                {
+                    AI.Instance.BattleData.NextSlot = new Slot();
+                }
+                AI.Instance.BattleData.NextSlot.Add(SpellsDef.HarvestMoon.GetSpell());
+            }
+        }
+
+        StopHelper.StopActions(BattleData.Instance.GcdDuration);
+
+        // positional indicator
         if (!inTN && 
                 !Core.Me.HasAura(AurasDef.Enshrouded) && 
                 Core.Me.GetCurrTarget() is not null && 
                 Core.Me.GetCurrTarget().HasPositional())
         {
-            if (GibGallowsReady)
+            if (GibGallowsReady && !GibGallowsJustUsed)
             {
                 if (Core.Me.HasAura(AurasDef.EnhancedGallows))
                 {
                     MeleePosHelper.Draw(MeleePosHelper.Pos.Behind, gcdProgPctg);
-                    //LogHelper.Print("ready for enhanced gallows");
                 }
                 else if (Core.Me.HasAura(AurasDef.EnhancedGibbet))
                 {
                     MeleePosHelper.Draw(MeleePosHelper.Pos.Flank, gcdProgPctg);
-                    //LogHelper.Print("ready for enhanced gibbet");
                 }
                 else
                 {
                     MeleePosHelper.Clear();
-                    //LogHelper.Print("cleared");
                 }
             }
             else if (Core.Resolve<JobApi_Reaper>().SoulGauge >= 50 || SpellsDef.SoulSlice.GetSpell().IsReadyWithCanCast())
             {
                 if (Core.Me.HasAura(AurasDef.EnhancedGallows))
                 {
-                    MeleePosHelper.Draw(MeleePosHelper.Pos.Behind, 1);
-                    //LogHelper.Print("s>=50 or ss ready and enhanced gallows");
+                    MeleePosHelper.Draw(MeleePosHelper.Pos.Behind, 33);
                 }
                 else if (Core.Me.HasAura(AurasDef.EnhancedGibbet))
                 {
-                    MeleePosHelper.Draw(MeleePosHelper.Pos.Flank, 1);
-                    //LogHelper.Print("s>=50 or ss ready and enhanced gibbet");
+                    MeleePosHelper.Draw(MeleePosHelper.Pos.Flank, 33);
                 }
                 else
                 {
                     MeleePosHelper.Clear();
-                    //LogHelper.Print("cleared");
                 }
             }
             else

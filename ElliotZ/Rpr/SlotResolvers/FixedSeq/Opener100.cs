@@ -50,7 +50,7 @@ public class Opener100 : IOpener
 
     private static void Step0(Slot slot)
     {
-        slot.Add(new Spell(SpellsDef.ShadowOfDeath, SpellTargetType.Target));
+        slot.Add(SpellsDef.ShadowOfDeath.GetSpell());
         if (Qt.Instance.GetQt("爆发药") && !Qt.Instance.GetQt("爆发药2分") && !RprSettings.Instance.TripleWeavePot)
         {
             slot.Add(new SlotAction(SlotAction.WaitType.WaitInMs,
@@ -61,21 +61,21 @@ public class Opener100 : IOpener
 
     private static void Step1(Slot slot)
     {
-        slot.Add(new Spell(SpellsDef.SoulSlice, SpellTargetType.Target));
+        slot.Add(SpellsDef.SoulSlice.GetSpell());
         if (RprSettings.Instance.TripleWeavePot && Qt.Instance.GetQt("爆发药") && !Qt.Instance.GetQt("爆发药2分"))
         {
             slot.Add(new SlotAction(SlotAction.WaitType.WaitInMs,
                         GCDHelper.GetGCDDuration() - RprSettings.Instance.AnimLock * 3,
                         SpellsDef.ArcaneCircle.GetSpell()));
             slot.Add(Spell.CreatePotion());
-            slot.Add(new Spell(SpellsDef.Gluttony, SpellTargetType.Target));
+            slot.Add(SpellsDef.Gluttony.GetSpell());
         }
         else 
         {
             slot.Add(new SlotAction(SlotAction.WaitType.WaitInMs,
                                     GCDHelper.GetGCDDuration() - 2000,
                                     SpellsDef.ArcaneCircle.GetSpell()));
-            slot.Add(new Spell(SpellsDef.Gluttony, SpellTargetType.Target));
+            slot.Add(SpellsDef.Gluttony.GetSpell());
             //LogHelper.Error("why does this not work");
         }
     }

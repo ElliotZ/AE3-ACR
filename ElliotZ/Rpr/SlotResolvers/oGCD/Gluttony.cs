@@ -24,6 +24,7 @@ public class Gluttony : ISlotResolver
         {
             return -2;  // -2 for not in range
         }
+        if (BattleData.Instance.IsPulling) return -3;
 
         if (Core.Me.HasAura(AurasDef.Executioner) ||
                 Core.Me.HasAura(AurasDef.SoulReaver) ||

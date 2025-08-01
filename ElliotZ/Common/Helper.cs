@@ -84,6 +84,17 @@ public static class Helper
                      (spell.RecastTime.TotalMilliseconds / spell.MaxCharges) * (spell.MaxCharges - 1));
     }
 
+    public static bool AnyAuraTimerLessThan(List<uint> auras, int timeLeft)
+    {
+        foreach(var aura in Core.Me.StatusList)
+        {
+            if (aura.StatusId != 0 &&
+                    (double)Math.Abs(aura.RemainingTime) * 1000.0 <= timeLeft &&
+                    auras.Contains(aura.StatusId)) return true;
+        }
+        return false;
+    }
+
     /// <summary>
     /// 自身有buff且时间小于
     /// </summary>
@@ -255,6 +266,48 @@ public static class Helper
         else
         {
             return spell.IsUnlock();
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="spell"></param>
+    /// <returns>True if spell is in HP queue, false otherwise</returns>
+    public static bool CheckInHPQueue(this Spell spell)
+    {
+        Slot t = new Slot();
+        t.Add(spell);
+        if (spell.IsAbility())
+        {
+            return AI.Instance.BattleData.HighPrioritySlots_OffGCD.Count > 0 &&
+                        AI.Instance.BattleData.HighPrioritySlots_OffGCD.Contains(t);
+        }
+        else
+        {
+            return AI.Instance.BattleData.HighPrioritySlots_GCD.Count > 0 &&
+                        AI.Instance.BattleData.HighPrioritySlots_GCD.Contains(t);
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="spell"></param>
+    /// <returns>True if spell is at the top of HP queue, false otherwise</returns>
+    public static bool CheckInHPQueueTop(this Spell spell)
+    {
+        Slot t = new Slot();
+        t.Add(spell);
+        if (spell.IsAbility())
+        {
+            return AI.Instance.BattleData.HighPrioritySlots_OffGCD.Count > 0 &&
+                        AI.Instance.BattleData.HighPrioritySlots_OffGCD.Peek().Equals(t);
+        }
+        else
+        {
+            return AI.Instance.BattleData.HighPrioritySlots_GCD.Count > 0 &&
+                        AI.Instance.BattleData.HighPrioritySlots_GCD.Peek().Equals(t);
         }
     }
 

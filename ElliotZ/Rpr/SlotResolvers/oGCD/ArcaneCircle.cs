@@ -18,6 +18,7 @@ public class ArcaneCircle : ISlotResolver
         {
             return -16;  // delay for next pack
         }
+        if (BattleData.Instance.IsPulling) return -3;
 
         if (AI.Instance.BattleData.CurrBattleTimeInMs < 5000 && SpellsDef.SoulScythe.GetSpell().Charges == 2)
         {
