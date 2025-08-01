@@ -38,13 +38,13 @@ public static class DevTab
                     //float num = (int)Core.Resolve<JobApi_Monk>().BlitzTimeRemaining;
                     //ImGui.Text($"必杀技剩余时间: {num / 1000f:F1} 秒");
                     //ImGui.Text($"自动对齐红莲与团辅: {MnkRotationEventHandler.BurstAlignmentLocked} ");
-                    //ImGui.Text($"当前地图ID: {Core.Resolve<MemApiZoneInfo>().GetCurrTerrId()} ");
-                    //ImGui.Text($"角色当前坐标: {Core.Me.Position} ");
-                    //if (ImGui.Button("CID:" + ECHelper.ClientState.LocalContentId))
-                    //{
-                    //    ImGui.SetClipboardText(ECHelper.ClientState.LocalContentId.ToString());
-                    //    LogHelper.Print("已复制CID到剪贴板");
-                    //}
+                    ImGui.Text($"当前地图ID: {Core.Resolve<MemApiZoneInfo>().GetCurrTerrId()} ");
+                    ImGui.Text($"角色当前坐标: {Core.Me.Position} ");
+                    if (ImGui.Button("CID:" + ECHelper.ClientState.LocalContentId))
+                    {
+                        ImGui.SetClipboardText(ECHelper.ClientState.LocalContentId.ToString());
+                        LogHelper.Print("已复制CID到剪贴板");
+                    }
 
                     //string text = string.Join(", ", Core.Me.StatusList.Select(delegate (Status status)
                     //{

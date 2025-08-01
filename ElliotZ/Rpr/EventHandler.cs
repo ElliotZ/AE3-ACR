@@ -17,6 +17,7 @@ public class EventHandler : IRotationEventHandler
 {
     private MobPullHelper? mobPullHelper;
     //private static long _lastCheckTime = 0L;
+    private static bool _burstSettingsAltered = false;
 
     public void OnResetBattle()
     {
@@ -74,7 +75,15 @@ public class EventHandler : IRotationEventHandler
             {
                 LogHelper.Print("检测到你在8人本开了“小怪低血量不交爆发”，为防止出错已自动为你关闭该设置。");
                 RprSettings.Instance.NoBurst = false;
+                _burstSettingsAltered = true;
             }
+        }
+
+        if (Core.Resolve<MemApiDuty>().IsOver && _burstSettingsAltered) 
+        {
+            LogHelper.Print("改变过“小怪低血量不交爆发”的设置，现在复原。");
+            RprSettings.Instance.NoBurst = true;
+            _burstSettingsAltered = false;
         }
 
         // out of combat soulsow
@@ -168,7 +177,7 @@ public class EventHandler : IRotationEventHandler
             }
         }
 
-        StopHelper.StopActions(BattleData.Instance.GcdDuration);
+        StopHelper.StopActions(BattleData.Instance.GcdDuration, retarget: true);
 
         // positional indicator
         if (!inTN && 
@@ -195,11 +204,11 @@ public class EventHandler : IRotationEventHandler
             {
                 if (Core.Me.HasAura(AurasDef.EnhancedGallows))
                 {
-                    MeleePosHelper.Draw(MeleePosHelper.Pos.Behind, 33);
+                    MeleePosHelper.Draw(MeleePosHelper.Pos.Behind, 70);
                 }
                 else if (Core.Me.HasAura(AurasDef.EnhancedGibbet))
                 {
-                    MeleePosHelper.Draw(MeleePosHelper.Pos.Flank, 33);
+                    MeleePosHelper.Draw(MeleePosHelper.Pos.Flank, 70);
                 }
                 else
                 {
