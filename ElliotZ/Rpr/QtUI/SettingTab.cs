@@ -44,11 +44,17 @@ public static class SettingTab
                 ImGui.DragInt("动画锁长度", ref RprSettings.Instance.AnimLock, 10, 10, 1000);
                 ImGui.Checkbox("读条忽略移动状态", ref RprSettings.Instance.ForceCast);
                 ImGui.Checkbox("Debug", ref RprSettings.Instance.Debug);
+                ImGui.Checkbox("StopHelper Debug", ref StopHelper.Debug);
                 ImGui.EndGroup();
                 ImGui.Dummy(new Vector2(0, 10));
             }
 
             ImGuiHelper.Separator();
+
+            if (ImGui.Button("记录当前QT设置"))
+            {
+                Qt.SaveQtStates();
+            }
 
             if (ImGui.Button("获取爆发药情况"))
             {

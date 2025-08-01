@@ -55,18 +55,40 @@ public static class StopHelper
 
     public static readonly List<uint> Pyretic = [960, 639, 3522, 1599, 1133, 1049];
 
-    public static readonly List<uint> Invulns = [ 352, 529, 656, 671, 
-                                                    775, 776, 696, 981, 
-                                                    1570, 1697, 1829, 328, 
-                                                    2287, 3009, 3010, 3011, 
-                                                    3012 ];
+    public static readonly List<uint> Invulns =
+    [
+        325, // 无敌：一切攻击都无法造成伤害
+        529, // 无敌：一切攻击都无法造成伤害
+        656, // 无敌：一切攻击都无法造成伤害
+        671, // 无敌：一切攻击都无法造成伤害
+        775, // 无敌：一切攻击都无法造成伤害
+        776, // 无敌：一切攻击都无法造成伤害
+        895, // 无敌：所有攻击均无效化
+        969, // 无敌：一切攻击都无法造成伤害
+        981, // 无敌：一切攻击都无法造成伤害
+        1570, // 无敌：一切攻击都无法造成伤害
+        1697, // 无敌：一切攻击都无法造成伤害
+        1444,//魔导结界,塔结界在运转，一切攻击都无法造成伤害
+        1829, // 无敌：一切攻击都无法造成伤害
+        328, // 土神的心石
+        2287, // 纯正神圣领域
+        2670, // 冥界行
+        3012, // 风神障壁
+        3039, // 不死救赎
+        3255, // 出死入生
+        394, // 无敌：所有攻击均无效化
+        //1125, // 特定方向无敌：令特定方向的攻击无效化
+        1567, // 召唤兽的加护：受到了召唤兽的加护，处于暂时无敌的状态
+    ];
 
     public static readonly HashSet<string> WhiteList = [ "18014449513685488", 
                                                          "18014449511049086", 
                                                          "19014409515763009", 
                                                          "19014419509512110" ];
 
-    public static void StopActions(int time)
+    public static bool Debug = false;
+
+    public static void StopActions(int time, bool retarget = false)
     {
         var check = StopCheck(time);
         if (check is 1 or 2)
@@ -86,8 +108,11 @@ public static class StopHelper
             if (!_manualOverride) 
             {
                 PlayerOptions.Instance.Stop = false; 
-                if (TargetMgr.Instance.EnemysIn20.Count > 0 && Core.Me.GetCurrTarget() == Core.Me)
+                if (retarget && TargetMgr.Instance.EnemysIn20.Count > 0 && 
+                        (Core.Me.GetCurrTarget() is null || 
+                         Core.Me.GetCurrTarget()!.GameObjectId == Core.Me.GameObjectId))
                 {
+                    if (Debug) LogHelper.Print("Setting Target");
                     Core.Me.SetTarget(TargetMgr.Instance.EnemysIn20.Values.First());
                 }
             }
@@ -104,7 +129,9 @@ public static class StopHelper
     {
         if (Helper.AnyAuraTimerLessThan(AccelBomb, time)) { return 1; }
         if (Core.Me.HasAnyAura(Pyretic)) { return 1; }
-        if (Core.Me.GetCurrTarget() is not null && Core.Me.GetCurrTarget().HasAnyAura(Invulns)) 
+        if (Core.Me.GetCurrTarget() is not null && 
+                !(Core.Me.GetCurrTarget()!.GameObjectId == Core.Me.GameObjectId) && 
+                Core.Me.GetCurrTarget().HasAnyAura(Invulns)) 
         {
             return 2; 
         }
