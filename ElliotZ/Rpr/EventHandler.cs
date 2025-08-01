@@ -36,10 +36,10 @@ public class EventHandler : IRotationEventHandler
             {
                 BattleData.Instance.IsPulling = true;
             }
-            //else
-            //{
-            //    BattleData.Instance.IsPulling = false;
-            //}
+            else
+            {
+                BattleData.Instance.IsPulling = false;
+            }
 
             //MeleePosHelper.Clear();
             if (RprSettings.Instance.RestoreQtSet) 
@@ -47,7 +47,7 @@ public class EventHandler : IRotationEventHandler
                 Qt.LoadQtStatesNoPot();
             }
         }
-        BattleData.Instance.IsPulling = false;
+        //BattleData.Instance.IsPulling = false;
         MeleePosHelper.Clear();
     }
 
