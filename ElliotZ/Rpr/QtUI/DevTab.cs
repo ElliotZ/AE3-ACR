@@ -68,6 +68,7 @@ public static class DevTab
                     //ImGui.Text("自身Buff (" + text + ")");
                     ImGui.Text("周围20m目标: " + text2);
                     ImGui.PopTextWrapPos();
+                    ImGui.Text("IsPulling: " + BattleData.Instance.IsPulling);
                     //int num2 = GcdCalculator.CalculateSyncedGcd();
                     //ImGui.Text($"GCD复唱时间 ({(float)num2 / 1000f})");
                     float rotation = Core.Me.Rotation;
