@@ -70,6 +70,18 @@ public class RprRotationEntry : IRotationEntry, IDisposable
         return rot;
     }
 
+    public string CheckFirstAvailableSkillGCD()
+    {
+        SlotResolverData slotResolverData = _slotResolvers.FirstOrDefault((SlotResolverData srd) => srd.SlotMode == SlotMode.Gcd && srd.SlotResolver.Check() >= 0);
+        return (slotResolverData != null) ? slotResolverData.SlotResolver.GetType().Name : "无技能";
+    }
+
+    public string CheckFirstAvailableSkilloffGCD()
+    {
+        SlotResolverData slotResolverData = _slotResolvers.FirstOrDefault((SlotResolverData srd) => srd.SlotMode == SlotMode.OffGcd && srd.SlotResolver.Check() >= 0);
+        return (slotResolverData != null) ? slotResolverData.SlotResolver.GetType().Name : "无技能";
+    }
+
     public IRotationUI GetRotationUI() { return Qt.Instance; }
     public void OnDrawSetting() { }
     public void Dispose() { }
