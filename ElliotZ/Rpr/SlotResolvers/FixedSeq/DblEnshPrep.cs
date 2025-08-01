@@ -53,22 +53,22 @@ public class DblEnshPrep : ISlotSequence
 
     private static void Step0(Slot slot)
     {
-        slot.Add(new Spell(SpellsDef.Enshroud, SpellTargetType.Self));
+        slot.Add(SpellsDef.Enshroud.GetSpell());
         slot.Add(GCD.BuffMaintain.Solve().GetSpell());
     }
 
     private static void Step1(Slot slot)
     {
-        slot.Add(new Spell(SpellsDef.VoidReaping, SpellTargetType.Target));
+        slot.Add(SpellsDef.VoidReaping.GetSpell());
         
     }
     private static void Step2(Slot slot)
     {
         if (Helper.TgtAuraTimerMoreThan(AurasDef.DeathsDesign, 30000) && 
-            SpellsDef.HarvestMoon.GetSpell().IsReadyWithCanCast())
-            slot.Add(new Spell(SpellsDef.HarvestMoon, SpellTargetType.Target));
+            SpellsDef.HarvestMoon.GetSpell().IsReadyWithCanCast() && Qt.Instance.GetQt("收获月"))
+            slot.Add(SpellsDef.HarvestMoon.GetSpell());
         else
-            slot.Add(new Spell(SpellsDef.ShadowOfDeath, SpellTargetType.Target));
+            slot.Add(SpellsDef.ShadowOfDeath.GetSpell());
         if (Qt.Instance.GetQt("爆发药"))
         {
             if (BattleData.Instance.numBurstPhases == 0)
@@ -76,7 +76,7 @@ public class DblEnshPrep : ISlotSequence
                 if (ItemHelper.CheckCurrJobPotion())
                 {
                     slot.Add(new SlotAction(SlotAction.WaitType.None, 0, Spell.CreatePotion()));
-                    slot.Add(new Spell(SpellsDef.ArcaneCircle, SpellTargetType.Self));
+                    slot.Add(SpellsDef.ArcaneCircle.GetSpell());
                 }
                 else
                 {
@@ -85,7 +85,7 @@ public class DblEnshPrep : ISlotSequence
             }
             else
             {
-                slot.Add(new Spell(SpellsDef.ArcaneCircle, SpellTargetType.Self));
+                slot.Add(SpellsDef.ArcaneCircle.GetSpell());
                 slot.Add(new SlotAction(SlotAction.WaitType.None, 0, Spell.CreatePotion()));
             }
         }

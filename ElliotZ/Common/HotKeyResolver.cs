@@ -70,6 +70,7 @@ public class HotKeyResolver : IHotkeyResolver
     {
         var s = SpellId.GetSpell(TargetType);
         if (!s.isUnlockWithRoleSkills()) return -1;
+        if (UseHighPrioritySlot && Helper.CheckInHPQueueTop(s)) return -3;
         var isReady = WaitCoolDown ? s.Cooldown.TotalMilliseconds <= 5000 : s.IsReadyWithCanCast();
         return isReady ? 0 : -2;
     }

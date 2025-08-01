@@ -18,6 +18,11 @@ public class BuffMaintain : ISlotResolver
     public int Check()
     {
         if (SpellsDef.ShadowOfDeath.GetSpell().IsReadyWithCanCast() == false) { return -99; }  // -99 for not usable
+        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > SettingMgr.GetSetting<GeneralSettings>().AttackRange)
+        {
+            return -2;  // -2 for not in range
+        }
+        if (BattleData.Instance.IsPulling) return -3;
 
         if (SpellsDef.WhorlOfDeath.RecentlyUsed(5000)) { return -5; }  // -5 for Avoiding Spam
 

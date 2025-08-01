@@ -76,6 +76,7 @@ public class SoulSowHvstMnHK : IHotkeyResolver
         var s = SpellId.GetSpell();
         //if (!s.IsUnlock()) return -1;
         //var isReady = WaitCoolDown ? s.Cooldown.TotalMilliseconds <= 5000 : s.IsReadyWithCanCast();
+        if (UseHighPrioritySlot && Helper.CheckInHPQueueTop(s)) return -3;
         return s.IsReadyWithCanCast() ? 0 : -2;
     }
 

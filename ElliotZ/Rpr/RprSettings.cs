@@ -47,18 +47,42 @@ public class RprSettings
 
     #endregion
 
+    // General Settings
+    public int AnimLock = 550;
+    public bool ForceCast = false;
+    public bool ForceNextSlotsOnHKs = false;
+    public bool NoPosDrawInTN = false;
+    public bool TxtCmdWindowOpen = true;
+    public bool RestoreQtSet = true;
+    public bool ShowToast = false;
+    public bool Debug = false;
+
+    // Roulette Utility Settings
+    public bool NoBurst = true;
+    public bool PullingNoBurst = true;
+    public bool AutoCrest = false;
+    public float CrestPercent = 0.7f;
+    public bool AutoSecondWind = true;
+    public float SecondWindPercent = 0.8f;
+    public bool AutoBloodBath = true;
+    public float BloodBathPercent = 0.6f;
+    public bool AutoFeint = false;
+    public float MinMobHpPercent = 0.1f;
+    public float ConcentrationThreshold = 0.75f;
+    public int minTTK = 15;
+
+    // Opener Settings
+    public bool TripleWeavePot = false;
+    public int PrepullCastTimeHarpe = 1700;
+
+    //public bool AutoUpdateTimeLines = true;
+    //public bool TimeLinesDebug = false;
+
+    // QT设置存档
+    public Dictionary<String, bool> QtStates = new Dictionary<String, bool>();
     public JobViewSave JobViewSave = new()
     {
         QtLineCount = 3,
         QtUnVisibleList = ["挥割/爪", "暴食", "灵魂割", "真北", "播魂种", "祭牲"]
-    }; // QT设置存档
-
-    public bool TripleWeavePot = false;
-    public int PrepullCastTimeHarpe = 1700;
-    public int AnimLock = 550;
-    public bool ForceCast = false;
-    public bool ForceNextSlotsOnHKs = false;
-    public bool Debug = false;
-    //public bool AutoUpdateTimeLines = true;
-    //public bool TimeLinesDebug = false;
+    }; 
 }

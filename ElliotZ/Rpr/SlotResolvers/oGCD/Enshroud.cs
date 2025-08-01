@@ -47,6 +47,8 @@ public class Enshroud : ISlotResolver
             return -2;  // -2 for not in range
         }
 
+        if (BattleData.Instance.IsPulling) return -3;
+
         //if (Qt.Instance.GetQt("µ•ªÍ“¬") && Qt.Instance.GetQt("…Ò√ÿª∑") &&
         //    SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 20000) 
         //{ 

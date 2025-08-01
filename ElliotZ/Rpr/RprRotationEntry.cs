@@ -3,6 +3,7 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Helper;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
+using ElliotZ.Rpr.SlotResolvers;
 using ElliotZ.Rpr.SlotResolvers.FixedSeq;
 using ElliotZ.Rpr.SlotResolvers.GCD;
 using ElliotZ.Rpr.SlotResolvers.oGCD;
@@ -25,6 +26,7 @@ public class RprRotationEntry : IRotationEntry, IDisposable
         new(new EnshroudSk(), SlotMode.Gcd),
         new(new GibGall(), SlotMode.Gcd),
         new(new PerfectioHighPrio(), SlotMode.Gcd),
+        new(new SoulSow(), SlotMode.Gcd),
         new(new BuffMaintain(), SlotMode.Gcd),
         new(new GaugeGainCD(), SlotMode.Gcd),
         new(new Perfectio(), SlotMode.Gcd),
@@ -43,7 +45,7 @@ public class RprRotationEntry : IRotationEntry, IDisposable
         new(new Enshroud(), SlotMode.OffGcd),
         new(new BloodStalk(), SlotMode.OffGcd),
 
-        // Always
+        // Low Prio Always
         new(new Ingress(), SlotMode.Always),
     ];
 

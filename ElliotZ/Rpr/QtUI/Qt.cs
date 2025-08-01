@@ -1,8 +1,10 @@
 ﻿using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
+using AEAssist.Helper;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI.Hotkey;
+using PInvoke;
 
 namespace ElliotZ.Rpr.QtUI;
 
@@ -34,6 +36,39 @@ public static class Qt
         Instance.SetQt("真北优化", true);
         Instance.SetQt("智能AOE", true);
         Instance.SetQt("自动突进", false);
+    }
+
+    public static void SaveQtStates()
+    {
+        string[] qtArray = Instance.GetQtArray();
+        foreach (string name in qtArray)
+        {
+            bool state = Instance.GetQt(name);
+            RprSettings.Instance.QtStates[name] = state;
+        }
+
+        RprSettings.Instance.Save();
+        LogHelper.Print("QT设置已保存");
+    }
+
+    public static void LoadQtStates()
+    {
+        foreach (KeyValuePair<string, bool> qtState in RprSettings.Instance.QtStates)
+        {
+            Instance.SetQt(qtState.Key, qtState.Value);
+        }
+
+        LogHelper.Print("QT设置已重载");
+    }
+
+    public static void LoadQtStatesNoPot()
+    {
+        foreach (KeyValuePair<string, bool> qtState in RprSettings.Instance.QtStates)
+        {
+            if (qtState.Key is not "爆发药") Instance.SetQt(qtState.Key, qtState.Value);
+        }
+
+        LogHelper.Print("QT设置已重载");
     }
 
     public static void Build()
