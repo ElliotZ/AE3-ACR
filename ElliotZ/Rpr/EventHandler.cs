@@ -152,6 +152,7 @@ public class EventHandler : IRotationEventHandler
 
         if (RprSettings.Instance.NoBurst && 
             !Core.Resolve<MemApiDuty>().InBossBattle &&  // exclude boss battles and msq ultima wep
+            !Core.Me.GetCurrTarget().IsDummy() &&
             Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() != 1048 &&
             AI.Instance.BattleData.CurrBattleTimeInMs > 10000 && 
                 (BattleData.Instance.TotalHpPercentage < RprSettings.Instance.MinMobHpPercent || 
