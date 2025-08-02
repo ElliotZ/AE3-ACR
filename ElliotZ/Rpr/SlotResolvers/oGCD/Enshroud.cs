@@ -54,35 +54,37 @@ public class Enshroud : ISlotResolver
         //{ 
         //    return -6;  // burst prep
         //}
-        if (Core.Resolve<JobApi_Reaper>().ShroudGauge < 100)
+        if (!Qt.Instance.GetQt("倾泻资源"))  // ignore all if dump qt is set
         {
-            if (!Qt.Instance.GetQt("单魂衣") && // Qt.Instance.GetQt("神秘环") &&
-                //SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 40000)
-                !DeadZoneCheck())
+            if (Core.Resolve<JobApi_Reaper>().ShroudGauge < 100)
             {
-                return -6;
+                if (!Qt.Instance.GetQt("单魂衣") && // Qt.Instance.GetQt("神秘环") &&
+                                                 //SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 40000)
+                    !DeadZoneCheck())
+                {
+                    return -6;
+                }
+                if (Qt.Instance.GetQt("暴食") &&
+                        !Core.Me.HasAura(AurasDef.ArcaneCircle) &&
+                        SpellsDef.Gluttony.GetSpell().Cooldown.TotalMilliseconds <= 20000 &&
+                        SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds >= 55000)
+                {
+                    return -7;
+                }
             }
-            if (Qt.Instance.GetQt("暴食") &&
-                    !Core.Me.HasAura(AurasDef.ArcaneCircle) && 
-                    SpellsDef.Gluttony.GetSpell().Cooldown.TotalMilliseconds <= 20000 && 
-                    SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds >= 55000)
+            if (SpellsDef.SoulSlice.GetSpell().Charges > 1.6f && Core.Resolve<JobApi_Reaper>().ShroudGauge < 90)
             {
-                return -7;
+                return -11;
+            }
+            if (Helper.AoeTtkCheck() && TTKHelper.IsTargetTTK(Core.Me.GetCurrTarget()))
+            {
+                return -16;  // delay for next pack
             }
         }
         if (Core.Me.HasAura(AurasDef.SoulReaver) || Core.Me.HasAura(AurasDef.Executioner))
         {
             return -10;  // protect Gib/Gallows
         }
-        if (SpellsDef.SoulSlice.GetSpell().Charges > 1.6f && Core.Resolve<JobApi_Reaper>().ShroudGauge < 90)
-        {
-            return -11;
-        }
-        if (Helper.AoeTtkCheck() && TTKHelper.IsTargetTTK(Core.Me.GetCurrTarget())) 
-        { 
-            return -16;  // delay for next pack
-        }
-
         //if (Core.Resolve<JobApi_Reaper>().ShroudGauge < 50 && !Core.Me.HasAura(AurasDef.IdealHost)) return -1;
         return 0;
     }

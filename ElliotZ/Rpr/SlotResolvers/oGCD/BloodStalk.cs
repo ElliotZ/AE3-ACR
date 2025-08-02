@@ -86,35 +86,37 @@ public class BloodStalk : ISlotResolver
                 return -31;
             }
         }
-        if (Qt.Instance.GetQt("神秘环") &&
-                //Soul < 100 &&
-                SpellsDef.ArcaneCircle.IsUnlock() &&
-                SpellsDef.ArcaneCircle.RdyInGCDs(2) &&
-                Core.Resolve<JobApi_Reaper>().ShroudGauge != 40)
+        if (!Qt.Instance.GetQt("倾泻资源"))  // ignore all if dump qt is set
         {
-            return -17;  // delay for gluttony after burst window
+            if (Qt.Instance.GetQt("神秘环") &&
+                    //Soul < 100 &&
+                    SpellsDef.ArcaneCircle.IsUnlock() &&
+                    SpellsDef.ArcaneCircle.RdyInGCDs(2) &&
+                    Core.Resolve<JobApi_Reaper>().ShroudGauge != 40)
+            {
+                return -17;  // delay for gluttony after burst window
+            }
+            if (Soul == 100) return 1;
+            if (Qt.Instance.GetQt("神秘环") &&
+                    //Soul < 100 &&
+                    SpellsDef.ArcaneCircle.IsUnlock() &&
+                    SpellsDef.ArcaneCircle.RdyInGCDs(Math.Min(6, GcdsToOvercap() + 3)) &&
+                    Core.Resolve<JobApi_Reaper>().ShroudGauge != 40)
+            {
+                return -12;  // delay for gluttony after burst window
+            }
+            if (!Helper.AuraTimerMoreThan(AurasDef.TrueNorth,
+                                  BattleData.Instance.GcdDuration - GCDHelper.GetGCDCooldown()) &&
+                    Qt.Instance.GetQt("真北") && Qt.Instance.GetQt("真北优化") &&
+                    Core.Me.GetCurrTarget().HasPositional() &&
+                    !SpellsDef.TrueNorth.IsMaxChargeReady(1.8f) &&
+                    ((Core.Me.HasAura(AurasDef.EnhancedGallows) && !Helper.AtRear) ||
+                        (Core.Me.HasAura(AurasDef.EnhancedGibbet) && !Helper.AtFlank)))  // &&
+                                                                                         //Soul < 100)
+            {
+                return -13;  // TN Optimizations perhaps
+            }
         }
-        if (Soul == 100) return 1;
-        if (Qt.Instance.GetQt("神秘环") &&
-                //Soul < 100 &&
-                SpellsDef.ArcaneCircle.IsUnlock() &&
-                SpellsDef.ArcaneCircle.RdyInGCDs(Math.Min(6, GcdsToOvercap() + 3)) &&
-                Core.Resolve<JobApi_Reaper>().ShroudGauge != 40)
-        {
-            return -12;  // delay for gluttony after burst window
-        }
-        if (!Helper.AuraTimerMoreThan(AurasDef.TrueNorth,
-                              BattleData.Instance.GcdDuration - GCDHelper.GetGCDCooldown()) &&
-                Qt.Instance.GetQt("真北") && Qt.Instance.GetQt("真北优化") &&
-                Core.Me.GetCurrTarget().HasPositional() &&
-                !SpellsDef.TrueNorth.IsMaxChargeReady(1.8f) &&
-                ((Core.Me.HasAura(AurasDef.EnhancedGallows) && !Helper.AtRear) ||
-                    (Core.Me.HasAura(AurasDef.EnhancedGibbet) && !Helper.AtFlank)))  // &&
-                //Soul < 100)
-        {
-            return -13;  // TN Optimizations perhaps
-        }
-
         return 0;
     }
 
