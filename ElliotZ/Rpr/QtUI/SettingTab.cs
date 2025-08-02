@@ -34,7 +34,7 @@ public static class SettingTab
             //    ImGui.Dummy(new Vector2(0, 10));
             //}
 
-            if (ImGui.CollapsingHeader("一般设定", ImGuiTreeNodeFlags.DefaultOpen))
+            if (ImGui.CollapsingHeader("一般设定"))
             {
                 ImGui.Dummy(new Vector2(5, 0));
                 ImGui.SameLine();
@@ -48,7 +48,23 @@ public static class SettingTab
                 ImGui.EndGroup();
                 ImGui.Dummy(new Vector2(0, 10));
             }
-            if (ImGui.CollapsingHeader("起手设定", ImGuiTreeNodeFlags.DefaultOpen))
+            if (ImGui.CollapsingHeader("日随QoL设定", ImGuiTreeNodeFlags.DefaultOpen))
+            {
+                ImGui.Dummy(new Vector2(5, 0));
+                ImGui.SameLine();
+                ImGui.BeginGroup();
+                ImGui.Checkbox("小怪低血量不开爆发", ref RprSettings.Instance.NoBurst);
+                ImGui.Checkbox("坦克拉怪中留CD技能", ref RprSettings.Instance.PullingNoBurst);
+                ImGui.Checkbox("自动神秘纹", ref RprSettings.Instance.AutoCrest);
+                //ImGui.DragInt("倒数勾刃读条时间", ref RprSettings.Instance.PrepullCastTimeHarpe, 100, 500, 2000);
+                //ImGui.DragInt("动画锁长度", ref RprSettings.Instance.AnimLock, 10, 10, 1000);
+                ImGui.Checkbox("自动内丹", ref RprSettings.Instance.AutoSecondWind);
+                ImGui.Checkbox("自动浴血", ref RprSettings.Instance.AutoBloodBath);
+                ImGui.Checkbox("自动牵制", ref RprSettings.Instance.AutoFeint);
+                ImGui.EndGroup();
+                ImGui.Dummy(new Vector2(0, 10));
+            }
+            if (ImGui.CollapsingHeader("起手设定"))
             {
                 ImGui.Dummy(new Vector2(5, 0));
                 ImGui.SameLine();

@@ -58,7 +58,9 @@ public class EventHandler : IRotationEventHandler
         { 
             BattleData.Instance.NoTarget = true; 
         }
-        StopHelper.StopActions(BattleData.Instance.GcdDuration);
+        StopHelper.StopActions(1000);
+
+        if (RprSettings.Instance.Debug) LogHelper.Print("no target");
 
         await Task.CompletedTask;
     }
@@ -94,7 +96,7 @@ public class EventHandler : IRotationEventHandler
             await SpellsDef.Soulsow.GetSpell().Cast();
         }
 
-        StopHelper.StopActions(BattleData.Instance.GcdDuration);
+        StopHelper.StopActions(1000);
     }
 
     public void AfterSpell(Slot slot, Spell spell)
@@ -163,22 +165,23 @@ public class EventHandler : IRotationEventHandler
         }
 
         // stop action during accel bombs, pyretics and/or when boss is invuln
-        if (Helper.AnyAuraTimerLessThan(StopHelper.AccelBomb, 3000) && 
-            PlayerOptions.Instance.Stop == false)
-        {
-            if (Core.Me.GetCurrTarget() is not null && 
-                    Qt.Instance.GetQt("收获月") && 
-                    Core.Me.HasAura(AurasDef.Soulsow))
-            {
-                if (AI.Instance.BattleData.NextSlot is null)
-                {
-                    AI.Instance.BattleData.NextSlot = new Slot();
-                }
-                AI.Instance.BattleData.NextSlot.Add(SpellsDef.HarvestMoon.GetSpell());
-            }
-        }
+        //if (Helper.AnyAuraTimerLessThan(StopHelper.AccelBomb, 3200) && 
+        //    //Core.Me.HasAnyAura(StopHelper.AccelBomb, BattleData.Instance.GcdDuration) &&
+        //    PlayerOptions.Instance.Stop == false)
+        //{
+        //    if (Core.Me.GetCurrTarget() is not null && 
+        //            Qt.Instance.GetQt("收获月") && 
+        //            SpellsDef.HarvestMoon.GetSpell().IsReadyWithCanCast())
+        //    {
+        //        if (AI.Instance.BattleData.NextSlot is null)
+        //        {
+        //            AI.Instance.BattleData.NextSlot = new Slot();
+        //        }
+        //        AI.Instance.BattleData.NextSlot.Add(SpellsDef.HarvestMoon.GetSpell());
+        //    }
+        //}
 
-        StopHelper.StopActions(BattleData.Instance.GcdDuration, retarget: true);
+        StopHelper.StopActions(1000);
 
         // positional indicator
         if (!inTN && 
@@ -236,8 +239,8 @@ public class EventHandler : IRotationEventHandler
 
 
         //检查全局设置
-        if (!Helper.GlblSettings.NoClipGCD3)
-            LogHelper.PrintError("建议在acr全局设置中勾选【全局能力技不卡GCD】选项");
+        if (Helper.GlblSettings.NoClipGCD3)
+            LogHelper.PrintError("建议在acr全局设置中取消勾选【全局能力技不卡GCD】选项");
 
         //MeleePosHelper2.Init(Qt.Instance, "真北");
 

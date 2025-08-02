@@ -22,7 +22,7 @@ public class Ingress : ISlotResolver
     {
         if (Core.Me.GetCurrTarget() is null) return -9;
         var targetRing = Core.Me.GetCurrTarget()!.HitboxRadius * 2;
-        var atkRange = SettingMgr.GetSetting<GeneralSettings>().AttackRange;
+        var atkRange = Helper.GlblSettings.AttackRange;
 
         if (SpellsDef.HellsIngress.GetSpell().IsReadyWithCanCast() && 
                 (Core.Me.HasAura(AurasDef.SoulReaver) || 
@@ -32,7 +32,8 @@ public class Ingress : ISlotResolver
                 Qt.Instance.GetQt("自动突进") &&
                 //GCDHelper.GetGCDCooldown() < 1100 &&
                 Core.Me.GetCurrTarget().Distance(Core.Me) < 15 + targetRing + atkRange &&
-                Core.Me.GetCurrTarget().Distance(Core.Me) > 15 - targetRing - atkRange)
+                Core.Me.GetCurrTarget().Distance(Core.Me) > 15 - targetRing - atkRange &&
+                GCDHelper.GetGCDCooldown() >= RprSettings.Instance.AnimLock)
         {
             return 0;
         }

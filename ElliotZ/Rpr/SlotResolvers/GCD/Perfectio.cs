@@ -14,7 +14,7 @@ public class Perfectio : ISlotResolver
     public int Check()
     {
         Target = SpellsDef.Perfectio.OptimalAOETarget(1, Qt.Instance.GetQt("智能AOE"), 5);
-        if (Target is null || SpellsDef.Perfectio.GetSpell().IsReadyWithCanCast() == false) { return -99; }
+        if (Target is null || SpellsDef.Perfectio.GetSpell(Target).IsReadyWithCanCast() == false) { return -99; }
         //if (Core.Me.HasAura(AurasDef.PerfectioParata) == false) { return -99; }
         if (Qt.Instance.GetQt("完人") == false) { return -98; }
         if (Helper.ComboTimer < GCDHelper.GetGCDDuration() + 200 &&

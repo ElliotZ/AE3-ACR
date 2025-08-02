@@ -1,6 +1,7 @@
 ﻿using AEAssist;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View.JobView;
+using AEAssist.Extension;
 using AEAssist.GUI;
 using AEAssist.Helper;
 using AEAssist.JobApi;
@@ -50,6 +51,17 @@ public static class DevTab
                     string text2 = string.Join(", ", dictionary.Values.Select((IBattleChara character) => $"{character.Name}"));
                     ImGui.PushTextWrapPos(ImGui.GetCursorPosX() + 410f);
                     ImGui.Text("周围20m目标: " + text2);
+                    string targetGOID;
+                    if (Core.Me.GetCurrTarget() is null)
+                    {
+                        targetGOID = "null";
+                    } 
+                    else
+                    {
+                        targetGOID = Core.Me.GetCurrTarget()!.GameObjectId.ToString();
+                    }
+                    ImGui.Text("Target GameObjectId:" + targetGOID);
+                    ImGui.Text("Target is null? " + (Core.Me.GetCurrTarget() is null));
                     ImGui.PopTextWrapPos();
                     ImGui.Text("IsPulling: " + BattleData.Instance.IsPulling);
                     ImGui.Text($"自身面向 ({Core.Me.Rotation:F2})");

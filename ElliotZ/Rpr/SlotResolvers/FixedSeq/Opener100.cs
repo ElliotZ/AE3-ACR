@@ -20,7 +20,7 @@ public class Opener100 : IOpener
         if (Core.Me.Level < 88) { return -99; }  // might not need this
         if (SpellsDef.SoulSlice.IsMaxChargeReady(0.0f)== false) { return -99; }
         if (SpellsDef.ArcaneCircle.GetSpell().IsReadyWithCanCast() == false) { return -99; }
-        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > SettingMgr.GetSetting<GeneralSettings>().AttackRange)
+        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
         }
@@ -61,7 +61,7 @@ public class Opener100 : IOpener
     {
         if (Core.Me.GetCurrTarget() is null) return false;
         var targetRing = Core.Me.GetCurrTarget()!.HitboxRadius * 2;
-        var atkRange = SettingMgr.GetSetting<GeneralSettings>().AttackRange;
+        var atkRange = Helper.GlblSettings.AttackRange;
 
         if (SpellsDef.HellsIngress.GetSpell().IsReadyWithCanCast() &&
                 //Core.Me.GetCurrTarget().Distance(Core.Me) < 15 + targetRing + atkRange &&

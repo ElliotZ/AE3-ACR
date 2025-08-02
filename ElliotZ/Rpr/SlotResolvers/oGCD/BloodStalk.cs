@@ -67,7 +67,7 @@ public class BloodStalk : ISlotResolver
             {
                 return -21;
             }
-            if (Soul == 100) return 1;
+            if (Soul == 100 && GCDHelper.GetGCDCooldown() >= RprSettings.Instance.AnimLock) return 1;
             if (SpellsDef.Gluttony.IsUnlock() &&
                     SpellsDef.Gluttony.RdyInGCDs(GcdsToOvercap()) &&
                     !(SpellsDef.Gluttony.RdyInGCDs(2) && SpellsDef.SoulSlice.GetSpell().Charges > 1.7f)) // &&
@@ -96,7 +96,7 @@ public class BloodStalk : ISlotResolver
             {
                 return -17;  // delay for gluttony after burst window
             }
-            if (Soul == 100) return 1;
+            if (Soul == 100 && GCDHelper.GetGCDCooldown() >= RprSettings.Instance.AnimLock) return 1;
             if (Qt.Instance.GetQt("神秘环") &&
                     //Soul < 100 &&
                     SpellsDef.ArcaneCircle.IsUnlock() &&
@@ -117,6 +117,7 @@ public class BloodStalk : ISlotResolver
                 return -13;  // TN Optimizations perhaps
             }
         }
+        if (GCDHelper.GetGCDCooldown() < RprSettings.Instance.AnimLock) return -89;
         return 0;
     }
 
