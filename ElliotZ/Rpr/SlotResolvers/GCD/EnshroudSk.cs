@@ -1,6 +1,7 @@
 ﻿using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
+using AEAssist.CombatRoutine.Module.Target;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
@@ -19,7 +20,7 @@ public class EnshroudSk : ISlotResolver
     public int Check()
     {
         var enhancedReapingCheck = (Core.Me.HasAura(AurasDef.EnhancedCrossReaping) ||
-                                        Core.Me.HasAura(AurasDef.EnhancedVoidReaping)) ? 
+                                        Core.Me.HasAura(AurasDef.EnhancedVoidReaping)) ?
                                     3 : 4;
         Target = SpellsDef.GrimReaping.OptimalAOETarget(enhancedReapingCheck, 180f, Qt.Instance.GetQt("智能AOE"));
         CommunioTarget = SpellsDef.Communio.OptimalAOETarget(1, Qt.Instance.GetQt("智能AOE"), 5);
@@ -29,7 +30,7 @@ public class EnshroudSk : ISlotResolver
             return -3;  // -3 for Unmet Prereq Conditions
         }
         if ((!SpellsDef.Communio.IsUnlock() || blueOrb > 1) &&
-                Core.Me.Distance(Core.Me.GetCurrTarget()) > SettingMgr.GetSetting<GeneralSettings>().AttackRange)
+                Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
         }
@@ -38,11 +39,18 @@ public class EnshroudSk : ISlotResolver
         {
             return -6;
         }
-        if (!Core.Me.HasAura(AurasDef.PerfectioOculta) &&
-                Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 30000, false))
+        if (!Core.Me.HasAura(AurasDef.PerfectioOculta) && Core.Me.HasAura(AurasDef.Enshrouded, 8500))
         {
-            return -6;  // -6 for delaying for burst prep
-        }
+            if (TargetMgr.Instance.EnemysIn20.Count <= 2 &&
+                Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 30000, false))
+            {
+                return -6;
+            }
+            else if (TargetMgr.Instance.EnemysIn20.Count > 2 && BuffMaintain.AOEAuraCheck())
+            {
+                return -7;
+            }
+        } 
         return 0;
     }
 

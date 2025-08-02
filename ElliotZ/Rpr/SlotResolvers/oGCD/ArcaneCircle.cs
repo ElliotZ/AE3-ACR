@@ -24,6 +24,7 @@ public class ArcaneCircle : ISlotResolver
         {
             return -11;
         }
+        if (GCDHelper.GetGCDCooldown() < RprSettings.Instance.AnimLock) return -89;
         return 0;
     }
 

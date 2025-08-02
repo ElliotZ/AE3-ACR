@@ -49,6 +49,7 @@ public static class StopHelper
     public const uint NoPos = 3808u;
 
     private static bool _manualOverride = false;
+    private static bool _untargeted = false;
     private static bool _lastStopVal = false;
 
     public static readonly List<uint> AccelBomb = [4144, 3802, 3793, 1384, 2657, 1072];
@@ -95,9 +96,10 @@ public static class StopHelper
         {
             PlayerOptions.Instance.Stop = true;
             _manualOverride = false;
+            _untargeted = true;
             Core.Resolve<MemApiSpell>().CancelCast();
 
-            if (check is 1) { Core.Me.SetTarget(Core.Me); }
+            //if (check is 1) { Core.Me.SetTarget(Core.Me); }
         }
         else
         {
@@ -108,14 +110,14 @@ public static class StopHelper
             if (!_manualOverride) 
             {
                 PlayerOptions.Instance.Stop = false; 
-                if (retarget && TargetMgr.Instance.EnemysIn20.Count > 0 &&
-                    //!TargetMgr.Instance.EnemysIn20.Values.First().HasAnyAura(Invulns) &&
-                        //(Core.Me.GetCurrTarget() is null || 
-                        Core.Me.GetCurrTarget() is not null &&
-                        Core.Me.GetCurrTarget()!.GameObjectId == Core.Me.GameObjectId)//)
+                if (_untargeted && TargetMgr.Instance.EnemysIn20.Count > 0 &&
+                        !TargetMgr.Instance.EnemysIn20.Values.First().HasAnyAura(Invulns) &&
+                        Core.Me.GetCurrTarget() is null)// &&
+                        //Core.Me.GetCurrTarget()!.GameObjectId == Core.Me.GameObjectId)//)
                 {
                     if (Debug) LogHelper.Print("Setting Target");
                     Core.Me.SetTarget(TargetMgr.Instance.EnemysIn20.Values.First());
+                    _untargeted = false;
                 }
             }
         }

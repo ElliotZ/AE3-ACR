@@ -20,12 +20,12 @@ public class Gluttony : ISlotResolver
     {
         Target = SpellsDef.Gluttony.OptimalAOETarget(1, Qt.Instance.GetQt("智能AOE"), 5);
 
-        if (Target is null || SpellsDef.Gluttony.GetSpell().IsReadyWithCanCast() == false)
+        if (Target is null || SpellsDef.Gluttony.GetSpell(Target).IsReadyWithCanCast() == false)
         {
             return -99;
         }
         if (Qt.Instance.GetQt("暴食") == false) { return -98; }
-        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > SettingMgr.GetSetting<GeneralSettings>().AttackRange)
+        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
         }
@@ -48,6 +48,7 @@ public class Gluttony : ISlotResolver
         }
         // add QT
         // might need to check for death's design
+        if (GCDHelper.GetGCDCooldown() < RprSettings.Instance.AnimLock) return -89;
         return 0;
     }
 

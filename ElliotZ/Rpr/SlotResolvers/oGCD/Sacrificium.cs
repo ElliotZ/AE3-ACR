@@ -15,7 +15,7 @@ public class Sacrificum : ISlotResolver
     public int Check()
     {
         Target = SpellsDef.Sacrificium.OptimalAOETarget(1, Qt.Instance.GetQt("智能AOE"), 5);
-        if (Target is null || SpellsDef.Sacrificium.GetSpell().IsReadyWithCanCast() == false)
+        if (Target is null || SpellsDef.Sacrificium.GetSpell(Target).IsReadyWithCanCast() == false)
         {
             return -99;
         }
@@ -27,9 +27,10 @@ public class Sacrificum : ISlotResolver
         {
             return -6;  // -6 for delaying for burst prep
         }
-        
+
         // add QT
         // might need to check for death's design
+        if (GCDHelper.GetGCDCooldown() < RprSettings.Instance.AnimLock) return -89;
         return 0;
     }
 

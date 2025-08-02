@@ -4,6 +4,7 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
+using AEAssist.MemoryApi;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 
@@ -30,7 +31,13 @@ public class DblEnshPrep : ISlotSequence
         //}
         if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Qt.Instance.GetQt("神秘环") == false || Qt.Instance.GetQt("魂衣") == false) { return -98; }
-        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > SettingMgr.GetSetting<GeneralSettings>().AttackRange)
+        if (!Core.Resolve<MemApiDuty>().InBossBattle && 
+                (Core.Me.GetCurrTarget() is not null && 
+                !Core.Me.GetCurrTarget().IsDummy())) 
+        { 
+            return -98; 
+        }
+        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
         }

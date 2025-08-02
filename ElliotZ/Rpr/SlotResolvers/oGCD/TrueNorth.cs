@@ -22,7 +22,8 @@ public class TrueNorth : ISlotResolver
 
         if (Core.Me.GetCurrTarget() is not null && Core.Me.GetCurrTarget().HasPositional() &&
                 GCDHelper.GetGCDCooldown() < RprSettings.Instance.AnimLock + 100 &&
-                (Core.Me.HasAura(AurasDef.SoulReaver) || Core.Me.HasAura(AurasDef.Executioner)))
+                GCDHelper.GetGCDCooldown() >= RprSettings.Instance.AnimLock &&
+        (Core.Me.HasAura(AurasDef.SoulReaver) || Core.Me.HasAura(AurasDef.Executioner)))
         {
             if (Core.Me.HasAura(AurasDef.EnhancedGallows) && !Helper.AtRear) { return 0; }
             if (Core.Me.HasAura(AurasDef.EnhancedGibbet) && !Helper.AtFlank) { return 0; }

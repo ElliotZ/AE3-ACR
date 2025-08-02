@@ -45,6 +45,10 @@ public class RprRotationEntry : IRotationEntry, IDisposable
         new(new Gluttony(), SlotMode.OffGcd),
         new(new Enshroud(), SlotMode.OffGcd),
         new(new BloodStalk(), SlotMode.OffGcd),
+        new(new AutoCrest(), SlotMode.OffGcd),
+        new(new AutoFeint(), SlotMode.OffGcd),
+        new(new AutoBloodBath(), SlotMode.OffGcd),
+        new(new AutoSecondWind(), SlotMode.OffGcd),
 
         // Low Prio Always
         new(new Ingress(), SlotMode.Always),

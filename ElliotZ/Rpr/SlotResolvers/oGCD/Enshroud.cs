@@ -42,7 +42,7 @@ public class Enshroud : ISlotResolver
     {
         if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Qt.Instance.GetQt("ป๊าย") == false) { return -98; }
-        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > SettingMgr.GetSetting<GeneralSettings>().AttackRange)
+        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
         }
@@ -85,6 +85,7 @@ public class Enshroud : ISlotResolver
         {
             return -10;  // protect Gib/Gallows
         }
+        if (GCDHelper.GetGCDCooldown() < RprSettings.Instance.AnimLock) return -89;
         //if (Core.Resolve<JobApi_Reaper>().ShroudGauge < 50 && !Core.Me.HasAura(AurasDef.IdealHost)) return -1;
         return 0;
     }

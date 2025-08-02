@@ -62,7 +62,7 @@ public class RprSettings
     public bool NoBurst = true;
     public bool PullingNoBurst = true;
     public bool AutoCrest = false;
-    public float CrestPercent = 0.7f;
+    public float CrestPercent = 0.8f;
     public bool AutoSecondWind = true;
     public float SecondWindPercent = 0.8f;
     public bool AutoBloodBath = true;

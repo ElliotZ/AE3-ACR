@@ -56,7 +56,7 @@ public class OpenerCountDownOnly : IOpener
     {
         if (Core.Me.GetCurrTarget() is null) return false;
         var targetRing = Core.Me.GetCurrTarget()!.HitboxRadius * 2;
-        var atkRange = SettingMgr.GetSetting<GeneralSettings>().AttackRange;
+        var atkRange = Helper.GlblSettings.AttackRange;
 
         if (SpellsDef.HellsIngress.GetSpell().IsReadyWithCanCast() &&
                 //Core.Me.GetCurrTarget().Distance(Core.Me) < 15 + targetRing + atkRange &&

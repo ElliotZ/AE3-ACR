@@ -22,13 +22,13 @@ public class EnshroudAb : ISlotResolver
 
         if (Core.Me.HasAura(AurasDef.Enshrouded) == false) { return -3; }  // -3 for Unmet Prereq Conditions
         if (Target is null && 
-                Core.Me.Distance(Core.Me.GetCurrTarget()) > SettingMgr.GetSetting<GeneralSettings>().AttackRange)
+                Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
         }
-        if (Target is not null && SpellsDef.LemuresScythe.GetSpell(Target!).IsReadyWithCanCast())
+        if (Target is not null && SpellsDef.LemuresScythe.GetSpell(Target!).IsReadyWithCanCast() == false)
         {
-            return -2;
+            return -4;
         }
         //if (SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 5000 &&
         //        Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 30000))
@@ -37,6 +37,7 @@ public class EnshroudAb : ISlotResolver
         //}
         if (purpOrb < 2) { return -3; }
         //if (GCDHelper.GetGCDCooldown() < 800) return -7;  // -7 for avoiding clipping
+        if (GCDHelper.GetGCDCooldown() < RprSettings.Instance.AnimLock) return -89;
         return 0;
     }
 

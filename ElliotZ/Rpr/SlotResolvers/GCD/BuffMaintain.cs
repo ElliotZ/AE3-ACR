@@ -18,7 +18,7 @@ public class BuffMaintain : ISlotResolver
     public int Check()
     {
         if (SpellsDef.ShadowOfDeath.GetSpell().IsReadyWithCanCast() == false) { return -99; }  // -99 for not usable
-        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > SettingMgr.GetSetting<GeneralSettings>().AttackRange)
+        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
         }
@@ -70,7 +70,7 @@ public class BuffMaintain : ISlotResolver
     /// Checks for Deaths Design on all enemies 
     /// </summary>
     /// <returns>true if less than half enemies around have the debuff, false otherwise</returns>
-    private static bool AOEAuraCheck()
+    public static bool AOEAuraCheck()
     {
         var enemyCount = TargetHelper.GetNearbyEnemyCount(5);
         var enemylist = TargetMgr.Instance.EnemysIn12;
@@ -78,8 +78,8 @@ public class BuffMaintain : ISlotResolver
                 Core.Me.Distance(v.Value, DistanceMode.IgnoreTargetHitbox | DistanceMode.IgnoreHeight) < 5 &&
                 Core.Resolve<MemApiBuff>().GetAuraTimeleft(v.Value, AurasDef.DeathsDesign, true) <= BattleData.Instance.GcdDuration);
         if (RprSettings.Instance.Debug) {
-            LogHelper.PrintError("BuffMaintain.AOEAuraCheck() Internals");
-            LogHelper.PrintError(noDebuffEnemyCount.ToString() + "/" + enemyCount.ToString() + "=" + (noDebuffEnemyCount / (double)enemyCount).ToString());
+            LogHelper.Print("BuffMaintain.AOEAuraCheck() Internals");
+            LogHelper.Print(noDebuffEnemyCount.ToString() + "/" + enemyCount.ToString() + "=" + (noDebuffEnemyCount / (double)enemyCount).ToString());
         }
         return (noDebuffEnemyCount / (double)enemyCount) > 0.5;
     }
