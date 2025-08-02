@@ -75,6 +75,8 @@ public class RprSettings
     // Opener Settings
     public bool TripleWeavePot = false;
     public int PrepullCastTimeHarpe = 1700;
+    public bool PrepullSprint = true;
+    public bool PrepullIngress = true;
 
     //public bool AutoUpdateTimeLines = true;
     //public bool TimeLinesDebug = false;

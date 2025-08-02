@@ -5,6 +5,7 @@ using AEAssist.CombatRoutine.Module.Opener;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
+using AEAssist.MemoryApi;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 
@@ -38,12 +39,45 @@ public class Opener100 : IOpener
         Qt.LoadQtStatesNoPot();
 
         const int startTime = 15000;
-        if (!Core.Me.HasAura(AurasDef.Soulsow))
+        if (!Core.Me.HasAura(AurasDef.Soulsow) && SpellsDef.Soulsow.GetSpell().IsReadyWithCanCast())
         {
-            cdh.AddAction(startTime, SpellsDef.Soulsow);
+            cdh.AddAction(startTime, () => SpellsDef.Soulsow.GetSpell());
+        }
+        if (RprSettings.Instance.PrepullSprint && Spell.CreateSprint().IsReadyWithCanCast())
+        {
+            cdh.AddAction(startTime, () => Spell.CreateSprint());
         }
         cdh.AddAction(RprSettings.Instance.PrepullCastTimeHarpe, 
                       () => SpellsDef.Harpe.GetSpell(SpellTargetType.Target));
+        if (RprSettings.Instance.PrepullIngress && PrepullIngressCheck())
+        {
+            cdh.AddAction(RprSettings.Instance.PrepullCastTimeHarpe - 
+                              (int)SpellsDef.Harpe.GetSpell().CastTime.TotalMilliseconds, 
+                          PrepullIngress);
+        }
+    }
+
+    private bool PrepullIngressCheck()
+    {
+        if (Core.Me.GetCurrTarget() is null) return false;
+        var targetRing = Core.Me.GetCurrTarget()!.HitboxRadius * 2;
+        var atkRange = SettingMgr.GetSetting<GeneralSettings>().AttackRange;
+
+        if (SpellsDef.HellsIngress.GetSpell().IsReadyWithCanCast() &&
+                //Core.Me.GetCurrTarget().Distance(Core.Me) < 15 + targetRing + atkRange &&
+                Core.Me.GetCurrTarget().Distance(Core.Me) > 15 - targetRing - atkRange)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private Spell PrepullIngress()
+    {
+        Core.Resolve<MemApiMoveControl>().Stop();
+        Core.Resolve<MemApiMove>().SetRot(Helper.GetRotationToTarget(Core.Me.Position,
+                                                                     Core.Me.GetCurrTarget()!.Position));
+        return SpellsDef.HellsIngress.GetSpell();
     }
 
     public List<Action<Slot>> Sequence { get; } = [Step0, Step1];
