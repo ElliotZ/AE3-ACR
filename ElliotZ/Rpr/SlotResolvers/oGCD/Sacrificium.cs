@@ -21,9 +21,10 @@ public class Sacrificum : ISlotResolver
         }
 
         if (Qt.Instance.GetQt("神秘环") &&
-                (!Core.Me.HasAura(AurasDef.ArcaneCircle) &&
+                ((!Core.Me.HasAura(AurasDef.ArcaneCircle) &&
                  SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 10000) ||
-                 BattleData.Instance.justCastAC)
+                 BattleData.Instance.justCastAC) &&
+                 !Qt.Instance.GetQt("倾泻资源"))
         {
             return -6;  // -6 for delaying for burst prep
         }
