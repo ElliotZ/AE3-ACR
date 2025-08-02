@@ -29,7 +29,7 @@ public class DblEnshPrep : ISlotSequence
         //    return -6;
         //}
         if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() == false) { return -99; }
-        if (Qt.Instance.GetQt("神秘环") == false) { return -98; }
+        if (Qt.Instance.GetQt("神秘环") == false || Qt.Instance.GetQt("魂衣") == false) { return -98; }
         if (Core.Me.Distance(Core.Me.GetCurrTarget()) > SettingMgr.GetSetting<GeneralSettings>().AttackRange)
         {
             return -2;  // -2 for not in range

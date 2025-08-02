@@ -15,7 +15,7 @@ public class Opener100 : IOpener
     public int StartCheck()
     {
         if (Qt.Instance.GetQt("起手") == false) { return -98; }
-        if (Qt.Instance.GetQt("神秘环") == false) { return -98; }
+        if (Qt.Instance.GetQt("神秘环") == false || Qt.Instance.GetQt("魂衣") == false) { return -98; }
         if (Core.Me.Level < 88) { return -99; }  // might not need this
         if (SpellsDef.SoulSlice.IsMaxChargeReady(0.0f)== false) { return -99; }
         if (SpellsDef.ArcaneCircle.GetSpell().IsReadyWithCanCast() == false) { return -99; }

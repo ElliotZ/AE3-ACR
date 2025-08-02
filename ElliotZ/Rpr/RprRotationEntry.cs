@@ -26,6 +26,7 @@ public class RprRotationEntry : IRotationEntry, IDisposable
         new(new EnshroudSk(), SlotMode.Gcd),
         new(new GibGall(), SlotMode.Gcd),
         new(new PerfectioHighPrio(), SlotMode.Gcd),
+        new(new HarvestMoonHighPrio(), SlotMode.Gcd),
         new(new SoulSow(), SlotMode.Gcd),
         new(new BuffMaintain(), SlotMode.Gcd),
         new(new GaugeGainCD(), SlotMode.Gcd),
@@ -72,14 +73,22 @@ public class RprRotationEntry : IRotationEntry, IDisposable
 
     public string CheckFirstAvailableSkillGCD()
     {
-        SlotResolverData slotResolverData = _slotResolvers.FirstOrDefault((SlotResolverData srd) => srd.SlotMode == SlotMode.Gcd && srd.SlotResolver.Check() >= 0);
-        return (slotResolverData != null) ? slotResolverData.SlotResolver.GetType().Name : "无技能";
+        SlotResolverData? slotResolverData = 
+            _slotResolvers.FirstOrDefault((SlotResolverData srd) => 
+                                              srd.SlotMode == SlotMode.Gcd && 
+                                              srd.SlotResolver.Check() >= 0);
+        return (slotResolverData != null) ? 
+                   slotResolverData.SlotResolver.GetType().Name : "无技能";
     }
 
     public string CheckFirstAvailableSkilloffGCD()
     {
-        SlotResolverData slotResolverData = _slotResolvers.FirstOrDefault((SlotResolverData srd) => srd.SlotMode == SlotMode.OffGcd && srd.SlotResolver.Check() >= 0);
-        return (slotResolverData != null) ? slotResolverData.SlotResolver.GetType().Name : "无技能";
+        SlotResolverData? slotResolverData = 
+            _slotResolvers.FirstOrDefault((SlotResolverData srd) => 
+                                              srd.SlotMode == SlotMode.OffGcd && 
+                                              srd.SlotResolver.Check() >= 0);
+        return (slotResolverData != null) ? 
+                   slotResolverData.SlotResolver.GetType().Name : "无技能";
     }
 
     public IRotationUI GetRotationUI() { return Qt.Instance; }
