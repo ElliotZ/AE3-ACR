@@ -54,6 +54,7 @@ public class RprSettings
     public bool NoPosDrawInTN = false;
     public bool TxtCmdWindowOpen = true;
     public bool RestoreQtSet = true;
+    //public bool SmartAOE = true;
     public bool ShowToast = false;
     public bool Debug = false;
 
