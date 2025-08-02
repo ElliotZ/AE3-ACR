@@ -1,4 +1,5 @@
 ﻿using AEAssist;
+using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
@@ -21,6 +22,7 @@ public class Ingress : ISlotResolver
     {
         if (Core.Me.GetCurrTarget() is null) return -9;
         var targetRing = Core.Me.GetCurrTarget()!.HitboxRadius * 2;
+        var atkRange = SettingMgr.GetSetting<GeneralSettings>().AttackRange;
 
         if (SpellsDef.HellsIngress.GetSpell().IsReadyWithCanCast() && 
                 (Core.Me.HasAura(AurasDef.SoulReaver) || 
@@ -29,8 +31,8 @@ public class Ingress : ISlotResolver
                     Core.Resolve<JobApi_Reaper>().LemureShroud > 2) &&
                 Qt.Instance.GetQt("自动突进") &&
                 //GCDHelper.GetGCDCooldown() < 1100 &&
-                Core.Me.InRange(Core.Me.GetCurrTarget(), (int)(15 + targetRing + 3)) &&
-                !Core.Me.InRange(Core.Me.GetCurrTarget(), (int)(15 - targetRing - 3)))
+                Core.Me.GetCurrTarget().Distance(Core.Me) < 15 + targetRing + atkRange &&
+                Core.Me.GetCurrTarget().Distance(Core.Me) > 15 - targetRing - atkRange)
         {
             return 0;
         }
@@ -42,6 +44,6 @@ public class Ingress : ISlotResolver
         Core.Resolve<MemApiMoveControl>().Stop();
         Core.Resolve<MemApiMove>().SetRot(Helper.GetRotationToTarget(Core.Me.Position, 
                                                                      Core.Me.GetCurrTarget()!.Position));
-        slot.Add(SpellsDef.HellsIngress.GetSpell(Core.Me.GetCurrTarget()));
+        slot.Add(SpellsDef.HellsIngress.GetSpell());
     }
 }

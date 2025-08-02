@@ -108,9 +108,11 @@ public static class StopHelper
             if (!_manualOverride) 
             {
                 PlayerOptions.Instance.Stop = false; 
-                if (retarget && TargetMgr.Instance.EnemysIn20.Count > 0 && 
-                        (Core.Me.GetCurrTarget() is null || 
-                         Core.Me.GetCurrTarget()!.GameObjectId == Core.Me.GameObjectId))
+                if (retarget && TargetMgr.Instance.EnemysIn20.Count > 0 &&
+                    //!TargetMgr.Instance.EnemysIn20.Values.First().HasAnyAura(Invulns) &&
+                        //(Core.Me.GetCurrTarget() is null || 
+                        Core.Me.GetCurrTarget() is not null &&
+                        Core.Me.GetCurrTarget()!.GameObjectId == Core.Me.GameObjectId)//)
                 {
                     if (Debug) LogHelper.Print("Setting Target");
                     Core.Me.SetTarget(TargetMgr.Instance.EnemysIn20.Values.First());
