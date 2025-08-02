@@ -12,16 +12,23 @@ namespace ElliotZ.Rpr.SlotResolvers.GCD;
 
 public class EnshroudSk : ISlotResolver
 {
-    private int blueOrb => Core.Resolve<JobApi_Reaper>().LemureShroud;
+    private static int blueOrb => Core.Resolve<JobApi_Reaper>().LemureShroud;
     private IBattleChara? Target { get; set; }
+    private IBattleChara? CommunioTarget { get; set; }
 
     public int Check()
     {
+        var enhancedReapingCheck = (Core.Me.HasAura(AurasDef.EnhancedCrossReaping) ||
+                                        Core.Me.HasAura(AurasDef.EnhancedVoidReaping)) ? 
+                                    3 : 4;
+        Target = SpellsDef.GrimReaping.OptimalAOETarget(enhancedReapingCheck, 180f, Qt.Instance.GetQt("智能AOE"));
+        CommunioTarget = SpellsDef.Communio.OptimalAOETarget(1, Qt.Instance.GetQt("智能AOE"), 5);
+
         if (Core.Me.HasAura(AurasDef.Enshrouded) == false)
         {
             return -3;  // -3 for Unmet Prereq Conditions
         }
-        if ((SpellsDef.Communio.IsUnlock() ? blueOrb > 1 : true) &&
+        if ((!SpellsDef.Communio.IsUnlock() || blueOrb > 1) &&
                 Core.Me.Distance(Core.Me.GetCurrTarget()) > SettingMgr.GetSetting<GeneralSettings>().AttackRange)
         {
             return -2;  // -2 for not in range
@@ -42,21 +49,17 @@ public class EnshroudSk : ISlotResolver
     private Spell Solve()
     {
         //var purpOrb = Core.Resolve<JobApi_Reaper>().VoidShroud;
-        var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 8, 180);
-        var enhancedReapingCheck = (Core.Me.HasAura(AurasDef.EnhancedCrossReaping) ||
-                                      Core.Me.HasAura(AurasDef.EnhancedVoidReaping)) ? 3 : 4;
-        Target = SpellsDef.GrimReaping.OptimalAOETarget(enhancedReapingCheck, 180);
+        //var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 8, 180);
 
-        if (SpellsDef.Communio.GetSpell().IsReadyWithCanCast() && blueOrb < 2)
+        if (CommunioTarget is not null && 
+                SpellsDef.Communio.GetSpell().IsReadyWithCanCast() && 
+                blueOrb < 2)
         {
-            return SpellsDef.Communio.GetSpell();
+            return SpellsDef.Communio.GetSpell(CommunioTarget!);
         }
-        if (Qt.Instance.GetQt("AOE"))
+        if (Qt.Instance.GetQt("AOE") && Target is not null)
         {
-            if (Target is not null)
-            {
-                return SpellsDef.GrimReaping.GetSpell(Target!);
-            }
+            return SpellsDef.GrimReaping.GetSpell(Target!);
         }
         if (Core.Me.HasAura(AurasDef.EnhancedCrossReaping))
         {

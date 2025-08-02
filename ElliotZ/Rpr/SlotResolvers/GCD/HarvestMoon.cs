@@ -2,6 +2,7 @@
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
+using Dalamud.Game.ClientState.Objects.Types;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 
@@ -9,9 +10,11 @@ namespace ElliotZ.Rpr.SlotResolvers.GCD;
 
 public class HarvestMoon : ISlotResolver
 {
+    private IBattleChara? Target { get; set; }
     public int Check()
     {
-        if (SpellsDef.HarvestMoon.GetSpell().IsReadyWithCanCast() == false) { return -99; }
+        Target = SpellsDef.HarvestMoon.OptimalAOETarget(1, Qt.Instance.GetQt("智能AOE"), 5);
+        if (Target is null || SpellsDef.HarvestMoon.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Qt.Instance.GetQt("收获月") == false) { return -98; }// Add QT
 
         if (Core.Me.HasAura(AurasDef.SoulReaver) || Core.Me.HasAura(AurasDef.Executioner))
@@ -29,6 +32,6 @@ public class HarvestMoon : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(SpellsDef.HarvestMoon.GetSpell());
+        slot.Add(SpellsDef.HarvestMoon.GetSpell(Target));
     }
 }

@@ -65,10 +65,10 @@ public static class Qt
     {
         foreach (KeyValuePair<string, bool> qtState in RprSettings.Instance.QtStates)
         {
-            if (qtState.Key is not "爆发药") Instance.SetQt(qtState.Key, qtState.Value);
+            if (qtState.Key is not ("爆发药" or "智能AOE" or "爆发药2分" or "自动突进")) Instance.SetQt(qtState.Key, qtState.Value);
         }
 
-        LogHelper.Print("QT设置已重载");
+        if(RprSettings.Instance.Debug) LogHelper.Print("除爆发药和智能AOE以外QT设置已重载");
     }
 
     public static void Build()

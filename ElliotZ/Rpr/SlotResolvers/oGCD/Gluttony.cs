@@ -5,6 +5,7 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
+using Dalamud.Game.ClientState.Objects.Types;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 using static AEAssist.CombatRoutine.View.MeleePosHelper;
@@ -13,9 +14,13 @@ namespace ElliotZ.Rpr.SlotResolvers.oGCD;
 
 public class Gluttony : ISlotResolver
 {
+    private IBattleChara? Target { get; set; }
+
     public int Check()
     {
-        if (SpellsDef.Gluttony.GetSpell().IsReadyWithCanCast() == false)
+        Target = SpellsDef.Gluttony.OptimalAOETarget(1, Qt.Instance.GetQt("智能AOE"), 5);
+
+        if (Target is null || SpellsDef.Gluttony.GetSpell().IsReadyWithCanCast() == false)
         {
             return -99;
         }
@@ -48,6 +53,6 @@ public class Gluttony : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(SpellsDef.Gluttony.GetSpell());
+        slot.Add(SpellsDef.Gluttony.GetSpell(Target));
     }
 }

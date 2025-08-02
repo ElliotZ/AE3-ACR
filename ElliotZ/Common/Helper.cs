@@ -208,7 +208,7 @@ public static class Helper
             //var spellDmgRange = Core.Resolve<MemApiSpell>().
             var enemyCount = TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 
                                                               (int)spellId.GetSpell().ActionRange, dmgRange);
-            return (count >= enemyCount ? Core.Me.GetCurrTarget() : null);
+            return (count <= enemyCount ? Core.Me.GetCurrTarget() : null);
         }
     }
 
@@ -232,7 +232,31 @@ public static class Helper
                                                                     Core.Me.GetCurrTarget(), 
                                                                     (int)spellId.GetSpell().ActionRange, 
                                                                     angle);
-            return (count >= enemyCount ? Core.Me.GetCurrTarget() : null);
+            return (count <= enemyCount ? Core.Me.GetCurrTarget() : null);
+        }
+    }
+
+    /// <summary>
+    /// 带开关的智能AOE选择器，矩形
+    /// </summary>
+    /// <param name="spellId"></param>
+    /// <param name="count"></param>
+    /// <param name="width">如果toggle有可能为false的话一定要填这个，不然就等死吧</param>
+    /// <param name="toggle">这里可以输入控制智能AOE的QT</param>
+    /// <returns></returns>
+    public static IBattleChara? OptimalLineAOETarget(this uint spellId, int count, bool toggle = true, int width = 0)
+    {
+        if (toggle)
+        {
+            return TargetHelper.GetMostCanTargetObjects(spellId, count);
+        }
+        else
+        {
+            var enemyCount = TargetHelper.GetEnemyCountInsideRect(Core.Me,
+                                                                    Core.Me.GetCurrTarget(),
+                                                                    (int)spellId.GetSpell().ActionRange,
+                                                                    width);
+            return (count <= enemyCount ? Core.Me.GetCurrTarget() : null);
         }
     }
 
