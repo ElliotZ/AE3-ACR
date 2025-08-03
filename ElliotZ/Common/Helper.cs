@@ -30,6 +30,9 @@ public static class Helper
     public static int GetAuraTimeLeft(uint buffID) =>
             Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me, buffID, true);
 
+    public static int GetAuraTimeLeft(IBattleChara c, uint buffID) =>
+            Core.Resolve<MemApiBuff>().GetAuraTimeleft(c, buffID, true);
+
     /// <summary>显示一个文本提示，用于在游戏中显示简短的消息。</summary>
     /// <param name="msg">要显示的消息文本。</param>
     /// <param name="s">文本提示的样式。支持蓝色提示（1）和红色提示（2）两种</param>
@@ -71,6 +74,11 @@ public static class Helper
 
     public static bool AtRear => Core.Resolve<MemApiTarget>().IsBehind;
     public static bool AtFlank => Core.Resolve<MemApiTarget>().IsFlanking;
+
+    public static bool IsCastingSpell(this IBattleChara c, uint spellId)
+    {
+        return c.IsCasting && c.CastActionId == spellId;
+    }
 
     /// <summary>
     /// 充能技能还有多少冷却时间(ms)才可用

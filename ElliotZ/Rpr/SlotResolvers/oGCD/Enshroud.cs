@@ -58,8 +58,9 @@ public class Enshroud : ISlotResolver
         {
             if (Core.Resolve<JobApi_Reaper>().ShroudGauge < 100)
             {
-                if (!Qt.Instance.GetQt("单魂衣") && // Qt.Instance.GetQt("神秘环") &&
-                                                 //SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 40000)
+                if (!Qt.Instance.GetQt("单魂衣") && 
+                    // Qt.Instance.GetQt("神秘环") &&
+                    //SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 40000)
                     !DeadZoneCheck())
                 {
                     return -6;
@@ -74,12 +75,12 @@ public class Enshroud : ISlotResolver
             }
             if (SpellsDef.SoulSlice.GetSpell().Charges > 1.6f && Core.Resolve<JobApi_Reaper>().ShroudGauge < 90)
             {
-                return -11;
+                return -11;  // SoulSlice overcap protection
             }
-            if (Helper.AoeTtkCheck() && TTKHelper.IsTargetTTK(Core.Me.GetCurrTarget()))
-            {
-                return -16;  // delay for next pack
-            }
+            //if (Helper.AoeTtkCheck() && TTKHelper.IsTargetTTK(Core.Me.GetCurrTarget()))
+            //{
+            //    return -16;  // delay for next pack
+            //}
         }
         if (Core.Me.HasAura(AurasDef.SoulReaver) || Core.Me.HasAura(AurasDef.Executioner))
         {

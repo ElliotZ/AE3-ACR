@@ -107,7 +107,8 @@ public static class DevTab
             if (ImGui.CollapsingHeader("更新日志"))
             {
                 ImGui.BeginChild("UpdateLog", new System.Numerics.Vector2(0f, 300f), border: true, ImGuiWindowFlags.HorizontalScrollbar);
-                ImGui.TextWrapped("更新日志：PlaceHolder txt");
+                ImGui.TextWrapped("更新日志：\n\n" + 
+                                  "2025/08/03: 初版。");
                 ImGui.EndChild();
             }
         });

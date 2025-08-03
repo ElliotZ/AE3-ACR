@@ -31,7 +31,7 @@ public class OpenerCountDownOnly : IOpener
 
     public void InitCountDown(CountDownHandler cdh)
     {
-        Qt.LoadQtStatesNoPot();
+        if (RprSettings.Instance.RestoreQtSet) { Qt.LoadQtStatesNoPot(); }
 
         const int startTime = 15000;
         if (!Core.Me.HasAura(AurasDef.Soulsow) && SpellsDef.Soulsow.GetSpell().IsReadyWithCanCast())

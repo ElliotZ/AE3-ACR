@@ -52,9 +52,9 @@ public class RprSettings
     public bool ForceCast = false;
     public bool ForceNextSlotsOnHKs = false;
     public bool NoPosDrawInTN = false;
-    public bool TxtCmdWindowOpen = true;
     public bool RestoreQtSet = true;
     //public bool SmartAOE = true;
+    public bool CommandWindowOpen = true;
     public bool ShowToast = false;
     public bool Debug = false;
 
@@ -86,6 +86,6 @@ public class RprSettings
     public JobViewSave JobViewSave = new()
     {
         QtLineCount = 3,
-        QtUnVisibleList = ["挥割/爪", "暴食", "灵魂割", "真北", "播魂种", "祭牲"]
+        QtUnVisibleList = ["挥割/爪", "暴食", "灵魂割", "祭牲",]
     }; 
 }

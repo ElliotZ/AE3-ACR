@@ -76,10 +76,14 @@ public class BuffMaintain : ISlotResolver
         var enemylist = TargetMgr.Instance.EnemysIn12;
         var noDebuffEnemyCount = enemylist.Count(v =>
                 Core.Me.Distance(v.Value, DistanceMode.IgnoreTargetHitbox | DistanceMode.IgnoreHeight) < 5 &&
-                Core.Resolve<MemApiBuff>().GetAuraTimeleft(v.Value, AurasDef.DeathsDesign, true) <= BattleData.Instance.GcdDuration);
+                Helper.GetAuraTimeLeft(v.Value, AurasDef.DeathsDesign) <= BattleData.Instance.GcdDuration);
         if (RprSettings.Instance.Debug) {
             LogHelper.Print("BuffMaintain.AOEAuraCheck() Internals");
-            LogHelper.Print(noDebuffEnemyCount.ToString() + "/" + enemyCount.ToString() + "=" + (noDebuffEnemyCount / (double)enemyCount).ToString());
+            LogHelper.Print(noDebuffEnemyCount.ToString() + 
+                                "/" + 
+                                enemyCount.ToString() + 
+                                "=" + 
+                                (noDebuffEnemyCount / (double)enemyCount).ToString());
         }
         return (noDebuffEnemyCount / (double)enemyCount) > 0.5;
     }

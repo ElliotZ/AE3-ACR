@@ -9,6 +9,7 @@ namespace ElliotZ.Rpr;
 
 public static class RprHelper
 {
+    public static readonly string TxtCmdHandle = "/EZRpr";
     public static int GetGcdDuration => BattleData.Instance.GcdDuration;
     public static uint PrevCombo => Core.Resolve<MemApiSpell>().GetLastComboSpellId();
     //public static int ComboTimer => (int)Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds;
