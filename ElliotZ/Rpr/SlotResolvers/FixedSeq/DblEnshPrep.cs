@@ -31,6 +31,7 @@ public class DblEnshPrep : ISlotSequence
         //}
         if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Qt.Instance.GetQt("神秘环") == false || Qt.Instance.GetQt("魂衣") == false) { return -98; }
+        if (Qt.Instance.GetQt("单魂衣")) return -98;
         if (!Core.Resolve<MemApiDuty>().InBossBattle && 
                 (Core.Me.GetCurrTarget() is not null && 
                 !Core.Me.GetCurrTarget().IsDummy())) 

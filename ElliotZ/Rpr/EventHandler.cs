@@ -2,6 +2,7 @@
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View;
+using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
@@ -9,6 +10,7 @@ using AEAssist.MemoryApi;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 using System.Numerics;
+using System.Reflection;
 using Task = System.Threading.Tasks.Task;
 
 namespace ElliotZ.Rpr;
@@ -18,6 +20,10 @@ public class EventHandler : IRotationEventHandler
     private MobPullHelper? mobPullHelper;
     //private static long _lastCheckTime = 0L;
     private static bool _burstSettingsAltered = false;
+    private Dictionary<string, string> _qtKeyDict;
+    private Dictionary<string, IHotkeyResolver> _hotkeyDict;
+    private static readonly List<string> QtToastBuffer = new List<string>();
+    private static bool _qtToastScheduled;
 
     public void OnResetBattle()
     {
@@ -71,6 +77,13 @@ public class EventHandler : IRotationEventHandler
 
     public async Task OnPreCombat()
     {
+        // out of combat soulsow
+        if (SpellsDef.Soulsow.IsUnlock() && Qt.Instance.GetQt("播魂种") &&
+                Core.Me.HasAura(AurasDef.Soulsow) == false)
+        {
+            await SpellsDef.Soulsow.GetSpell().Cast();
+        }
+
         if (!Core.Resolve<MemApiDuty>().IsOver && Core.Resolve<MemApiDuty>().InMission)
         {
             if (Core.Resolve<MemApiDuty>().DutyMembersNumber() == 8 && RprSettings.Instance.NoBurst)
@@ -86,14 +99,6 @@ public class EventHandler : IRotationEventHandler
             LogHelper.Print("改变过“小怪低血量不交爆发”的设置，现在复原。");
             RprSettings.Instance.NoBurst = true;
             _burstSettingsAltered = false;
-        }
-
-        // out of combat soulsow
-        if (SpellsDef.Soulsow.IsUnlock() && Qt.Instance.GetQt("播魂种") &&
-                Core.Me.HasAura(AurasDef.Soulsow) == false &&
-                !SpellsDef.HarvestMoon.GetSpell().RecentlyUsed(1500))
-        {
-            await SpellsDef.Soulsow.GetSpell().Cast();
         }
 
         StopHelper.StopActions(1000);
@@ -114,14 +119,11 @@ public class EventHandler : IRotationEventHandler
 
     public void OnBattleUpdate(int currTime)
     {
-        var gcdProgPctg = (int)((GCDHelper.GetGCDCooldown() / (double)BattleData.Instance.GcdDuration) * 100);
-        var inTN = Core.Me.HasAura(AurasDef.TrueNorth) &&
-                   !RprSettings.Instance.NoPosDrawInTN;
-        var GibGallowsReady = Core.Me.HasAura(AurasDef.SoulReaver) || 
-                              Core.Me.HasAura(AurasDef.Executioner);
-        var GibGallowsJustUsed = 
-                Core.Resolve<MemApiSpell>().CheckActionChange(SpellsDef.Gibbet).RecentlyUsed(500) ||
-                Core.Resolve<MemApiSpell>().CheckActionChange(SpellsDef.Gallows).RecentlyUsed(500);
+        //stop casting soulsow if just entered combat
+        if (currTime < 1000 && Core.Me.IsCastingSpell(SpellsDef.Soulsow))
+        {
+            Core.Resolve<MemApiSpell>().CancelCast();
+        }
 
         // detect if tank is pulling in dungeons
         mobPullHelper = new MobPullHelper();
@@ -155,7 +157,7 @@ public class EventHandler : IRotationEventHandler
         if (RprSettings.Instance.NoBurst && 
             !Core.Resolve<MemApiDuty>().InBossBattle &&  // exclude boss battles and msq ultima wep
             !Core.Me.GetCurrTarget().IsDummy() &&
-            Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() != 1048 &&
+            Helper.GetTerritoyId != 1048 &&
             AI.Instance.BattleData.CurrBattleTimeInMs > 10000 && 
                 (BattleData.Instance.TotalHpPercentage < RprSettings.Instance.MinMobHpPercent || 
                  BattleData.Instance.AverageTTK < (RprSettings.Instance.minTTK * 1000)))
@@ -164,7 +166,6 @@ public class EventHandler : IRotationEventHandler
             Qt.Instance.SetQt("神秘环", false);
         }
 
-        // stop action during accel bombs, pyretics and/or when boss is invuln
         //if (Helper.AnyAuraTimerLessThan(StopHelper.AccelBomb, 3200) && 
         //    //Core.Me.HasAnyAura(StopHelper.AccelBomb, BattleData.Instance.GcdDuration) &&
         //    PlayerOptions.Instance.Stop == false)
@@ -181,9 +182,18 @@ public class EventHandler : IRotationEventHandler
         //    }
         //}
 
+        // stop action during accel bombs, pyretics and/or when boss is invuln
         StopHelper.StopActions(1000);
 
         // positional indicator
+        var gcdProgPctg = (int)((GCDHelper.GetGCDCooldown() / (double)BattleData.Instance.GcdDuration) * 100);
+        var inTN = Core.Me.HasAura(AurasDef.TrueNorth) &&
+                   !RprSettings.Instance.NoPosDrawInTN;
+        var GibGallowsReady = Core.Me.HasAura(AurasDef.SoulReaver) ||
+                              Core.Me.HasAura(AurasDef.Executioner);
+        var GibGallowsJustUsed =
+                Helper.GetActionChange(SpellsDef.Gibbet).RecentlyUsed(500) ||
+                Helper.GetActionChange(SpellsDef.Gallows).RecentlyUsed(500);
         if (!inTN && 
                 !Core.Me.HasAura(AurasDef.Enshrouded) && 
                 Core.Me.GetCurrTarget() is not null && 
@@ -199,12 +209,10 @@ public class EventHandler : IRotationEventHandler
                 {
                     MeleePosHelper.Draw(MeleePosHelper.Pos.Flank, gcdProgPctg);
                 }
-                else
-                {
-                    MeleePosHelper.Clear();
-                }
+                else { MeleePosHelper.Clear(); }
             }
-            else if (Core.Resolve<JobApi_Reaper>().SoulGauge >= 50 || SpellsDef.SoulSlice.GetSpell().IsReadyWithCanCast())
+            else if (Core.Resolve<JobApi_Reaper>().SoulGauge >= 50 || 
+                        SpellsDef.SoulSlice.GetSpell().IsReadyWithCanCast())
             {
                 if (Core.Me.HasAura(AurasDef.EnhancedGallows))
                 {
@@ -214,43 +222,144 @@ public class EventHandler : IRotationEventHandler
                 {
                     MeleePosHelper.Draw(MeleePosHelper.Pos.Flank, 70);
                 }
-                else
-                {
-                    MeleePosHelper.Clear();
-                }
+                else { MeleePosHelper.Clear(); }
             }
-            else
-            {
-                MeleePosHelper.Clear();
-            }
+            else { MeleePosHelper.Clear(); }
         }
-        else
-        {
-            MeleePosHelper.Clear();
-        }
+        else { MeleePosHelper.Clear(); }
     }
 
     public void OnEnterRotation() //切换到当前ACR
     {
         //LogHelper.Print(
         //    "欢迎使用yoyo舞者ACR，反馈请到：https://discord.com/channels/1191648233454313482/1326201786046087329");
-        //Core.Resolve<MemApiChatMessage>()
-        //    .Toast2("跟我念：傻逼riku和souma的妈死干净咯！", 1, 5000);
-
+        Helper.SendTips("欢迎使用EZRpr，使用前请把左上角悬浮窗拉大查看README。");
+        LogHelper.Print("如有问题和反馈可以在DC找我。");
 
         //检查全局设置
         if (Helper.GlblSettings.NoClipGCD3)
             LogHelper.PrintError("建议在acr全局设置中取消勾选【全局能力技不卡GCD】选项");
 
-        //MeleePosHelper2.Init(Qt.Instance, "真北");
+        try
+        {
+            ECHelper.Commands.RemoveHandler(RprHelper.TxtCmdHandle);
+        }
+        catch (Exception) { }
 
-        //更新时间轴
-        //if (DncSettings.Instance.AutoUpdataTimeLines)
-        //    TimeLineUpdater.UpdateFiles(Helper.DncTimeLineUrl);
+        ECHelper.Commands.AddHandler(RprHelper.TxtCmdHandle, new Dalamud.Game.Command.CommandInfo(RprCommandHandler));
+        _qtKeyDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach ((string name, string enName, bool defVal, string tooltip) in Qt.QtKeys) 
+        { 
+            _qtKeyDict.TryAdd(name, name);
+            _qtKeyDict.TryAdd(enName.ToLower(), name);
+        }
+        _hotkeyDict = new Dictionary<string, IHotkeyResolver>(StringComparer.OrdinalIgnoreCase);
+        foreach ((string name, string enName, IHotkeyResolver hkr) in Qt.HKResolvers)
+        {
+            _hotkeyDict.TryAdd(enName.ToLower(), hkr);
+            _hotkeyDict.TryAdd(name, hkr);
+        }
+    }
+
+    private void RprCommandHandler(string command, string args)
+    {
+        if (string.IsNullOrWhiteSpace(args))
+        {
+            LogHelper.PrintError(RprHelper.TxtCmdHandle[1..] + " 命令无效，请提供参数");
+            return;
+        }
+
+        string processed = args.Trim().ToLower();
+        if (processed.EndsWith("_qt"))
+        {
+            if (_qtKeyDict.ContainsKey(processed[..^3]))
+            {
+                ToggleQtSetting(_qtKeyDict.GetValueOrDefault(processed[..^3]));
+            }
+            else
+            {
+                 LogHelper.PrintError("未知QT参数：" +  args);
+            }
+            return;
+        }
+
+        if (processed.EndsWith("_hk"))
+        {
+            if (_hotkeyDict.ContainsKey(processed[..^3]))
+            {
+                ExecuteHotkey(_hotkeyDict.GetValueOrDefault(processed[..^3]));
+            }
+            else
+            {
+                 LogHelper.PrintError("未知Hotkey参数：" + args);
+            }
+            return;
+        }
+
+        if (processed == "hello")
+        {
+            LogHelper.Print("Hello World!");
+        }
+        else
+        {
+            LogHelper.PrintError("未知参数：" + args);
+        }
+    }
+
+    private static void ExecuteHotkey(IHotkeyResolver? hkr)
+    {
+        if (hkr is null)
+        {
+            LogHelper.PrintError("HotkeyResolver未初始化");
+        }
+        else if (hkr.Check() >= 0)
+        {
+            hkr.Run();
+        }
+        else
+        {
+            LogHelper.Print("无法执行Hotkey，可能条件不满足或技能不可用。");
+        }
+    }
+
+    private static void ToggleQtSetting(string? qtName)
+    {
+        if (!string.IsNullOrEmpty(qtName))
+        {
+            if (Qt.Instance.ReverseQt(qtName))
+            {
+                var SuccessNote = $"QT\"{qtName}\"已设置为 {Qt.Instance.GetQt(qtName)}。";
+                LogHelper.Print(SuccessNote);
+                if (RprSettings.Instance.ShowToast)
+                {
+                    QtToastBuffer.Add(SuccessNote);
+                    if (!_qtToastScheduled)
+                    {
+                        _qtToastScheduled = true;
+                        Task.Delay(50).ContinueWith(delegate 
+                        {
+                            string msg = string.Join("\n", QtToastBuffer);
+                            Helper.SendTips(msg, 1, 1000);
+                            QtToastBuffer.Clear();
+                            _qtToastScheduled = false;
+                        });
+                    }
+                }
+            }
+            else
+            {
+                LogHelper.PrintError("Failed to Toggle QT");
+            }
+        }
+        else
+        {
+            LogHelper.PrintError("Empty QT name");
+        }
     }
 
     public void OnExitRotation() //退出ACR
     {
+        ECHelper.Commands.RemoveHandler(RprHelper.TxtCmdHandle);
     }
 
     public void OnTerritoryChanged()

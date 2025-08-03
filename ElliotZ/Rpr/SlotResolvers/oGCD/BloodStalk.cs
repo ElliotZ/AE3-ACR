@@ -136,8 +136,12 @@ public class BloodStalk : ISlotResolver
     private static int GcdsToOvercap()
     {
         int res = (100 - Core.Resolve<JobApi_Reaper>().SoulGauge) / 10;
-        if (Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, BattleData.Instance.GcdDuration * (res + 3), false) ||
-            Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 30000 + BattleData.Instance.GcdDuration * res, false))
+        if (Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 
+                                            BattleData.Instance.GcdDuration * (res + 3), 
+                                            false) ||
+            Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 
+                                            30000 + BattleData.Instance.GcdDuration * res, 
+                                            false))
         {
             res++;
         }

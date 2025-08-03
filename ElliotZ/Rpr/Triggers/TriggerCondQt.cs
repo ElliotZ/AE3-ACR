@@ -8,7 +8,7 @@ namespace ElliotZ.Rpr.Triggers;
 
 public class TriggerCondQt : ITriggerCond
 {
-    public string DisplayName => "Dancer/QT检测";
+    public string DisplayName => "Reaper/QT检测";
     public string Remark { get; set; }
 
     public string Key = "";
