@@ -48,7 +48,39 @@ public static class SettingTab
                 ImGui.PopStyleColor();
                 ImGui.Checkbox("读条技能施放忽略移动状态（移动中也会使用）", ref RprSettings.Instance.ForceCast);
                 ImGui.Checkbox("Hotkeys使用强制队列（可能会造成卡GCD）", ref RprSettings.Instance.ForceNextSlotsOnHKs);
+                ImGui.Separator();
                 ImGui.Checkbox("真北期间不绘制身位", ref RprSettings.Instance.NoPosDrawInTN);
+                string PosStyle = RprSettings.Instance.PosDrawStyle switch
+                {
+                    0 => "不填充",
+                    1 => "填充70%",
+                    _ => "填充满"
+                };
+                ImGui.Text("身位风格设置");
+                ImGui.SetNextItemWidth(120f);
+                if (ImGui.BeginCombo("选择身位绘制风格", PosStyle))
+                {
+                    if (ImGui.Selectable("不填充", RprSettings.Instance.PosDrawStyle == 0))
+                    {
+                        RprSettings.Instance.PosDrawStyle = 0;
+                        RprSettings.Instance.Save();
+                    }
+
+                    if (ImGui.Selectable("填充70%", RprSettings.Instance.PosDrawStyle == 1))
+                    {
+                        RprSettings.Instance.PosDrawStyle = 1;
+                        RprSettings.Instance.Save();
+                    }
+
+                    if (ImGui.Selectable("填充满（默认）", RprSettings.Instance.PosDrawStyle == 2))
+                    {
+                        RprSettings.Instance.PosDrawStyle = 2;
+                        RprSettings.Instance.Save();
+                    }
+
+                    ImGui.EndCombo();
+                }
+                ImGui.Separator();
                 ImGui.Checkbox("自动重置QT", ref RprSettings.Instance.RestoreQtSet);
                 ImGui.SameLine();
                 if (ImGui.Button("记录当前QT设置"))
@@ -77,6 +109,7 @@ public static class SettingTab
                     ImGui.SliderFloat("平均血量阈值(0-0.2)", ref RprSettings.Instance.MinMobHpPercent, 0f, 0.2f);
                     ImGui.SetNextItemWidth(200f);
                     ImGui.SliderInt("平均死亡时间（秒）(0-20)", ref RprSettings.Instance.minTTK, 0, 20);
+                    ImGui.Separator();
                 }
                 ImGui.Checkbox("坦克拉怪中留CD技能", ref RprSettings.Instance.PullingNoBurst);
                 if (RprSettings.Instance.PullingNoBurst)
@@ -106,6 +139,7 @@ public static class SettingTab
                         ImGui.SliderFloat("自动神秘纹血量阈值 (0.10-1.00)",
                                               ref RprSettings.Instance.CrestPercent,
                                               0.1f, 1.0f);
+                        ImGui.Separator();
                         //if (!RprSettings.Instance.JobViewSave.HotkeyUnVisibleList.Contains("神秘纹"))
                         //{
                         //    RprSettings.Instance.JobViewSave.HotkeyUnVisibleList.Add("神秘纹");
@@ -123,6 +157,7 @@ public static class SettingTab
                         ImGui.SliderFloat("自动内丹血量阈值 (0.10-0.99)",
                                               ref RprSettings.Instance.SecondWindPercent,
                                               0.1f, 0.99f);
+                        ImGui.Separator();
                         if (!RprSettings.Instance.JobViewSave.HotkeyUnVisibleList.Contains("内丹"))
                         {
                             RprSettings.Instance.JobViewSave.HotkeyUnVisibleList.Add("内丹");
@@ -140,6 +175,7 @@ public static class SettingTab
                         ImGui.SliderFloat("自动浴血血量阈值 (0.10-0.99)",
                                               ref RprSettings.Instance.BloodBathPercent,
                                               0.1f, 0.99f);
+                        ImGui.Separator();
                         if (!RprSettings.Instance.JobViewSave.HotkeyUnVisibleList.Contains("浴血"))
                         {
                             RprSettings.Instance.JobViewSave.HotkeyUnVisibleList.Add("浴血");
@@ -179,7 +215,7 @@ public static class SettingTab
                 ImGui.Text("倒数勾刃读条时间(ms)");
                 ImGui.SetNextItemWidth(200f);
                 ImGui.SliderInt("(100-2000)", ref RprSettings.Instance.PrepullCastTimeHarpe, 100, 2000);
-
+                ImGui.Separator();
                 if (ImGui.Button("获取爆发药情况"))
                 {
                     _8幻药 = CItemHelper.FindItem((uint)Potion._8级刚力之幻药);
@@ -189,19 +225,19 @@ public static class SettingTab
 
                 if (_8幻药 > 0)
                 {
-                    ImGui.Text($"8级巧力之幻药：{_8幻药} 瓶");
+                    ImGui.Text($"8级刚力之幻药：{_8幻药} 瓶");
                     DrawPotion(Potion._8级刚力之幻药);
                 }
 
                 if (宝药 > 0)
                 {
-                    ImGui.Text($"巧力之宝药：{宝药} 瓶");
+                    ImGui.Text($"刚力之宝药：{宝药} 瓶");
                     DrawPotion(Potion.刚力之宝药);
                 }
 
                 if (_2宝药 > 0)
                 {
-                    ImGui.Text($"2级巧力之宝药：{_2宝药} 瓶");
+                    ImGui.Text($"2级刚力之宝药：{_2宝药} 瓶");
                     DrawPotion(Potion._2级刚力之宝药);
                 }
                 ImGui.EndGroup();

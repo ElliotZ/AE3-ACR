@@ -47,7 +47,7 @@ public class IngressHK(int hktype) : HotKeyResolver(SpellsDef.HellsIngress, Spel
 
     public override int Check()
     {
-        if (HkType == FaceTarget && Core.Me.GetCurrTarget() is null) return -9;
+        //if (HkType == FaceTarget && Core.Me.GetCurrTarget() is null) return -9;
         if (Core.Me.HasAura(AurasDef.RegressReady) &&
                     RegressPosition().Equals(Vector3.Zero))
         {
@@ -69,9 +69,12 @@ public class IngressHK(int hktype) : HotKeyResolver(SpellsDef.HellsIngress, Spel
             switch (HkType)
             {
                 case 2:
-                    Core.Resolve<MemApiMoveControl>().Stop();
-                    Core.Resolve<MemApiMove>().SetRot(Helper.GetRotationToTarget(Core.Me.Position,
-                                                                         Core.Me.GetCurrTarget()!.Position));
+                    if (Core.Me.GetCurrTarget() is not null)
+                    {
+                        Core.Resolve<MemApiMoveControl>().Stop();
+                        Core.Resolve<MemApiMove>().SetRot(Helper.GetRotationToTarget(Core.Me.Position,
+                                                                             Core.Me.GetCurrTarget()!.Position));
+                    }
                     break;
                 case 3:
                     Core.Resolve<MemApiMoveControl>().Stop();

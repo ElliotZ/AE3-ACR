@@ -33,13 +33,14 @@ public class BloodStalk : ISlotResolver
         if (Core.Me.HasAura(AurasDef.Enshrouded)) { return -1; }  // not this slot resolver
 
         if (Shroud == 100 ||
-            Core.Me.HasAura(AurasDef.SoulReaver) ||
-            Core.Me.HasAura(AurasDef.Executioner))
+                Core.Me.HasAura(AurasDef.SoulReaver) ||
+                Core.Me.HasAura(AurasDef.Executioner))
         {
             return -4;
         }
         if (Helper.ComboTimer <= GCDHelper.GetGCDDuration() + RprSettings.Instance.AnimLock * 3 &&
-        (RprHelper.PrevCombo == SpellsDef.Slice || RprHelper.PrevCombo == SpellsDef.WaxingSlice))
+                (RprHelper.PrevCombo == SpellsDef.Slice || 
+                 RprHelper.PrevCombo == SpellsDef.WaxingSlice))
         {
             return -9;  // -9 for combo protection
         }

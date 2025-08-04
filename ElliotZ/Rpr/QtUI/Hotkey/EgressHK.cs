@@ -38,7 +38,7 @@ public class EgressHK(int hktype, bool waitForCD = true) : HotKeyResolver(Spells
 
     public override int Check()
     {
-        if (HkType == IngressHK.FaceTarget && Core.Me.GetCurrTarget() is null) return -9;
+        //if (HkType == IngressHK.FaceTarget && Core.Me.GetCurrTarget() is null) return -9;
         if (Core.Me.HasAura(AurasDef.RegressReady) &&
                 IngressHK.RegressPosition().Equals(Vector3.Zero))
         {
@@ -60,9 +60,12 @@ public class EgressHK(int hktype, bool waitForCD = true) : HotKeyResolver(Spells
             switch (HkType)
             {
                 case 2:
-                    Core.Resolve<MemApiMoveControl>().Stop();
-                    Core.Resolve<MemApiMove>().SetRot(Helper.GetRotationToTarget(Core.Me.Position,
-                                                                         Core.Me.GetCurrTarget()!.Position));
+                    if (Core.Me.GetCurrTarget() is not null)
+                    {
+                        Core.Resolve<MemApiMoveControl>().Stop();
+                        Core.Resolve<MemApiMove>().SetRot(Helper.GetRotationToTarget(Core.Me.Position,
+                                                                             Core.Me.GetCurrTarget()!.Position));
+                    }
                     break;
                 case 3:
                     Core.Resolve<MemApiMoveControl>().Stop();
