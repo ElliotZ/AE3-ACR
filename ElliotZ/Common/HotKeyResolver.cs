@@ -10,33 +10,31 @@ using System.Numerics;
 
 namespace ElliotZ.Common;
 
-public class HotKeyResolver : IHotkeyResolver
+/// <summary>
+/// 
+/// </summary>
+/// <param name="spellId"></param>
+/// <param name="targetType"></param>
+/// <param name="useHighPrioritySlot">使用不卡GCD的强插</param>
+/// <param name="waitCoolDown">是否允许提早5秒点HK</param>
+public class HotKeyResolver(uint spellId, 
+                                SpellTargetType targetType = SpellTargetType.Target, 
+                                bool useHighPrioritySlot = true,
+                                bool waitCoolDown = true) : IHotkeyResolver
 {
-    private readonly uint SpellId;
-    private readonly SpellTargetType TargetType;
-    private readonly bool UseHighPrioritySlot;
-    private readonly bool WaitCoolDown;
+    protected readonly uint SpellId = spellId;
+    protected readonly SpellTargetType TargetType = targetType;
+    protected readonly bool UseHighPrioritySlot = useHighPrioritySlot;
+    protected readonly bool WaitCoolDown = waitCoolDown;
 
-    /// <summary>
-    /// 只使用不卡gcd的强插
-    /// </summary>
-    public HotKeyResolver(uint spellId, SpellTargetType targetType, bool useHighPrioritySlot = true,
-        bool waitCoolDown = true)
+    public virtual void Draw(Vector2 size)
     {
-        SpellId = spellId;
-        TargetType = targetType;
-        UseHighPrioritySlot = useHighPrioritySlot;
-        WaitCoolDown = waitCoolDown;
+        HotkeyHelper.DrawSpellImage(size, Helper.GetActionChange(SpellId));
     }
 
-    public void Draw(Vector2 size)
+    public virtual void DrawExternal(Vector2 size, bool isActive)
     {
-        HotkeyHelper.DrawSpellImage(size, SpellId);
-    }
-
-    public void DrawExternal(Vector2 size, bool isActive)
-    {
-        var targetSpellId = Core.Resolve<MemApiSpell>().CheckActionChange(SpellId);
+        var targetSpellId = Helper.GetActionChange(SpellId);
         var spell = targetSpellId.GetSpell(TargetType);
 
         if (WaitCoolDown && spell.isUnlockWithRoleSkills())
@@ -66,9 +64,9 @@ public class HotKeyResolver : IHotkeyResolver
         }
     }
 
-    public int Check()
+    public virtual int Check()
     {
-        var s = SpellId.GetSpell(TargetType);
+        var s = Helper.GetActionChange(SpellId).GetSpell(TargetType);
         if (!s.isUnlockWithRoleSkills()) return -1;
         if (UseHighPrioritySlot && Helper.CheckInHPQueueTop(s)) return -3;
         var isReady = WaitCoolDown ? s.Cooldown.TotalMilliseconds <= 5000 : s.IsReadyWithCanCast();
@@ -77,7 +75,7 @@ public class HotKeyResolver : IHotkeyResolver
 
     public void Run()
     {
-        var targetSpellId = Core.Resolve<MemApiSpell>().CheckActionChange(SpellId);
+        var targetSpellId = Helper.GetActionChange(SpellId);
         var spell = targetSpellId.GetSpell(TargetType);
         var cooldown = spell.Cooldown.TotalMilliseconds;
 
@@ -91,7 +89,7 @@ public class HotKeyResolver : IHotkeyResolver
         }
     }
 
-    private async Task Run1(Spell spell, int delay = 0)
+    protected virtual async Task Run1(Spell spell, int delay = 0)
     {
         if (delay > 0) await Coroutine.Instance.WaitAsync(delay);
 
@@ -115,22 +113,7 @@ public class HotKeyResolver : IHotkeyResolver
         }
         else
         {
-            //var gcdCooldown = GCDHelper.GetGCDCooldown();
-            //if (gcdCooldown is < 700 and > 0)
-            //{
-            //    _ = Run2(spell, gcdCooldown + 100);
-            //}
-            //else
-            //{
-            //    _ = Run2(spell);
-            //}
             AI.Instance.BattleData.AddSpell2NextSlot(spell);
         }
     }
-
-    //private static async Task Run2(Spell spell, int delay = 0)
-    //{
-    //    if (delay > 0) await Coroutine.Instance.WaitAsync(delay);
-    //    AI.Instance.BattleData.AddSpell2NextSlot(spell);
-    //}
 }

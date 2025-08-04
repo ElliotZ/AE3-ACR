@@ -61,7 +61,7 @@ public static class DevTab
                         targetGOID = Core.Me.GetCurrTarget()!.GameObjectId.ToString();
                     }
                     ImGui.Text("Target GameObjectId:" + targetGOID);
-                    ImGui.Text("Target is null? " + (Core.Me.GetCurrTarget() is null));
+                    ImGui.Text("Self Casting Spell ID" + (Core.Me.CastActionId).ToString());
                     ImGui.PopTextWrapPos();
                     ImGui.Text("IsPulling: " + BattleData.Instance.IsPulling);
                     ImGui.Text($"自身面向 ({Core.Me.Rotation:F2})");
@@ -81,8 +81,14 @@ public static class DevTab
                 ImGui.SameLine();
                 if (ImGui.Button("清除一个"))
                 {
-                    AI.Instance.BattleData.HighPrioritySlots_OffGCD.Dequeue();
-                    AI.Instance.BattleData.HighPrioritySlots_GCD.Dequeue();
+                    if (AI.Instance.BattleData.HighPrioritySlots_OffGCD.Count != 0)
+                    {
+                        AI.Instance.BattleData.HighPrioritySlots_OffGCD.Dequeue();
+                    }
+                    if (AI.Instance.BattleData.HighPrioritySlots_GCD.Count != 0)
+                    {
+                        AI.Instance.BattleData.HighPrioritySlots_GCD.Dequeue();
+                    }
                 }
 
                 ImGui.Text("-------能力技-------");
