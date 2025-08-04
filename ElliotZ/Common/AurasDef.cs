@@ -355,6 +355,7 @@
             ImmortalSacrifice = 2592,
             Enshrouded = 2593,
             Soulsow = 2594,
+            RegressReady = 2595,
             BloodsownCircle = 2972,
             CrestOfTimeReturned = 2598,
             CrestOfTimeBorrowed = 2597,

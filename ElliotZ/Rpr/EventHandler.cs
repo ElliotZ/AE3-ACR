@@ -78,8 +78,7 @@ public class EventHandler : IRotationEventHandler
     public async Task OnPreCombat()
     {
         // out of combat soulsow
-        if (SpellsDef.Soulsow.IsUnlock() && Qt.Instance.GetQt("播魂种") &&
-                Core.Me.HasAura(AurasDef.Soulsow) == false)
+        if (SpellsDef.Soulsow.GetSpell().IsReadyWithCanCast() && Qt.Instance.GetQt("播魂种"))
         {
             await SpellsDef.Soulsow.GetSpell().Cast();
         }
@@ -120,7 +119,7 @@ public class EventHandler : IRotationEventHandler
     public void OnBattleUpdate(int currTime)
     {
         //stop casting soulsow if just entered combat
-        if (currTime < 1000 && Core.Me.IsCastingSpell(SpellsDef.Soulsow))
+        if (currTime < 3000 && Core.Me.CastActionId == SpellsDef.Soulsow)
         {
             Core.Resolve<MemApiSpell>().CancelCast();
         }

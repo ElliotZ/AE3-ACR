@@ -75,11 +75,6 @@ public static class Helper
     public static bool AtRear => Core.Resolve<MemApiTarget>().IsBehind;
     public static bool AtFlank => Core.Resolve<MemApiTarget>().IsFlanking;
 
-    public static bool IsCastingSpell(this IBattleChara c, uint spellId)
-    {
-        return c.IsCasting && c.CastActionId == spellId;
-    }
-
     /// <summary>
     /// 充能技能还有多少冷却时间(ms)才可用
     /// </summary>
