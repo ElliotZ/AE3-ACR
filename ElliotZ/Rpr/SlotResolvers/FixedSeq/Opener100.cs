@@ -4,7 +4,6 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Module.Opener;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
@@ -18,14 +17,17 @@ public class Opener100 : IOpener
         if (Qt.Instance.GetQt("起手") == false) { return -98; }
         if (Qt.Instance.GetQt("神秘环") == false || Qt.Instance.GetQt("魂衣") == false) { return -98; }
         if (Core.Me.Level < 88) { return -99; }  // might not need this
-        if (SpellsDef.SoulSlice.IsMaxChargeReady(0.0f)== false) { return -99; }
+        if (SpellsDef.SoulSlice.IsMaxChargeReady(0.0f) == false) { return -99; }
         if (SpellsDef.ArcaneCircle.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
         }
         if (SpellsDef.Gluttony.CoolDownInGCDs(3) == false) { return -6; }
-        if (TargetHelper.GetNearbyEnemyCount(5) > 2) { return -13; }  // opener is basically only meant for single target
+        if (TargetHelper.GetNearbyEnemyCount(25) > 2)
+        {
+            return -13; // opener is basically only meant for single target
+        }
         return 0;
     }
 
@@ -47,17 +49,17 @@ public class Opener100 : IOpener
         {
             cdh.AddAction(startTime, () => Spell.CreateSprint());
         }
-        cdh.AddAction(RprSettings.Instance.PrepullCastTimeHarpe, 
+        cdh.AddAction(RprSettings.Instance.PrepullCastTimeHarpe,
                       () => SpellsDef.Harpe.GetSpell(SpellTargetType.Target));
         if (RprSettings.Instance.PrepullIngress && PrepullIngressCheck())
         {
-            cdh.AddAction(RprSettings.Instance.PrepullCastTimeHarpe - 
-                              (int)SpellsDef.Harpe.GetSpell().CastTime.TotalMilliseconds, 
+            cdh.AddAction(RprSettings.Instance.PrepullCastTimeHarpe -
+                              (int)SpellsDef.Harpe.GetSpell().CastTime.TotalMilliseconds,
                           PrepullIngress);
         }
     }
 
-    private bool PrepullIngressCheck()
+    private static bool PrepullIngressCheck()
     {
         if (Core.Me.GetCurrTarget() is null) return false;
         var targetRing = Core.Me.GetCurrTarget()!.HitboxRadius * 2;
@@ -88,7 +90,7 @@ public class Opener100 : IOpener
         if (Qt.Instance.GetQt("爆发药") && !Qt.Instance.GetQt("爆发药2分") && !RprSettings.Instance.TripleWeavePot)
         {
             slot.Add(new SlotAction(SlotAction.WaitType.WaitInMs,
-                                    GCDHelper.GetGCDDuration() - RprSettings.Instance.AnimLock, 
+                                    GCDHelper.GetGCDDuration() - RprSettings.Instance.AnimLock,
                                     Spell.CreatePotion()));
         }
     }
@@ -104,7 +106,7 @@ public class Opener100 : IOpener
             slot.Add(Spell.CreatePotion());
             slot.Add(SpellsDef.Gluttony.GetSpell());
         }
-        else 
+        else
         {
             slot.Add(new SlotAction(SlotAction.WaitType.WaitInMs,
                                     GCDHelper.GetGCDDuration() - 2000,
@@ -116,5 +118,5 @@ public class Opener100 : IOpener
 
     public uint Level { get; } = 88;
 
-    public Action CompletedAction { get; set; }
+    public Action? CompletedAction { get; set; }
 }

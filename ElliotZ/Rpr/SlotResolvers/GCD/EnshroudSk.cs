@@ -13,7 +13,7 @@ namespace ElliotZ.Rpr.SlotResolvers.GCD;
 
 public class EnshroudSk : ISlotResolver
 {
-    private static int blueOrb => Core.Resolve<JobApi_Reaper>().LemureShroud;
+    private static int BlueOrb => Core.Resolve<JobApi_Reaper>().LemureShroud;
     private IBattleChara? Target { get; set; }
     private IBattleChara? CommunioTarget { get; set; }
 
@@ -22,14 +22,16 @@ public class EnshroudSk : ISlotResolver
         var enhancedReapingCheck = (Core.Me.HasAura(AurasDef.EnhancedCrossReaping) ||
                                         Core.Me.HasAura(AurasDef.EnhancedVoidReaping)) ?
                                     3 : 4;
-        Target = SpellsDef.GrimReaping.OptimalAOETarget(enhancedReapingCheck, 180f, Qt.Instance.GetQt("智能AOE"));
+        Target = SpellsDef.GrimReaping.OptimalAOETarget(enhancedReapingCheck,
+                                                            180f,
+                                                            Qt.Instance.GetQt("智能AOE"));
         CommunioTarget = SpellsDef.Communio.OptimalAOETarget(1, Qt.Instance.GetQt("智能AOE"), 5);
 
         if (Core.Me.HasAura(AurasDef.Enshrouded) == false)
         {
             return -3;  // -3 for Unmet Prereq Conditions
         }
-        if ((!SpellsDef.Communio.IsUnlock() || blueOrb > 1) &&
+        if ((!SpellsDef.Communio.IsUnlock() || BlueOrb > 1) &&
                 Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
@@ -50,7 +52,7 @@ public class EnshroudSk : ISlotResolver
             {
                 return -7;
             }
-        } 
+        }
         return 0;
     }
 
@@ -59,9 +61,9 @@ public class EnshroudSk : ISlotResolver
         //var purpOrb = Core.Resolve<JobApi_Reaper>().VoidShroud;
         //var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 8, 180);
 
-        if (CommunioTarget is not null && 
-                SpellsDef.Communio.GetSpell().IsReadyWithCanCast() && 
-                blueOrb < 2)
+        if (CommunioTarget is not null &&
+                SpellsDef.Communio.GetSpell().IsReadyWithCanCast() &&
+                BlueOrb < 2)
         {
             return SpellsDef.Communio.GetSpell(CommunioTarget!);
         }

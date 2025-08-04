@@ -21,7 +21,7 @@ public class EnshroudAb : ISlotResolver
         Target = SpellsDef.LemuresScythe.OptimalAOETarget(3, 180, Qt.Instance.GetQt("智能AOE"));
 
         if (Core.Me.HasAura(AurasDef.Enshrouded) == false) { return -3; }  // -3 for Unmet Prereq Conditions
-        if (Target is null && 
+        if (Target is null &&
                 Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
@@ -46,11 +46,11 @@ public class EnshroudAb : ISlotResolver
         //var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 8, 180);
         //Target = SpellsDef.LemuresScythe.OptimalAOETarget(3, 180);
 
-        if (Qt.Instance.GetQt("AOE") && 
-                Target is not null && 
-                SpellsDef.LemuresScythe.GetSpell(Target!).IsReadyWithCanCast()) 
-        { 
-            return SpellsDef.LemuresScythe.GetSpell(Target!); 
+        if (Qt.Instance.GetQt("AOE") &&
+                Target is not null &&
+                SpellsDef.LemuresScythe.GetSpell(Target!).IsReadyWithCanCast())
+        {
+            return SpellsDef.LemuresScythe.GetSpell(Target!);
         }
         return SpellsDef.LemuresSlice.GetSpell();
     }

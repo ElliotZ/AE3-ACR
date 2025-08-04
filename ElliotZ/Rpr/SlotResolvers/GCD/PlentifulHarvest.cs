@@ -12,7 +12,11 @@ public class PlentifulHarvest : ISlotResolver
     public int Check()
     {
         Target = SpellsDef.PlentifulHarvest.OptimalLineAOETarget(1, Qt.Instance.GetQt("智能AOE"), 4);
-        if (Target is null || SpellsDef.PlentifulHarvest.GetSpell(Target).IsReadyWithCanCast() == false) { return -99; }
+        if (Target is null ||
+                SpellsDef.PlentifulHarvest.GetSpell(Target).IsReadyWithCanCast() == false)
+        {
+            return -99;
+        }
         if (Qt.Instance.GetQt("大丰收") == false) { return -98; }
         return 0;
     }

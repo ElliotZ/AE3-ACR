@@ -15,8 +15,8 @@ public class Harpe : ISlotResolver
         if (Helper.IsMoving && !RprSettings.Instance.ForceCast) { return -2; }
         if (Qt.Instance.GetQt("勾刃") == false) { return -98; }// Add QT
 
-        if (Core.Me.HasAura(AurasDef.SoulReaver) || Core.Me.HasAura(AurasDef.Executioner)) 
-        { 
+        if (Core.Me.HasAura(AurasDef.SoulReaver) || Core.Me.HasAura(AurasDef.Executioner))
+        {
             return -10;  // -10 for protecting SoulReaver/Executioner
         }
         return 0;

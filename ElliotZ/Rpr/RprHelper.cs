@@ -1,7 +1,4 @@
 ﻿using AEAssist;
-using AEAssist.CombatRoutine;
-using AEAssist.Extension;
-using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using ElliotZ.Common;
 

@@ -3,10 +3,8 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
-using AEAssist.MemoryApi;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
-using ElliotZ.Rpr.SlotResolvers.oGCD;
 
 namespace ElliotZ.Rpr.SlotResolvers.GCD;
 
@@ -17,7 +15,7 @@ public class GaugeGainCD : ISlotResolver
     public int Check()
     {
         if (SpellsDef.SoulSlice.GetSpell().IsReadyWithCanCast() == false) { return -99; }
-        if (Qt.Instance.GetQt("灵魂割") == false) { return -98;  }  // -98 for QT toggled off
+        if (Qt.Instance.GetQt("灵魂割") == false) { return -98; }  // -98 for QT toggled off
         if (!Qt.Instance.GetQt("倾泻资源"))
         {
             if (Soul > 50) { return -4; }  // -4 for Overcapped Resources
@@ -27,8 +25,9 @@ public class GaugeGainCD : ISlotResolver
         {
             return -5;
         }
-        if (Helper.ComboTimer <= GCDHelper.GetGCDDuration() * 2 + 200 && 
-                (RprHelper.PrevCombo == SpellsDef.Slice || RprHelper.PrevCombo == SpellsDef.WaxingSlice))
+        if (Helper.ComboTimer <= GCDHelper.GetGCDDuration() * 2 + 200 &&
+                (RprHelper.PrevCombo == SpellsDef.Slice ||
+                 RprHelper.PrevCombo == SpellsDef.WaxingSlice))
         {
             return -9;  // -9 for combo protection
         }

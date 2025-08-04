@@ -4,7 +4,6 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using AEAssist.MemoryApi;
 using ElliotZ.Rpr;
 using System.Numerics;
 
@@ -17,8 +16,8 @@ namespace ElliotZ.Common;
 /// <param name="targetType"></param>
 /// <param name="useHighPrioritySlot">使用不卡GCD的强插</param>
 /// <param name="waitCoolDown">是否允许提早5秒点HK</param>
-public class HotKeyResolver(uint spellId, 
-                                SpellTargetType targetType = SpellTargetType.Target, 
+public class HotKeyResolver(uint spellId,
+                                SpellTargetType targetType = SpellTargetType.Target,
                                 bool useHighPrioritySlot = true,
                                 bool waitCoolDown = true) : IHotkeyResolver
 {
@@ -37,7 +36,7 @@ public class HotKeyResolver(uint spellId,
         var targetSpellId = Helper.GetActionChange(SpellId);
         var spell = targetSpellId.GetSpell(TargetType);
 
-        if (WaitCoolDown && spell.isUnlockWithRoleSkills())
+        if (WaitCoolDown && spell.IsUnlockWithRoleSkills())
         {
             if (spell.Cooldown.TotalMilliseconds <= 5000.0)
             {
@@ -67,7 +66,7 @@ public class HotKeyResolver(uint spellId,
     public virtual int Check()
     {
         var s = Helper.GetActionChange(SpellId).GetSpell(TargetType);
-        if (!s.isUnlockWithRoleSkills()) return -1;
+        if (!s.IsUnlockWithRoleSkills()) return -1;
         if (UseHighPrioritySlot && Helper.CheckInHPQueueTop(s)) return -3;
         var isReady = WaitCoolDown ? s.Cooldown.TotalMilliseconds <= 5000 : s.IsReadyWithCanCast();
         return isReady ? 0 : -2;
@@ -94,22 +93,22 @@ public class HotKeyResolver(uint spellId,
         if (delay > 0) await Coroutine.Instance.WaitAsync(delay);
 
         if (UseHighPrioritySlot &&
-                !RprSettings.Instance.ForceNextSlotsOnHKs && 
+                !RprSettings.Instance.ForceNextSlotsOnHKs &&
                 Core.Me.GetCurrTarget() is not null &&
                 Core.Me.GetCurrTarget().CanAttack() &&
                 Core.Me.InCombat())
         {
             var slot = new Slot();
             slot.Add(spell);
-            if (spell.IsAbility()) 
-            { 
-                AI.Instance.BattleData.HighPrioritySlots_OffGCD.Enqueue(slot); 
+            if (spell.IsAbility())
+            {
+                AI.Instance.BattleData.HighPrioritySlots_OffGCD.Enqueue(slot);
             }
             else
             {
                 AI.Instance.BattleData.HighPrioritySlots_GCD.Enqueue(slot);
             }
-            
+
         }
         else
         {

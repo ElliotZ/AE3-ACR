@@ -4,13 +4,7 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
-using Dalamud.Game.Gui.Toast;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ElliotZ.Common;
 
@@ -55,7 +49,7 @@ public class MobPullHelper
             }
         }
 
-        ConcentrationPctg = ((VisibleEnemiesIn25 > 0) ? 
+        ConcentrationPctg = ((VisibleEnemiesIn25 > 0) ?
                              (VisibleEnemiesIn5 / (float)VisibleEnemiesIn25) : 0f);
     }
 
@@ -98,7 +92,7 @@ public class MobPullHelper
     public static float GetAverageTTKOfNearbyEnemies()
     {
         Dictionary<uint, IBattleChara> enemysIn = TargetMgr.Instance.EnemysIn25;
-        List<float> TTKList = new List<float>();
+        List<float> TTKList = [];
         int MobCount = 0;
         foreach (KeyValuePair<uint, IBattleChara> item in enemysIn)
         {

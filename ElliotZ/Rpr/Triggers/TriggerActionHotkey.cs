@@ -7,14 +7,14 @@ namespace ElliotZ.Rpr.Triggers;
 public class TriggerActionHotkey : ITriggerAction
 {
     public string DisplayName { get; } = "Reaper/Hotkey";
-    public string Remark { get; set; }
+    public string? Remark { get; set; }
 
     public string Key = "";
     public bool Value;
 
     // 辅助数据 因为是private 所以不存档
     private int _selectIndex;
-    private string[] _hotkeyArray;
+    private readonly string[] _hotkeyArray;
 
     public TriggerActionHotkey()
     {

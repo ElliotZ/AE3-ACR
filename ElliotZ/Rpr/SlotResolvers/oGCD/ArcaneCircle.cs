@@ -20,7 +20,8 @@ public class ArcaneCircle : ISlotResolver
         }
         if (BattleData.Instance.IsPulling) return -3;
 
-        if (AI.Instance.BattleData.CurrBattleTimeInMs < 5000 && SpellsDef.SoulScythe.GetSpell().Charges == 2)
+        if (AI.Instance.BattleData.CurrBattleTimeInMs < 5000 &&
+                SpellsDef.SoulScythe.GetSpell().Charges == 2)
         {
             return -11;
         }

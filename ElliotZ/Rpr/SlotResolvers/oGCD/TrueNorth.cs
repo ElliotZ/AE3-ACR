@@ -2,7 +2,6 @@
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using AEAssist.MemoryApi;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 
@@ -20,10 +19,12 @@ public class TrueNorth : ISlotResolver
 
         if (Core.Me.HasAura(AurasDef.TrueNorth)) { return -5; }  // -5 for avoiding spam
 
-        if (Core.Me.GetCurrTarget() is not null && Core.Me.GetCurrTarget().HasPositional() &&
+        if (Core.Me.GetCurrTarget() is not null &&
+                Core.Me.GetCurrTarget().HasPositional() &&
                 GCDHelper.GetGCDCooldown() < RprSettings.Instance.AnimLock + 100 &&
                 GCDHelper.GetGCDCooldown() >= RprSettings.Instance.AnimLock &&
-        (Core.Me.HasAura(AurasDef.SoulReaver) || Core.Me.HasAura(AurasDef.Executioner)))
+                (Core.Me.HasAura(AurasDef.SoulReaver) ||
+                    Core.Me.HasAura(AurasDef.Executioner)))
         {
             if (Core.Me.HasAura(AurasDef.EnhancedGallows) && !Helper.AtRear) { return 0; }
             if (Core.Me.HasAura(AurasDef.EnhancedGibbet) && !Helper.AtFlank) { return 0; }

@@ -1,9 +1,7 @@
 ﻿using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
-using AEAssist.Helper;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
-using ElliotZ.Rpr.SlotResolvers;
 using ElliotZ.Rpr.SlotResolvers.FixedSeq;
 using ElliotZ.Rpr.SlotResolvers.GCD;
 using ElliotZ.Rpr.SlotResolvers.oGCD;
@@ -77,21 +75,21 @@ public class RprRotationEntry : IRotationEntry, IDisposable
 
     public string CheckFirstAvailableSkillGCD()
     {
-        SlotResolverData? slotResolverData = 
-            _slotResolvers.FirstOrDefault((SlotResolverData srd) => 
-                                              srd.SlotMode == SlotMode.Gcd && 
+        SlotResolverData? slotResolverData =
+            _slotResolvers.FirstOrDefault((SlotResolverData srd) =>
+                                              srd.SlotMode == SlotMode.Gcd &&
                                               srd.SlotResolver.Check() >= 0);
-        return (slotResolverData != null) ? 
+        return (slotResolverData != null) ?
                    slotResolverData.SlotResolver.GetType().Name : "无技能";
     }
 
     public string CheckFirstAvailableSkilloffGCD()
     {
-        SlotResolverData? slotResolverData = 
-            _slotResolvers.FirstOrDefault((SlotResolverData srd) => 
-                                              srd.SlotMode == SlotMode.OffGcd && 
+        SlotResolverData? slotResolverData =
+            _slotResolvers.FirstOrDefault((SlotResolverData srd) =>
+                                              srd.SlotMode == SlotMode.OffGcd &&
                                               srd.SlotResolver.Check() >= 0);
-        return (slotResolverData != null) ? 
+        return (slotResolverData != null) ?
                    slotResolverData.SlotResolver.GetType().Name : "无技能";
     }
 

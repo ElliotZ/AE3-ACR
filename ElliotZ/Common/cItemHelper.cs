@@ -2,7 +2,7 @@
 
 namespace ElliotZ.Common;
 
-public class cItemHelper
+public class CItemHelper
 {
     /// <summary>
     /// 获取背包内指定物品的数量

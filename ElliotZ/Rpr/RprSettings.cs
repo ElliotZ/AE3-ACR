@@ -41,7 +41,7 @@ public class RprSettings
 
     public void Save()
     {
-        Directory.CreateDirectory(Path.GetDirectoryName(path));
+        _ = Directory.CreateDirectory(Path.GetDirectoryName(path)!);
         File.WriteAllText(path, JsonHelper.ToJson(this));
     }
 
@@ -82,10 +82,10 @@ public class RprSettings
     //public bool TimeLinesDebug = false;
 
     // QT设置存档
-    public Dictionary<String, bool> QtStates = new Dictionary<String, bool>();
+    public Dictionary<String, bool> QtStates = [];
     public JobViewSave JobViewSave = new()
     {
         QtLineCount = 3,
         QtUnVisibleList = ["挥割/爪", "暴食", "灵魂割", "祭牲",]
-    }; 
+    };
 }

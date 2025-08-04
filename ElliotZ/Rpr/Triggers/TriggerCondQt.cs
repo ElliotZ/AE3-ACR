@@ -9,13 +9,13 @@ namespace ElliotZ.Rpr.Triggers;
 public class TriggerCondQt : ITriggerCond
 {
     public string DisplayName => "Reaper/QT检测";
-    public string Remark { get; set; }
+    public string? Remark { get; set; }
 
     public string Key = "";
     public bool Value;
 
     private int _selectIndex;
-    private string[] _qtArray;
+    private readonly string[] _qtArray;
 
     public TriggerCondQt()
     {

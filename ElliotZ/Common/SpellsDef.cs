@@ -1,4 +1,5 @@
 ﻿using AEAssist.CombatRoutine;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
 
 namespace ElliotZ.Common
 {
@@ -6,8 +7,8 @@ namespace ElliotZ.Common
     {
         public const uint Sprint = 3;
 
-        public static HashSet<uint> AbilityAsGcdSet = new()
-        {
+        public static HashSet<uint> AbilityAsGcdSet =
+        [
             StandardStep,
             TechnicalStep,
             TenCombo,
@@ -22,7 +23,34 @@ namespace ElliotZ.Common
             TcjHuton,
             TcjDoton,
             TcjSuiton,
-    };
+        ];
+
+        public static List<uint> RoleSkills =
+        [
+            SecondWind,
+            Bloodbath,
+            TrueNorth,
+            ArmsLength,
+            Feint,
+            HeadGraze,
+            FootGraze,
+            LegGraze,
+            Peloton,
+            LegSweep,
+            Potion,
+            Surecast,
+            Addle,
+            LucidDreaming,
+            Esuna,
+            Rescue,
+            Repose,
+            Rampart,
+            Provoke,
+            Reprisal,
+            Shirk,
+            Interject,
+            LowBlow,
+        ];
 
         // DPS Role
 
@@ -69,54 +97,39 @@ namespace ElliotZ.Common
 
         public static uint GetTankStateOpenId(Jobs jobs)
         {
-            switch (jobs)
+            return jobs switch
             {
-                case Jobs.Paladin:
-                    return 28;
-                case Jobs.Warrior:
-                    return Defiance;
-                case Jobs.DarkKnight:
-                    return 3629;
-                case Jobs.Gunbreaker:
-                    return 16142;
-            }
-
-            return 0;
+                Jobs.Paladin => 28,
+                Jobs.Warrior => Defiance,
+                Jobs.DarkKnight => 3629,
+                Jobs.Gunbreaker => 16142,
+                _ => 0,
+            };
         }
 
         public static uint GetTankStateAuraId(Jobs jobs)
         {
-            switch (jobs)
+            return jobs switch
             {
-                case Jobs.Paladin:
-                    return 79;
-                case Jobs.Warrior:
-                    return AurasDef.Defiance;
-                case Jobs.DarkKnight:
-                    return 743;
-                case Jobs.Gunbreaker:
-                    return 1833;
-            }
-
-            return 0;
+                Jobs.Paladin => 79,
+                Jobs.Warrior => AurasDef.Defiance,
+                Jobs.DarkKnight => 743,
+                Jobs.Gunbreaker => 1833,
+                _ => 0,
+            };
         }
 
 
         public static uint GetTankStateCloseId(Jobs jobs)
         {
-            switch (jobs)
+            return jobs switch
             {
-                case Jobs.Paladin:
-                    return 32065;
-                case Jobs.Warrior:
-                    return 32066;
-                case Jobs.DarkKnight:
-                    return 32067;
-                case Jobs.Gunbreaker:
-                    return 32068;
-            }
-
-            return 0;
+                Jobs.Paladin => 32065,
+                Jobs.Warrior => 32066,
+                Jobs.DarkKnight => 32067,
+                Jobs.Gunbreaker => 32068,
+                _ => 0,
+            };
         }
 
         #endregion

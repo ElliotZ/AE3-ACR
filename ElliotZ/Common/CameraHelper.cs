@@ -1,8 +1,4 @@
-﻿using System.CodeDom;
-using Dalamud.Interface.Utility;
-using ECommons.DalamudServices;
-using FFXIVClientStructs.FFXIV.Client.Graphics.Kernel;
-using FFXIVClientStructs.FFXIV.Client.UI;
+﻿using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Common.Math;
 using CSFramework = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework;
 namespace ElliotZ.Common;
@@ -13,9 +9,7 @@ public class CameraHelper
     {
         get
         {
-
             return CSFramework.Instance()->GetUIModule()->GetRaptureAtkModule();
-
         }
     }
 
@@ -25,7 +19,6 @@ public class CameraHelper
         {
             // 获取相机旋转角度（度数）
             var cameraRotation = RaptureAtkModule->AtkModule.AtkArrayDataHolder.NumberArrays[24]->IntArray[3];
-
 
             // 将角度转换为弧度，并确保范围在 [-π, π]
             var sign = Math.Sign(cameraRotation) == -1 ? -1 : 1;
