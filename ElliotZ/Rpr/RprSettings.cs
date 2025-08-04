@@ -52,6 +52,7 @@ public class RprSettings
     public bool ForceCast = false;
     public bool ForceNextSlotsOnHKs = false;
     public bool NoPosDrawInTN = false;
+    public int PosDrawStyle = 2;
     public bool RestoreQtSet = true;
     //public bool SmartAOE = true;
     public bool CommandWindowOpen = true;

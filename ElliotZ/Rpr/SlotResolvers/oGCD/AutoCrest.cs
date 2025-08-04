@@ -16,7 +16,7 @@ public class AutoCrest : ISlotResolver
         if (SpellsDef.ArcaneCrest.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Core.Me.CurrentHp > CrestThreshold) { return -4; }
         if (Core.Me.GetCurrTarget() is null ||
-                !TargetHelper.targetCastingIsBossAOE(Core.Me.GetCurrTarget(), 2500))
+                !TargetHelper.targetCastingIsBossAOE(Core.Me.GetCurrTarget(), 2000))
         {
             return -3;
         }

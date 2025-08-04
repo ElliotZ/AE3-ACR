@@ -17,7 +17,7 @@ public static class ReadmeTab
             ImGuiHelper.Separator();
             ImGui.Bullet();
             ImGui.SameLine();
-            ImGui.Text("单魂衣：神秘环期间只会有一个免费送的变身。暂时不要开，逻辑还没有优化完");
+            ImGui.Text("单魂衣：神秘环期间只会有一个免费送的变身。暂时不要开，逻辑还没有优化完。");
             ImGui.Bullet();
             ImGui.SameLine();
             ImGui.Text("神秘环/大丰收/灵魂割/挥割/暴食/魂衣/完人……：比较简单，开了就会打这个技能，不开就不会打。");

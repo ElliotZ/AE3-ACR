@@ -19,9 +19,13 @@ public class GaugeGainCD : ISlotResolver
         if (!Qt.Instance.GetQt("倾泻资源"))
         {
             if (Soul > 50) { return -4; }  // -4 for Overcapped Resources
-            if (Soul == 50 && SpellsDef.Gluttony.CoolDownInGCDs(3)) { return -4; }
+            if (Core.Me.Level < 78 && 
+                    Soul == 50 && 
+                    SpellsDef.Gluttony.CoolDownInGCDs(3)) { return -4; }
         }
-        if (Core.Me.HasAura(AurasDef.ArcaneCircle) && !Core.Me.HasAura(AurasDef.BloodsownCircle))
+        if (SpellsDef.Enshroud.IsUnlock() && 
+              Core.Me.HasAura(AurasDef.ArcaneCircle) && 
+              !Core.Me.HasAura(AurasDef.BloodsownCircle))
         {
             return -5;
         }

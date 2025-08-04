@@ -192,6 +192,13 @@ public class EventHandler : IRotationEventHandler
         var GibGallowsJustUsed =
                 Helper.GetActionChange(SpellsDef.Gibbet).RecentlyUsed(500) ||
                 Helper.GetActionChange(SpellsDef.Gallows).RecentlyUsed(500);
+        var StaticPosProg = RprSettings.Instance.PosDrawStyle switch
+        {
+            0 => 1,
+            1 => 70,
+            _ => 100,
+        };
+
         if (!inTN &&
                 !Core.Me.HasAura(AurasDef.Enshrouded) &&
                 Core.Me.GetCurrTarget() is not null &&
@@ -214,11 +221,11 @@ public class EventHandler : IRotationEventHandler
             {
                 if (Core.Me.HasAura(AurasDef.EnhancedGallows))
                 {
-                    MeleePosHelper.Draw(MeleePosHelper.Pos.Behind, 70);
+                    MeleePosHelper.Draw(MeleePosHelper.Pos.Behind, StaticPosProg);
                 }
                 else if (Core.Me.HasAura(AurasDef.EnhancedGibbet))
                 {
-                    MeleePosHelper.Draw(MeleePosHelper.Pos.Flank, 70);
+                    MeleePosHelper.Draw(MeleePosHelper.Pos.Flank, StaticPosProg);
                 }
                 else { MeleePosHelper.Clear(); }
             }

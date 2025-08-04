@@ -34,7 +34,9 @@ public class Gluttony : ISlotResolver
         {
             return -4;  // -4 for Overcapped Resources
         }
-        if (!Qt.Instance.GetQt("单魂衣") && Core.Me.HasAura(AurasDef.ArcaneCircle))
+        if (!Qt.Instance.GetQt("单魂衣") &&
+                SpellsDef.Enshroud.IsUnlock() && 
+                Core.Me.HasAura(AurasDef.ArcaneCircle))
         {
             return -12;  // delay for burst window
         }
