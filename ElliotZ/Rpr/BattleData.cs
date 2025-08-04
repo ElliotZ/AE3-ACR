@@ -20,12 +20,12 @@ public class BattleData
 
     public float TotalHpPercentage = 0f;
     public float AverageTTK = 0f;
-    public bool IsStopped = false;
-    public bool NoTarget = false;
-    public bool IsInvuln = false;
-    public int VisibleEnemiesIn25 = 0;
-    public int VisibleEnemiesIn5 = 0;
+    //public bool IsStopped = false;
+    //public bool NoTarget = false;
+    //public bool IsInvuln = false;
+    //public int VisibleEnemiesIn25 = 0;
+    //public int VisibleEnemiesIn5 = 0;
     public bool IsPulling = false;
-    public Vector3 currPos = Vector3.Zero;
-    public Vector3 lastPos = Vector3.Zero;
+    //public Vector3 currPos = Vector3.Zero;
+    //public Vector3 lastPos = Vector3.Zero;
 }

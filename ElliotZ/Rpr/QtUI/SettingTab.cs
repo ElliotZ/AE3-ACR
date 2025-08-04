@@ -55,6 +55,7 @@ public static class SettingTab
                 {
                     Qt.SaveQtStates();
                 }
+                ImGui.Text("会从当前记录过的QT设置重置，爆发药、爆发药2分、智能AOE以及自动突进这几个QT不会被重置。");
                 ImGui.Separator();
                 ImGui.Text("高级设置");
                 ImGui.Checkbox("Debug", ref RprSettings.Instance.Debug);

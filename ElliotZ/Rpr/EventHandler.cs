@@ -59,10 +59,10 @@ public class EventHandler : IRotationEventHandler
     public async Task OnNoTarget()
     {
         // maybe add soulsow, idk
-        if (BattleData.Instance.IsStopped == false)
-        {
-            BattleData.Instance.NoTarget = true;
-        }
+        //if (BattleData.Instance.IsStopped == false)
+        //{
+        //    BattleData.Instance.NoTarget = true;
+        //}
         StopHelper.StopActions(1000);
 
         if (RprSettings.Instance.Debug) LogHelper.Print("no target");
