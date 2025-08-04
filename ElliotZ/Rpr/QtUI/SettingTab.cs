@@ -97,12 +97,13 @@ public static class SettingTab
                 }
                 if (ImGui.CollapsingHeader("自动回复/减伤设置"))
                 {
+                    ImGui.Text("血量阈值是最大血量的比例。");
                     ImGui.Checkbox("自动神秘纹", ref RprSettings.Instance.AutoCrest);
                     if (RprSettings.Instance.AutoCrest)
                     {
-                        ImGui.Text("自动神秘纹阈值");
+                        //ImGui.Text("自动神秘纹阈值");
                         ImGui.SetNextItemWidth(200f);
-                        ImGui.SliderFloat("神秘纹阈值 (0.10-1.00)",
+                        ImGui.SliderFloat("自动神秘纹血量阈值 (0.10-1.00)",
                                               ref RprSettings.Instance.CrestPercent,
                                               0.1f, 1.0f);
                         //if (!RprSettings.Instance.JobViewSave.HotkeyUnVisibleList.Contains("神秘纹"))
@@ -117,9 +118,9 @@ public static class SettingTab
                     ImGui.Checkbox("自动内丹", ref RprSettings.Instance.AutoSecondWind);
                     if (RprSettings.Instance.AutoSecondWind)
                     {
-                        ImGui.Text("自动内丹阈值");
+                        //ImGui.Text("自动内丹阈值");
                         ImGui.SetNextItemWidth(200f);
-                        ImGui.SliderFloat("内丹阈值 (0.10-0.99)",
+                        ImGui.SliderFloat("自动内丹血量阈值 (0.10-0.99)",
                                               ref RprSettings.Instance.SecondWindPercent,
                                               0.1f, 0.99f);
                         if (!RprSettings.Instance.JobViewSave.HotkeyUnVisibleList.Contains("内丹"))
@@ -134,9 +135,9 @@ public static class SettingTab
                     ImGui.Checkbox("自动浴血", ref RprSettings.Instance.AutoBloodBath);
                     if (RprSettings.Instance.AutoBloodBath)
                     {
-                        ImGui.Text("自动浴血阈值");
+                        //ImGui.Text("自动浴血阈值");
                         ImGui.SetNextItemWidth(200f);
-                        ImGui.SliderFloat("浴血阈值 (0.10-0.99)", 
+                        ImGui.SliderFloat("自动浴血血量阈值 (0.10-0.99)", 
                                               ref RprSettings.Instance.BloodBathPercent, 
                                               0.1f, 0.99f);
                         if (!RprSettings.Instance.JobViewSave.HotkeyUnVisibleList.Contains("浴血"))
