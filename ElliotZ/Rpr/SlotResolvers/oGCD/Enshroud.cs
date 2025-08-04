@@ -1,5 +1,4 @@
 using AEAssist;
-using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
@@ -20,14 +19,14 @@ public class Enshroud : ISlotResolver
                               Core.Resolve<JobApi_Reaper>().ShroudGauge;
         var neededSoul = neededShroud * 5 - Core.Resolve<JobApi_Reaper>().SoulGauge;
         var soulSliceCharge = SpellsDef.SoulSlice.GetSpell().Charges;
-        var gluttonyPossible = SpellsDef.Gluttony.GetSpell().Cooldown.TotalMilliseconds < 
+        var gluttonyPossible = SpellsDef.Gluttony.GetSpell().Cooldown.TotalMilliseconds <
                                (accd - DblEnshPrep.PreAcEnshTimer - GCDHelper.GetGCDDuration() * 3);
-        var deathsDesgnTime = Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me.GetCurrTarget(), 
+        var deathsDesgnTime = Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me.GetCurrTarget(),
                                                                          AurasDef.DeathsDesign, true);
-        var totalTimeBeforeAC = accd - 
-                                GCDHelper.GetGCDDuration() * 2 - 
-                                6000 - 
-                                GCDHelper.GetGCDCooldown() - 
+        var totalTimeBeforeAC = accd -
+                                GCDHelper.GetGCDDuration() * 2 -
+                                6000 -
+                                GCDHelper.GetGCDCooldown() -
                                 DblEnshPrep.PreAcEnshTimer;
         var totalNumGCDsBeforeAC = (int)Math.Ceiling(totalTimeBeforeAC / GCDHelper.GetGCDDuration() + 0.5);
         if (gluttonyPossible) neededSoul -= 50;
@@ -58,7 +57,7 @@ public class Enshroud : ISlotResolver
         {
             if (Core.Resolve<JobApi_Reaper>().ShroudGauge < 100)
             {
-                if (!Qt.Instance.GetQt("单魂衣") && 
+                if (!Qt.Instance.GetQt("单魂衣") &&
                     // Qt.Instance.GetQt("神秘环") &&
                     //SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 40000)
                     !DeadZoneCheck())

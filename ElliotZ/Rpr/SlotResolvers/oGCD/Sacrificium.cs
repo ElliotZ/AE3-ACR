@@ -2,7 +2,6 @@
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
@@ -15,7 +14,8 @@ public class Sacrificum : ISlotResolver
     public int Check()
     {
         Target = SpellsDef.Sacrificium.OptimalAOETarget(1, Qt.Instance.GetQt("智能AOE"), 5);
-        if (Target is null || SpellsDef.Sacrificium.GetSpell(Target).IsReadyWithCanCast() == false)
+        if (Target is null ||
+                SpellsDef.Sacrificium.GetSpell(Target).IsReadyWithCanCast() == false)
         {
             return -99;
         }

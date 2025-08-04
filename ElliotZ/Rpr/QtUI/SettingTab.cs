@@ -4,7 +4,6 @@ using Dalamud.Interface.Colors;
 using ElliotZ.Common;
 using ImGuiNET;
 using System.Numerics;
-using System.Runtime;
 
 namespace ElliotZ.Rpr.QtUI;
 
@@ -70,7 +69,7 @@ public static class SettingTab
                 ImGui.SameLine();
                 ImGui.BeginGroup();
                 ImGui.Checkbox("小怪低血量不开爆发", ref RprSettings.Instance.NoBurst);
-                if (RprSettings.Instance.NoBurst) 
+                if (RprSettings.Instance.NoBurst)
                 {
                     ImGui.Text("小于设定数会关闭夜游魂衣和神秘环QT，如果设置了QT重载，脱战会自动开启");
                     ImGui.SetNextItemWidth(200f);
@@ -79,7 +78,7 @@ public static class SettingTab
                     ImGui.SliderInt("平均死亡时间（秒）(0-20)", ref RprSettings.Instance.minTTK, 0, 20);
                 }
                 ImGui.Checkbox("坦克拉怪中留CD技能", ref RprSettings.Instance.PullingNoBurst);
-                if (RprSettings.Instance.PullingNoBurst) 
+                if (RprSettings.Instance.PullingNoBurst)
                 {
                     ImGui.Text("小怪集中度");
                     ImGui.SetNextItemWidth(200f);
@@ -137,8 +136,8 @@ public static class SettingTab
                     {
                         //ImGui.Text("自动浴血阈值");
                         ImGui.SetNextItemWidth(200f);
-                        ImGui.SliderFloat("自动浴血血量阈值 (0.10-0.99)", 
-                                              ref RprSettings.Instance.BloodBathPercent, 
+                        ImGui.SliderFloat("自动浴血血量阈值 (0.10-0.99)",
+                                              ref RprSettings.Instance.BloodBathPercent,
                                               0.1f, 0.99f);
                         if (!RprSettings.Instance.JobViewSave.HotkeyUnVisibleList.Contains("浴血"))
                         {
@@ -157,7 +156,7 @@ public static class SettingTab
                             RprSettings.Instance.JobViewSave.HotkeyUnVisibleList.Add("牵制");
                         }
                     }
-                    else 
+                    else
                     {
                         RprSettings.Instance.JobViewSave.HotkeyUnVisibleList.Remove("牵制");
                     }
@@ -182,9 +181,9 @@ public static class SettingTab
 
                 if (ImGui.Button("获取爆发药情况"))
                 {
-                    _8幻药 = cItemHelper.FindItem((uint)Potion._8级刚力之幻药);
-                    宝药 = cItemHelper.FindItem((uint)Potion.刚力之宝药);
-                    _2宝药 = cItemHelper.FindItem((uint)Potion._2级刚力之宝药);
+                    _8幻药 = CItemHelper.FindItem((uint)Potion._8级刚力之幻药);
+                    宝药 = CItemHelper.FindItem((uint)Potion.刚力之宝药);
+                    _2宝药 = CItemHelper.FindItem((uint)Potion._2级刚力之宝药);
                 }
 
                 if (_8幻药 > 0)

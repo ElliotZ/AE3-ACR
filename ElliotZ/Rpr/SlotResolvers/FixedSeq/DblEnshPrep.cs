@@ -12,17 +12,17 @@ namespace ElliotZ.Rpr.SlotResolvers.FixedSeq;
 
 public class DblEnshPrep : ISlotSequence
 {
-    public Action CompletedAction { get; set; }
+    public Action? CompletedAction { get; set; }
 
-    private static bool needShadow(int t) => Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, t, false);
+    //private static bool needShadow(int t) => Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, t, false);
     public static double PreAcEnshTimer => GCDHelper.GetGCDDuration() * 2.5 + 800;
 
     public int StartCheck()
     {
         if (Core.Me.Level < 80) { return -99; }
-        if (SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds > PreAcEnshTimer) 
-        { 
-            return -6; 
+        if (SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds > PreAcEnshTimer)
+        {
+            return -6;
         }
         //if (!needShadow(30000)  && 
         //        SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds > GCDHelper.GetGCDDuration() + 800)
@@ -32,11 +32,11 @@ public class DblEnshPrep : ISlotSequence
         if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Qt.Instance.GetQt("神秘环") == false || Qt.Instance.GetQt("魂衣") == false) { return -98; }
         if (Qt.Instance.GetQt("单魂衣")) return -98;
-        if (!Core.Resolve<MemApiDuty>().InBossBattle && 
-                (Core.Me.GetCurrTarget() is not null && 
-                !Core.Me.GetCurrTarget().IsDummy())) 
-        { 
-            return -98; 
+        if (!Core.Resolve<MemApiDuty>().InBossBattle &&
+                (Core.Me.GetCurrTarget() is not null &&
+                !Core.Me.GetCurrTarget().IsDummy()))
+        {
+            return -98;
         }
         if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
         {
@@ -52,7 +52,7 @@ public class DblEnshPrep : ISlotSequence
         return -1;
     }
 
-    public List<Action<Slot>> Sequence { get; } = 
+    public List<Action<Slot>> Sequence { get; } =
     [
         Step0,
         Step1,
@@ -68,15 +68,15 @@ public class DblEnshPrep : ISlotSequence
     private static void Step1(Slot slot)
     {
         slot.Add(SpellsDef.VoidReaping.GetSpell());
-        
+
     }
     private static void Step2(Slot slot)
     {
-        if (Helper.TgtAuraTimerMoreThan(AurasDef.DeathsDesign, 30000) && 
+        if (Helper.TgtAuraTimerMoreThan(AurasDef.DeathsDesign, 30000) &&
             SpellsDef.HarvestMoon.GetSpell().IsReadyWithCanCast() && Qt.Instance.GetQt("收获月"))
             slot.Add(SpellsDef.HarvestMoon.GetSpell());
         else
-            slot.Add(SpellsDef.ShadowOfDeath.GetSpell());
+            slot.Add(GCD.BuffMaintain.Solve().GetSpell());
         if (Qt.Instance.GetQt("爆发药"))
         {
             if (BattleData.Instance.numBurstPhases == 0)

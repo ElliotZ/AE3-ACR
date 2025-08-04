@@ -1,14 +1,11 @@
 ﻿using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
-using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
-using Dalamud.Game.ClientState.Objects.Types;
 using ElliotZ.Common;
 using System.Numerics;
-using System.Transactions;
 
 namespace ElliotZ.Rpr.QtUI.Hotkey;
 
@@ -26,10 +23,10 @@ public class EgressHK(int hktype, bool waitForCD = true) : HotKeyResolver(Spells
         {
             switch (HkType)
             {
-                case 2:
+                case IngressHK.FaceTarget:
                     HotkeyHelper.DrawSpellImage(size, "../../ACR/ElliotZ/HKImages/egress_t.png");
                     break;
-                case 3:
+                case IngressHK.FaceCam:
                     HotkeyHelper.DrawSpellImage(size, "../../ACR/ElliotZ/HKImages/egress_cam.png");
                     break;
                 default:
@@ -41,11 +38,11 @@ public class EgressHK(int hktype, bool waitForCD = true) : HotKeyResolver(Spells
 
     public override int Check()
     {
-        if (HkType == 2 && Core.Me.GetCurrTarget() is null) return -9;
+        if (HkType == IngressHK.FaceTarget && Core.Me.GetCurrTarget() is null) return -9;
         if (Core.Me.HasAura(AurasDef.RegressReady) &&
                 IngressHK.RegressPosition().Equals(Vector3.Zero))
-        { 
-            return -8; 
+        {
+            return -8;
         }
         return base.Check();
     }

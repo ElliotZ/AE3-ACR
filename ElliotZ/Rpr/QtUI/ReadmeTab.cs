@@ -23,7 +23,7 @@ public static class ReadmeTab
             ImGui.Text("神秘环/大丰收/灵魂割/挥割/暴食/魂衣/完人……：比较简单，开了就会打这个技能，不开就不会打。");
             ImGui.Bullet();
             ImGui.SameLine();
-            ImGui.Text("智能AOE：AOE技能以及类似暴食、团契这类多目标衰减的单体技能会自动寻找能打到最多目标的目标来施放。" + 
+            ImGui.Text("智能AOE：AOE技能以及类似暴食、团契这类多目标衰减的单体技能会自动寻找能打到最多目标的目标来施放。" +
                              "目前只会判断目标数，没有任何其他判断，一般来讲日随环境以外不建议开启。");
             ImGui.Bullet();
             ImGui.SameLine();
@@ -35,7 +35,7 @@ public static class ReadmeTab
                              "自动向目标方向施放地狱入境。“足够远离”的标准是打不到目标，并且施放地狱入境之后的落点不会超出近战范围。");
             ImGui.Bullet();
             ImGui.SameLine();
-            ImGui.Text("倾泻资源：开启后会在可用情况下尽快打出收获月，如果有足够蓝条也会施放变身。" + 
+            ImGui.Text("倾泻资源：开启后会在可用情况下尽快打出收获月，如果有足够蓝条也会施放变身。" +
                              "挥割/爪也会忽略一些延迟打出的判定。");
             ImGui.Bullet();
             ImGui.SameLine();

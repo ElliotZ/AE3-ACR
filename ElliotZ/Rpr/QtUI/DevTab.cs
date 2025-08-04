@@ -4,19 +4,9 @@ using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Extension;
 using AEAssist.GUI;
 using AEAssist.Helper;
-using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
-using Dalamud.Game.ClientState.Statuses;
-using ElliotZ.Common;
 using ImGuiNET;
-using Lumina.Text.ReadOnly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ElliotZ.Rpr.QtUI;
 
@@ -45,17 +35,18 @@ public static class DevTab
                         ImGui.SetClipboardText(ECHelper.ClientState.LocalContentId.ToString());
                         LogHelper.Print("已复制CID到剪贴板");
                     }
-                    Dictionary<uint, IBattleChara> dictionary = new Dictionary<uint, IBattleChara>();
-                    Core.Resolve<MemApiTarget>().GetNearbyGameObjects<IBattleChara>(20f, dictionary);
+                    Dictionary<uint, IBattleChara> dictionary = [];
+                    Core.Resolve<MemApiTarget>().GetNearbyGameObjects(20f, dictionary);
                     dictionary.Remove(Core.Me.EntityId);
-                    string text2 = string.Join(", ", dictionary.Values.Select((IBattleChara character) => $"{character.Name}"));
+                    string text2 = string.Join(", ",
+                                               dictionary.Values.Select(character => $"{character.Name}"));
                     ImGui.PushTextWrapPos(ImGui.GetCursorPosX() + 410f);
                     ImGui.Text("周围20m目标: " + text2);
                     string targetGOID;
                     if (Core.Me.GetCurrTarget() is null)
                     {
                         targetGOID = "null";
-                    } 
+                    }
                     else
                     {
                         targetGOID = Core.Me.GetCurrTarget()!.GameObjectId.ToString();
@@ -94,7 +85,8 @@ public static class DevTab
                 ImGui.Text("-------能力技-------");
                 if (AI.Instance.BattleData.HighPrioritySlots_OffGCD.Count > 0)
                 {
-                    foreach (SlotAction item in AI.Instance.BattleData.HighPrioritySlots_OffGCD.SelectMany((Slot spell) => spell.Actions))
+                    foreach (SlotAction item in
+                             AI.Instance.BattleData.HighPrioritySlots_OffGCD.SelectMany(spell => spell.Actions))
                     {
                         ImGui.Text(item.Spell.Name);
                     }
@@ -103,7 +95,8 @@ public static class DevTab
                 ImGui.Text("-------GCD-------");
                 if (AI.Instance.BattleData.HighPrioritySlots_GCD.Count > 0)
                 {
-                    foreach (SlotAction item2 in AI.Instance.BattleData.HighPrioritySlots_GCD.SelectMany((Slot spell) => spell.Actions))
+                    foreach (SlotAction item2 in
+                             AI.Instance.BattleData.HighPrioritySlots_GCD.SelectMany(spell => spell.Actions))
                     {
                         ImGui.Text(item2.Spell.Name);
                     }
@@ -112,8 +105,11 @@ public static class DevTab
 
             if (ImGui.CollapsingHeader("更新日志"))
             {
-                ImGui.BeginChild("UpdateLog", new System.Numerics.Vector2(0f, 300f), border: true, ImGuiWindowFlags.HorizontalScrollbar);
-                ImGui.TextWrapped("更新日志：\n\n" + 
+                ImGui.BeginChild("UpdateLog",
+                                 new System.Numerics.Vector2(0f, 300f),
+                                 border: true,
+                                 ImGuiWindowFlags.HorizontalScrollbar);
+                ImGui.TextWrapped("更新日志：\n\n" +
                                   "2025/08/03: 初版。");
                 ImGui.EndChild();
             }

@@ -1,18 +1,11 @@
 ﻿using AEAssist;
-using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
-using Dalamud.Game.ClientState.Objects.Types;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ElliotZ.Rpr.SlotResolvers.oGCD;
 
@@ -24,10 +17,10 @@ public class Ingress : ISlotResolver
         var targetRing = Core.Me.GetCurrTarget()!.HitboxRadius * 2;
         var atkRange = Helper.GlblSettings.AttackRange;
 
-        if (SpellsDef.HellsIngress.GetSpell().IsReadyWithCanCast() && 
-                (Core.Me.HasAura(AurasDef.SoulReaver) || 
-                    Core.Me.HasAura(AurasDef.Executioner) || 
-                    !Qt.Instance.GetQt("勾刃") || 
+        if (SpellsDef.HellsIngress.GetSpell().IsReadyWithCanCast() &&
+                (Core.Me.HasAura(AurasDef.SoulReaver) ||
+                    Core.Me.HasAura(AurasDef.Executioner) ||
+                    !Qt.Instance.GetQt("勾刃") ||
                     Core.Resolve<JobApi_Reaper>().LemureShroud > 2) &&
                 Qt.Instance.GetQt("自动突进") &&
                 //GCDHelper.GetGCDCooldown() < 1100 &&
@@ -43,7 +36,7 @@ public class Ingress : ISlotResolver
     public void Build(Slot slot)
     {
         Core.Resolve<MemApiMoveControl>().Stop();
-        Core.Resolve<MemApiMove>().SetRot(Helper.GetRotationToTarget(Core.Me.Position, 
+        Core.Resolve<MemApiMove>().SetRot(Helper.GetRotationToTarget(Core.Me.Position,
                                                                      Core.Me.GetCurrTarget()!.Position));
         slot.Add(SpellsDef.HellsIngress.GetSpell());
     }

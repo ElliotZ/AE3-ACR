@@ -5,11 +5,6 @@ using AEAssist.Helper;
 using Dalamud.Game.ClientState.Objects.Types;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ElliotZ.Rpr.SlotResolvers.GCD;
 
@@ -19,7 +14,11 @@ public class HarvestMoonHighPrio : ISlotResolver
     public int Check()
     {
         Target = SpellsDef.HarvestMoon.OptimalAOETarget(1, Qt.Instance.GetQt("智能AOE"), 5);
-        if (Target is null || SpellsDef.HarvestMoon.GetSpell(Target).IsReadyWithCanCast() == false) { return -99; }
+        if (Target is null ||
+                SpellsDef.HarvestMoon.GetSpell(Target).IsReadyWithCanCast() == false)
+        {
+            return -99;
+        }
         if (Qt.Instance.GetQt("收获月") == false) { return -98; }
         if (!Qt.Instance.GetQt("倾泻资源")) { return -1; }
         if (Core.Me.HasAura(AurasDef.SoulReaver) || Core.Me.HasAura(AurasDef.Executioner))

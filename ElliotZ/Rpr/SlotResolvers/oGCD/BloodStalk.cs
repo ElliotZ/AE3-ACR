@@ -4,27 +4,26 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
-using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
-using static AEAssist.CombatRoutine.View.MeleePosHelper;
 
 namespace ElliotZ.Rpr.SlotResolvers.oGCD;
 
 public class BloodStalk : ISlotResolver
 {
-    private IBattleChara? Target {  get; set; }
-    private int Soul => Core.Resolve<JobApi_Reaper>().SoulGauge;
+    private IBattleChara? Target { get; set; }
+    private static int Soul => Core.Resolve<JobApi_Reaper>().SoulGauge;
+    private static int Shroud => Core.Resolve<JobApi_Reaper>().ShroudGauge;
 
     public int Check()
     {
         Target = SpellsDef.GrimSwathe.OptimalAOETarget(4, 180, Qt.Instance.GetQt("智能AOE"));
 
-        if (Target is null && 
-                Helper.GetActionChange(SpellsDef.BloodStalk).GetSpell().IsReadyWithCanCast() == false) 
+        if (Target is null &&
+                Helper.GetActionChange(SpellsDef.BloodStalk).GetSpell().IsReadyWithCanCast() == false)
         {
-            return -99; 
+            return -99;
         }
         if (Target is not null && SpellsDef.GrimSwathe.GetSpell(Target!).IsReadyWithCanCast() == false)
         {
@@ -32,12 +31,12 @@ public class BloodStalk : ISlotResolver
         }
         if (Qt.Instance.GetQt("挥割/爪") == false) { return -98; }
         if (Core.Me.HasAura(AurasDef.Enshrouded)) { return -1; }  // not this slot resolver
-        
-        if (Core.Resolve<JobApi_Reaper>().ShroudGauge == 100 ||
-            Core.Me.HasAura(AurasDef.SoulReaver) || 
-            Core.Me.HasAura(AurasDef.Executioner)) 
-        { 
-            return -4; 
+
+        if (Shroud == 100 ||
+            Core.Me.HasAura(AurasDef.SoulReaver) ||
+            Core.Me.HasAura(AurasDef.Executioner))
+        {
+            return -4;
         }
         if (Helper.ComboTimer <= GCDHelper.GetGCDDuration() + RprSettings.Instance.AnimLock * 3 &&
         (RprHelper.PrevCombo == SpellsDef.Slice || RprHelper.PrevCombo == SpellsDef.WaxingSlice))
@@ -62,7 +61,7 @@ public class BloodStalk : ISlotResolver
 
         if (Qt.Instance.GetQt("暴食"))
         {
-            if (SpellsDef.Gluttony.IsUnlock() && 
+            if (SpellsDef.Gluttony.IsUnlock() &&
                     SpellsDef.Gluttony.GetSpell().Cooldown.TotalMilliseconds < GCDHelper.GetGCDDuration())
             {
                 return -21;
@@ -71,7 +70,7 @@ public class BloodStalk : ISlotResolver
             if (SpellsDef.Gluttony.IsUnlock() &&
                     SpellsDef.Gluttony.RdyInGCDs(GcdsToOvercap()) &&
                     !(SpellsDef.Gluttony.RdyInGCDs(2) && SpellsDef.SoulSlice.GetSpell().Charges > 1.7f)) // &&
-                    //Soul < 100)
+                                                                                                         //Soul < 100)
             {
                 return -22;  // delay for gluttony gauge cost
             }
@@ -81,7 +80,7 @@ public class BloodStalk : ISlotResolver
             if (Qt.Instance.GetQt("神秘环") &&
                     SpellsDef.ArcaneCircle.IsUnlock() &&
                     !SpellsDef.ArcaneCircle.RdyInGCDs(GcdsToOvercap() + 3))  // &&
-                    //Soul < 100)
+                                                                             //Soul < 100)
             {
                 return -31;
             }
@@ -92,7 +91,7 @@ public class BloodStalk : ISlotResolver
                     //Soul < 100 &&
                     SpellsDef.ArcaneCircle.IsUnlock() &&
                     SpellsDef.ArcaneCircle.RdyInGCDs(2) &&
-                    Core.Resolve<JobApi_Reaper>().ShroudGauge != 40)
+                    Shroud != 40)
             {
                 return -17;  // delay for gluttony after burst window
             }
@@ -101,7 +100,7 @@ public class BloodStalk : ISlotResolver
                     //Soul < 100 &&
                     SpellsDef.ArcaneCircle.IsUnlock() &&
                     SpellsDef.ArcaneCircle.RdyInGCDs(Math.Min(6, GcdsToOvercap() + 3)) &&
-                    Core.Resolve<JobApi_Reaper>().ShroudGauge != 40)
+                    Shroud != 40)
             {
                 return -12;  // delay for gluttony after burst window
             }
@@ -126,9 +125,9 @@ public class BloodStalk : ISlotResolver
         //var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 8, 180);
 
         if (Qt.Instance.GetQt("AOE") && Target is not null &&
-                SpellsDef.GrimSwathe.GetSpell(Target!).IsReadyWithCanCast()) 
-        { 
-            return SpellsDef.GrimSwathe.GetSpell(Target!); 
+                SpellsDef.GrimSwathe.GetSpell(Target!).IsReadyWithCanCast())
+        {
+            return SpellsDef.GrimSwathe.GetSpell(Target!);
         }
         return Helper.GetActionChange(SpellsDef.BloodStalk).GetSpell();
     }
@@ -136,11 +135,11 @@ public class BloodStalk : ISlotResolver
     private static int GcdsToOvercap()
     {
         int res = (100 - Core.Resolve<JobApi_Reaper>().SoulGauge) / 10;
-        if (Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 
-                                            BattleData.Instance.GcdDuration * (res + 3), 
+        if (Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign,
+                                            BattleData.Instance.GcdDuration * (res + 3),
                                             false) ||
-            Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 
-                                            30000 + BattleData.Instance.GcdDuration * res, 
+            Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign,
+                                            30000 + BattleData.Instance.GcdDuration * res,
                                             false))
         {
             res++;

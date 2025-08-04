@@ -4,13 +4,6 @@ using AEAssist.CombatRoutine.Module.Target;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
-using Dalamud.Game.ClientState.Statuses;
-using Lumina.Excel.Sheets;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ElliotZ.Common;
 
@@ -256,9 +249,9 @@ public static class StopHelper
         2450, // 模仿：模仿对手的行动，对于物理攻击将进行物理反击，对于魔法攻击将进行魔法反击
     ];
 
-    public static readonly HashSet<string> WhiteList = [ "18014449513685488", 
-                                                         "18014449511049086", 
-                                                         "19014409515763009", 
+    public static readonly HashSet<string> WhiteList = [ "18014449513685488",
+                                                         "18014449511049086",
+                                                         "19014409515763009",
                                                          "19014419509512110" ];
 
     public static bool Debug = false;
@@ -281,13 +274,13 @@ public static class StopHelper
             {
                 _manualOverride = true;
             }
-            if (!_manualOverride) 
+            if (!_manualOverride)
             {
-                PlayerOptions.Instance.Stop = false; 
+                PlayerOptions.Instance.Stop = false;
                 if (_untargeted && TargetMgr.Instance.EnemysIn20.Count > 0 &&
                         !TargetMgr.Instance.EnemysIn20.Values.First().HasAnyAura(Invulns) &&
                         Core.Me.GetCurrTarget() is null)// &&
-                        //Core.Me.GetCurrTarget()!.GameObjectId == Core.Me.GameObjectId)//)
+                                                        //Core.Me.GetCurrTarget()!.GameObjectId == Core.Me.GameObjectId)//)
                 {
                     if (Debug) LogHelper.Print("Setting Target");
                     Core.Me.SetTarget(TargetMgr.Instance.EnemysIn20.Values.First());
@@ -308,11 +301,11 @@ public static class StopHelper
         if (Helper.AnyAuraTimerLessThan(AccelBomb, time)) { return 1; }
         if (Core.Me.HasAnyAura(Pyretic)) { return 1; }
         if (Core.Me.HasAnyAura(Incapacitated)) { return 2; }
-        if (Core.Me.GetCurrTarget() is not null && 
+        if (Core.Me.GetCurrTarget() is not null &&
                 //!(Core.Me.GetCurrTarget()!.GameObjectId == Core.Me.GameObjectId) &&  <- this does nothing
-                Core.Me.GetCurrTarget().HasAnyAura(Invulns)) 
+                Core.Me.GetCurrTarget().HasAnyAura(Invulns))
         {
-            return 2; 
+            return 2;
         }
         return -1;
     }

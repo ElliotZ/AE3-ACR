@@ -10,7 +10,6 @@ using AEAssist.MemoryApi;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 using System.Numerics;
-using System.Reflection;
 using Task = System.Threading.Tasks.Task;
 
 namespace ElliotZ.Rpr;
@@ -20,10 +19,10 @@ public class EventHandler : IRotationEventHandler
     private MobPullHelper? mobPullHelper;
     //private static long _lastCheckTime = 0L;
     private static bool _burstSettingsAltered = false;
-    private Dictionary<string, string> _qtKeyDict;
-    private Dictionary<string, IHotkeyResolver> _hotkeyDict;
-    private static readonly List<string> QtToastBuffer = new List<string>();
-    private static bool _qtToastScheduled;
+    private readonly Dictionary<string, string> _qtKeyDict = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, IHotkeyResolver> _hotkeyDict = new(StringComparer.OrdinalIgnoreCase);
+    private static readonly List<string> QtToastBuffer = [];
+    private static bool _qtToastScheduled = false;
 
     public void OnResetBattle()
     {
@@ -36,8 +35,8 @@ public class EventHandler : IRotationEventHandler
         // initialize pull record
         if (AI.Instance.BattleData.CurrBattleTimeInMs >= 0)
         {
-            if (Core.Resolve<MemApiDuty>().InMission && 
-                Core.Resolve<MemApiDuty>().DutyMembersNumber() == 4 && 
+            if (Core.Resolve<MemApiDuty>().InMission &&
+                Core.Resolve<MemApiDuty>().DutyMembersNumber() == 4 &&
                 RprSettings.Instance.PullingNoBurst)
             {
                 BattleData.Instance.IsPulling = true;
@@ -48,7 +47,7 @@ public class EventHandler : IRotationEventHandler
             }
 
             //MeleePosHelper.Clear();
-            if (RprSettings.Instance.RestoreQtSet) 
+            if (RprSettings.Instance.RestoreQtSet)
             {
                 Qt.LoadQtStatesNoPot();
             }
@@ -60,9 +59,9 @@ public class EventHandler : IRotationEventHandler
     public async Task OnNoTarget()
     {
         // maybe add soulsow, idk
-        if (BattleData.Instance.IsStopped == false) 
-        { 
-            BattleData.Instance.NoTarget = true; 
+        if (BattleData.Instance.IsStopped == false)
+        {
+            BattleData.Instance.NoTarget = true;
         }
         StopHelper.StopActions(1000);
 
@@ -93,7 +92,7 @@ public class EventHandler : IRotationEventHandler
             }
         }
 
-        if (Core.Resolve<MemApiDuty>().IsOver && _burstSettingsAltered) 
+        if (Core.Resolve<MemApiDuty>().IsOver && _burstSettingsAltered)
         {
             LogHelper.Print("改变过“小怪低血量不交爆发”的设置，现在复原。");
             RprSettings.Instance.NoBurst = true;
@@ -110,7 +109,7 @@ public class EventHandler : IRotationEventHandler
         if (d > 0) BattleData.Instance.GcdDuration = d;
 
         //Single Weave Skills
-        AI.Instance.BattleData.CurrGcdAbilityCount = (spell.Id is SpellsDef.VoidReaping 
+        AI.Instance.BattleData.CurrGcdAbilityCount = (spell.Id is SpellsDef.VoidReaping
                                                                or SpellsDef.CrossReaping) ? 1 : 2;
 
         BattleData.Instance.justCastAC = (spell.Id is SpellsDef.ArcaneCircle);
@@ -134,8 +133,8 @@ public class EventHandler : IRotationEventHandler
                 MobPullHelper._lastCheckTime = AI.Instance.BattleData.CurrBattleTimeInMs;
             }
 
-            if (mobPullHelper.IsPulling == false) 
-            { 
+            if (mobPullHelper.IsPulling == false)
+            {
                 mobPullHelper.CheckEnemiesAroundTank();
                 if (mobPullHelper.ConcentrationPctg > RprSettings.Instance.ConcentrationThreshold)
                 {
@@ -153,12 +152,12 @@ public class EventHandler : IRotationEventHandler
         BattleData.Instance.TotalHpPercentage = MobPullHelper.GetTotalHealthPercentageOfNearbyEnemies();
         BattleData.Instance.AverageTTK = MobPullHelper.GetAverageTTKOfNearbyEnemies();
 
-        if (RprSettings.Instance.NoBurst && 
+        if (RprSettings.Instance.NoBurst &&
             !Core.Resolve<MemApiDuty>().InBossBattle &&  // exclude boss battles and msq ultima wep
             !Core.Me.GetCurrTarget().IsDummy() &&
             Helper.GetTerritoyId != 1048 &&
-            AI.Instance.BattleData.CurrBattleTimeInMs > 10000 && 
-                (BattleData.Instance.TotalHpPercentage < RprSettings.Instance.MinMobHpPercent || 
+            AI.Instance.BattleData.CurrBattleTimeInMs > 10000 &&
+                (BattleData.Instance.TotalHpPercentage < RprSettings.Instance.MinMobHpPercent ||
                  BattleData.Instance.AverageTTK < (RprSettings.Instance.minTTK * 1000)))
         {
             Qt.Instance.SetQt("魂衣", false);
@@ -193,9 +192,9 @@ public class EventHandler : IRotationEventHandler
         var GibGallowsJustUsed =
                 Helper.GetActionChange(SpellsDef.Gibbet).RecentlyUsed(500) ||
                 Helper.GetActionChange(SpellsDef.Gallows).RecentlyUsed(500);
-        if (!inTN && 
-                !Core.Me.HasAura(AurasDef.Enshrouded) && 
-                Core.Me.GetCurrTarget() is not null && 
+        if (!inTN &&
+                !Core.Me.HasAura(AurasDef.Enshrouded) &&
+                Core.Me.GetCurrTarget() is not null &&
                 Core.Me.GetCurrTarget().HasPositional())
         {
             if (GibGallowsReady && !GibGallowsJustUsed)
@@ -210,7 +209,7 @@ public class EventHandler : IRotationEventHandler
                 }
                 else { MeleePosHelper.Clear(); }
             }
-            else if (Core.Resolve<JobApi_Reaper>().SoulGauge >= 50 || 
+            else if (Core.Resolve<JobApi_Reaper>().SoulGauge >= 50 ||
                         SpellsDef.SoulSlice.GetSpell().IsReadyWithCanCast())
             {
                 if (Core.Me.HasAura(AurasDef.EnhancedGallows))
@@ -246,13 +245,13 @@ public class EventHandler : IRotationEventHandler
         catch (Exception) { }
 
         ECHelper.Commands.AddHandler(RprHelper.TxtCmdHandle, new Dalamud.Game.Command.CommandInfo(RprCommandHandler));
-        _qtKeyDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        foreach ((string name, string enName, bool defVal, string tooltip) in Qt.QtKeys) 
-        { 
+        //_qtKeyDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach ((string name, string enName, bool defVal, string tooltip) in Qt.QtKeys)
+        {
             _qtKeyDict.TryAdd(name, name);
             _qtKeyDict.TryAdd(enName.ToLower(), name);
         }
-        _hotkeyDict = new Dictionary<string, IHotkeyResolver>(StringComparer.OrdinalIgnoreCase);
+        //_hotkeyDict = new Dictionary<string, IHotkeyResolver>(StringComparer.OrdinalIgnoreCase);
         foreach ((string name, string enName, IHotkeyResolver hkr) in Qt.HKResolvers)
         {
             _hotkeyDict.TryAdd(enName.ToLower(), hkr);
@@ -277,7 +276,7 @@ public class EventHandler : IRotationEventHandler
             }
             else
             {
-                 LogHelper.PrintError("未知QT参数：" +  args);
+                LogHelper.PrintError("未知QT参数：" + args);
             }
             return;
         }
@@ -290,7 +289,7 @@ public class EventHandler : IRotationEventHandler
             }
             else
             {
-                 LogHelper.PrintError("未知Hotkey参数：" + args);
+                LogHelper.PrintError("未知Hotkey参数：" + args);
             }
             return;
         }
@@ -335,7 +334,7 @@ public class EventHandler : IRotationEventHandler
                     if (!_qtToastScheduled)
                     {
                         _qtToastScheduled = true;
-                        Task.Delay(50).ContinueWith(delegate 
+                        Task.Delay(50).ContinueWith(delegate
                         {
                             string msg = string.Join("\n", QtToastBuffer);
                             Helper.SendTips(msg, 1, 1000);

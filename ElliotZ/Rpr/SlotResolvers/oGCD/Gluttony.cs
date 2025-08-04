@@ -1,14 +1,11 @@
 ﻿using AEAssist;
-using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
-using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
-using static AEAssist.CombatRoutine.View.MeleePosHelper;
 
 namespace ElliotZ.Rpr.SlotResolvers.oGCD;
 
@@ -42,7 +39,8 @@ public class Gluttony : ISlotResolver
             return -12;  // delay for burst window
         }
         if (Helper.ComboTimer < 2 * GCDHelper.GetGCDDuration() + GCDHelper.GetGCDCooldown() &&
-                (RprHelper.PrevCombo == SpellsDef.Slice || RprHelper.PrevCombo == SpellsDef.WaxingSlice))
+                (RprHelper.PrevCombo == SpellsDef.Slice ||
+                 RprHelper.PrevCombo == SpellsDef.WaxingSlice))
         {
             return -9;  // -9 for combo protection
         }

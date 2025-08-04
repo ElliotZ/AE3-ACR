@@ -7,11 +7,6 @@ using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ElliotZ.Rpr.SlotResolvers.FixedSeq;
 
@@ -52,7 +47,7 @@ public class OpenerCountDownOnly : IOpener
         }
     }
 
-    private bool PrepullIngressCheck()
+    private static bool PrepullIngressCheck()
     {
         if (Core.Me.GetCurrTarget() is null) return false;
         var targetRing = Core.Me.GetCurrTarget()!.HitboxRadius * 2;
@@ -79,6 +74,6 @@ public class OpenerCountDownOnly : IOpener
 
     public uint Level { get; } = 1;
 
-    public Action CompletedAction { get; set; }
+    public Action? CompletedAction { get; set; }
 }
 

@@ -1,7 +1,6 @@
 ﻿using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
-using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
@@ -24,18 +23,18 @@ public class IngressHK(int hktype) : HotKeyResolver(SpellsDef.HellsIngress, Spel
 
     public override void Draw(Vector2 size)
     {
-        if (Core.Me.HasAura(AurasDef.RegressReady)) 
+        if (Core.Me.HasAura(AurasDef.RegressReady))
         {
             HotkeyHelper.DrawSpellImage(size, Helper.GetActionChange(SpellId));
-        } 
+        }
         else
         {
             switch (HkType)
             {
-                case 2:
+                case FaceTarget:
                     HotkeyHelper.DrawSpellImage(size, "../../ACR/ElliotZ/HKImages/ingress_t.png");
                     break;
-                case 3:
+                case FaceCam:
                     HotkeyHelper.DrawSpellImage(size, "../../ACR/ElliotZ/HKImages/ingress_cam.png");
                     break;
                 default:
@@ -48,7 +47,7 @@ public class IngressHK(int hktype) : HotKeyResolver(SpellsDef.HellsIngress, Spel
 
     public override int Check()
     {
-        if (HkType == 2 && Core.Me.GetCurrTarget() is null) return -9;
+        if (HkType == FaceTarget && Core.Me.GetCurrTarget() is null) return -9;
         if (Core.Me.HasAura(AurasDef.RegressReady) &&
                     RegressPosition().Equals(Vector3.Zero))
         {

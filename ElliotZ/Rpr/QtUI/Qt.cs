@@ -2,10 +2,8 @@
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
 using AEAssist.Helper;
-using ECommons;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI.Hotkey;
-using PInvoke;
 
 namespace ElliotZ.Rpr.QtUI;
 
@@ -32,13 +30,13 @@ public static class Qt
         ("AOE", "AOE", true, ""),
         ("播魂种", "Soulsow", true, ""),
         ("祭牲", "Sacrificium", true, ""),
-        ("倾泻资源", "Dump", false, ""),
-        ("真北优化", "OptiNorth", true, ""),
-        ("智能AOE", "SmartAOE", true, ""),
-        ("自动突进", "AutoIngress", false, ""),
+        ("倾泻资源", "Dump", false, "会扔收获月，会尽快变身"),
+        ("真北优化", "OptiNorth", true, "够红条但是身位不对的时候会攒一攒"),
+        ("智能AOE", "SmartAOE", true, "会自动选择AOE目标，包括暴食团契这类技能"),
+        ("自动突进", "AutoIngress", false, "只会在跳了之后能打到的时候跳，能用勾刃就不会跳"),
     ];
 
-    public static readonly (string name, string ENname, IHotkeyResolver hkr)[] HKResolvers = 
+    public static readonly (string name, string ENname, IHotkeyResolver hkr)[] HKResolvers =
     [
         ("入境", "Ingress", new IngressHK(IngressHK.CurrDir)),
         ("出境", "Egress", new EgressHK(IngressHK.CurrDir)),
@@ -80,17 +78,23 @@ public static class Qt
             Instance.SetQt(qtState.Key, qtState.Value);
         }
 
-        LogHelper.Print("QT设置已重载");
+        if (RprSettings.Instance.Debug) LogHelper.Print("QT设置已重载");
     }
 
     public static void LoadQtStatesNoPot()
     {
         foreach (KeyValuePair<string, bool> qtState in RprSettings.Instance.QtStates)
         {
-            if (qtState.Key is not ("爆发药" or "智能AOE" or "爆发药2分" or "自动突进")) Instance.SetQt(qtState.Key, qtState.Value);
+            if (qtState.Key is not ("爆发药" or
+                                    "智能AOE" or
+                                    "爆发药2分" or
+                                    "自动突进"))
+            {
+                Instance.SetQt(qtState.Key, qtState.Value);
+            }
         }
 
-        if(RprSettings.Instance.Debug) LogHelper.Print("除爆发药和智能AOE以外QT设置已重载");
+        if (RprSettings.Instance.Debug) LogHelper.Print("除爆发药和智能AOE以外QT设置已重载");
     }
 
     public static void Build()

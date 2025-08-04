@@ -7,7 +7,7 @@ namespace ElliotZ.Common;
 public static class TimeLineUpdater
 {
     private static List<TimeLineInfo>? jsonData;
-    private static string _jsonUrl;
+    private static string _jsonUrl = "";
 
     /// <summary>
     /// 更新时间轴
@@ -72,7 +72,7 @@ public static class TimeLineUpdater
             var _jsonData = await client.GetStringAsync(_jsonUrl);
             jsonData = JsonSerializer.Deserialize<List<TimeLineInfo>>(_jsonData);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             jsonData = null;
             LogHelper.Print("时间轴", $"时间轴更新失败！请检查github网络连接！");
@@ -88,7 +88,7 @@ public static class TimeLineUpdater
             await File.WriteAllTextAsync(path, jsonData);
             return true;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             LogHelper.Error("acr下载时间轴文件时出错");
             return false;
@@ -98,8 +98,8 @@ public static class TimeLineUpdater
 
 public class TimeLineInfo
 {
-    public string Name { get; set; }
-    public string Version { get; set; }
-    public string DownloadUrl { get; set; }
-    public string UpdateInfo { get; set; }
+    public required string Name { get; set; }
+    public string? Version { get; set; }
+    public required string DownloadUrl { get; set; }
+    public string? UpdateInfo { get; set; }
 }

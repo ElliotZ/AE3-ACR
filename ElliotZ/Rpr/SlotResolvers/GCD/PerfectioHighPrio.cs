@@ -12,11 +12,15 @@ public class PerfectioHighPrio : ISlotResolver
     public int Check()
     {
         Target = SpellsDef.Perfectio.OptimalAOETarget(1, Qt.Instance.GetQt("智能AOE"), 5);
-        if (Target is null || SpellsDef.Perfectio.GetSpell(Target).IsReadyWithCanCast() == false) { return -99; }
+        if (Target is null ||
+                SpellsDef.Perfectio.GetSpell(Target).IsReadyWithCanCast() == false)
+        {
+            return -99;
+        }
         if (Qt.Instance.GetQt("完人") == false) { return -98; }
-        if (!Qt.Instance.GetQt("倾泻资源") && 
-                Helper.GetAuraTimeLeft(AurasDef.PerfectioParata) > 2500) 
-        { 
+        if (!Qt.Instance.GetQt("倾泻资源") &&
+                Helper.GetAuraTimeLeft(AurasDef.PerfectioParata) > 2500)
+        {
             return -8;  // -8 for Exiting High Prio state
         }
         return 0;

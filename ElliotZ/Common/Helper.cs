@@ -2,14 +2,11 @@
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Module.Target;
-using AEAssist.CombatRoutine.View;
 using AEAssist.Define;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
-using FFXIVClientStructs.FFXIV.Client.UI;
-using CSFramework = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework;
 using System.Numerics;
 
 namespace ElliotZ.Common;
@@ -20,7 +17,7 @@ public static class Helper
 
     // some reference urls if needed
 
-    private static int _GCDDuration = 0;
+    //private static int _GCDDuration = 0;
 
     /// <summary>
     /// 获取自身buff的剩余时间
@@ -89,7 +86,7 @@ public static class Helper
 
     public static bool AnyAuraTimerLessThan(List<uint> auras, int timeLeft)
     {
-        foreach(var aura in Core.Me.StatusList)
+        foreach (var aura in Core.Me.StatusList)
         {
             if (aura.StatusId != 0 &&
                     (double)Math.Abs(aura.RemainingTime) * 1000.0 <= timeLeft &&
@@ -165,9 +162,11 @@ public static class Helper
     {
         var enemyCount = TargetHelper.GetNearbyEnemyCount(8);
         var enemyList = TargetMgr.Instance.EnemysIn12;
-        var lowHPCount = enemyList.Count(v => 
-                  Core.Me.Distance(v.Value, DistanceMode.IgnoreTargetHitbox | DistanceMode.IgnoreHeight) <= 8 &&
-                  TTKHelper.IsTargetTTK(v.Value));
+        var lowHPCount = enemyList.Count(v =>
+                                           Core.Me.Distance(v.Value, 
+                                                            DistanceMode.IgnoreTargetHitbox | 
+                                                            DistanceMode.IgnoreHeight) <= 8 &&
+                                           TTKHelper.IsTargetTTK(v.Value));
         return (lowHPCount / (double)enemyCount > 0.667);
     }
 
@@ -200,7 +199,10 @@ public static class Helper
     /// <param name="toggle">这里可以输入控制智能AOE的QT</param>
     /// <param name="dmgRange">如果toggle有可能为false的话一定要填这个，不然就等死吧</param>
     /// <returns></returns>
-    public static IBattleChara? OptimalAOETarget(this uint spellId, int count, bool toggle = true, int dmgRange = 0)
+    public static IBattleChara? OptimalAOETarget(this uint spellId, 
+                                                     int count, 
+                                                     bool toggle = true, 
+                                                     int dmgRange = 0)
     {
         if (toggle)
         {
@@ -209,7 +211,7 @@ public static class Helper
         else
         {
             //var spellDmgRange = Core.Resolve<MemApiSpell>().
-            var enemyCount = TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 
+            var enemyCount = TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(),
                                                               (int)spellId.GetSpell().ActionRange, dmgRange);
             return (count <= enemyCount ? Core.Me.GetCurrTarget() : null);
         }
@@ -223,7 +225,10 @@ public static class Helper
     /// <param name="angle"></param>
     /// <param name="toggle">这里可以输入控制智能AOE的QT</param>
     /// <returns></returns>
-    public static IBattleChara? OptimalAOETarget(this uint spellId, int count, float angle, bool toggle = true)
+    public static IBattleChara? OptimalAOETarget(this uint spellId, 
+                                                     int count, 
+                                                     float angle, 
+                                                     bool toggle = true)
     {
         if (toggle)
         {
@@ -231,9 +236,9 @@ public static class Helper
         }
         else
         {
-            var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me, 
-                                                                    Core.Me.GetCurrTarget(), 
-                                                                    (int)spellId.GetSpell().ActionRange, 
+            var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me,
+                                                                    Core.Me.GetCurrTarget(),
+                                                                    (int)spellId.GetSpell().ActionRange,
                                                                     angle);
             return (count <= enemyCount ? Core.Me.GetCurrTarget() : null);
         }
@@ -247,7 +252,10 @@ public static class Helper
     /// <param name="width">如果toggle有可能为false的话一定要填这个，不然就等死吧</param>
     /// <param name="toggle">这里可以输入控制智能AOE的QT</param>
     /// <returns></returns>
-    public static IBattleChara? OptimalLineAOETarget(this uint spellId, int count, bool toggle = true, int width = 0)
+    public static IBattleChara? OptimalLineAOETarget(this uint spellId, 
+                                                        int count, 
+                                                        bool toggle = true, 
+                                                        int width = 0)
     {
         if (toggle)
         {
@@ -280,13 +288,9 @@ public static class Helper
                SelfBuff.Any(buff => TgtAuraTimerLessThan(buff, 15000));
     }
 
-    public static bool isUnlockWithRoleSkills(this Spell spell)
+    public static bool IsUnlockWithRoleSkills(this Spell spell)
     {
-        List<uint> RoleSkills = [7531, 7533, 7535, 7537, 7538, 7540, 
-                                 7541, 7542, 7546, 7548, 7549, 
-                                 7551, 7553, 7554, 7557, 7559, 
-                                 7560, 7561, 7562, 7568, 7571, 16560, 7863, 846,];
-        if (RoleSkills.Contains(spell.Id))
+        if (SpellsDef.RoleSkills.Contains(spell.Id))
         {
             return true;  // dirty fix for now; need better ways to detect if a role skill is unlocked
         }
@@ -303,7 +307,7 @@ public static class Helper
     /// <returns>True if spell is in HP queue, false otherwise</returns>
     public static bool CheckInHPQueue(this Spell spell)
     {
-        Slot t = new Slot();
+        Slot t = new();
         t.Add(spell);
         if (spell.IsAbility())
         {
@@ -324,7 +328,7 @@ public static class Helper
     /// <returns>True if spell is at the top of HP queue, false otherwise</returns>
     public static bool CheckInHPQueueTop(this Spell spell)
     {
-        Slot t = new Slot();
+        Slot t = new();
         t.Add(spell);
         if (spell.IsAbility())
         {
@@ -338,7 +342,7 @@ public static class Helper
         }
     }
 
-    private static uint
+    private const uint
         背刺 = 3849,
         强化药 = 49,
         灼热之光 = 2703,

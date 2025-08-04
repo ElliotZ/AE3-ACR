@@ -3,11 +3,6 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using ElliotZ.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ElliotZ.Rpr.SlotResolvers.oGCD;
 
@@ -21,7 +16,10 @@ public class AutoCrest : ISlotResolver
         if (SpellsDef.ArcaneCrest.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Core.Me.CurrentHp > CrestThreshold) { return -4; }
         if (Core.Me.GetCurrTarget() is null ||
-                !TargetHelper.targetCastingIsBossAOE(Core.Me.GetCurrTarget(), 2500)) { return -3; }
+                !TargetHelper.targetCastingIsBossAOE(Core.Me.GetCurrTarget(), 2500))
+        {
+            return -3;
+        }
         if (GCDHelper.GetGCDCooldown() < RprSettings.Instance.AnimLock) { return -89; }
         return 0;
     }
