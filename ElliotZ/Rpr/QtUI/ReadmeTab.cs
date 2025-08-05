@@ -40,6 +40,11 @@ public static class ReadmeTab
             ImGui.Bullet();
             ImGui.SameLine();
             ImGui.Text("设置中有一些自动使用职能技能的设置，开启后会自动隐藏对应的技能Hotkey。");
+            ImGui.Bullet();
+            ImGui.SameLine();
+            ImGui.PushStyleColor(ImGuiCol.Text, ImGui.ColorConvertFloat4ToU32(new System.Numerics.Vector4(1f, 0f, 0f, 1f)));
+            ImGui.Text("播魂种和收获月的Hotkey不要一直猛点，否则后果自负，You have been warned.");
+            ImGui.PopStyleColor();
         }
     };
 

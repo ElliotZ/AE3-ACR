@@ -66,13 +66,13 @@ public class HotKeyResolver(uint spellId,
     public virtual int Check()
     {
         var s = Helper.GetActionChange(SpellId).GetSpell(TargetType);
-        if (!s.IsUnlockWithRoleSkills()) return -1;
+        if (WaitCoolDown && !s.IsUnlockWithRoleSkills()) return -1;
         if (UseHighPrioritySlot && Helper.CheckInHPQueueTop(s)) return -3;
         var isReady = WaitCoolDown ? s.Cooldown.TotalMilliseconds <= 5000 : s.IsReadyWithCanCast();
         return isReady ? 0 : -2;
     }
 
-    public void Run()
+    public virtual void Run()
     {
         var targetSpellId = Helper.GetActionChange(SpellId);
         var spell = targetSpellId.GetSpell(TargetType);

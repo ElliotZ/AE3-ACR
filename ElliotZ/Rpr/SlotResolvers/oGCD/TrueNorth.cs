@@ -18,6 +18,7 @@ public class TrueNorth : ISlotResolver
         if (Qt.Instance.GetQt("真北") == false) { return -98; }
 
         if (Core.Me.HasAura(AurasDef.TrueNorth)) { return -5; }  // -5 for avoiding spam
+        if (Qt.Instance.GetQt("AOE") && TargetHelper.GetNearbyEnemyCount(8) >= 3) return -3;
 
         if (Core.Me.GetCurrTarget() is not null &&
                 Core.Me.GetCurrTarget().HasPositional() &&

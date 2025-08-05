@@ -19,7 +19,7 @@ public class DblEnshPrep : ISlotSequence
 
     public int StartCheck()
     {
-        if (Core.Me.Level < 80) { return -99; }
+        if (Core.Me.Level < 88) { return -99; }
         if (SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds > PreAcEnshTimer)
         {
             return -6;
@@ -33,8 +33,8 @@ public class DblEnshPrep : ISlotSequence
         if (Qt.Instance.GetQt("神秘环") == false || Qt.Instance.GetQt("魂衣") == false) { return -98; }
         if (Qt.Instance.GetQt("单魂衣")) return -98;
         if (!Core.Resolve<MemApiDuty>().InBossBattle &&
-                (Core.Me.GetCurrTarget() is not null &&
-                !Core.Me.GetCurrTarget().IsDummy()))
+                Core.Resolve<MemApiDuty>().InMission &&
+                Core.Resolve<MemApiDuty>().DutyMembersNumber() != 8)
         {
             return -98;
         }
