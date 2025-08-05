@@ -41,7 +41,7 @@ public class Enshroud : ISlotResolver
     {
         if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Qt.Instance.GetQt("魂衣") == false) { return -98; }
-        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
+        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange + 2)
         {
             return -2;  // -2 for not in range
         }
@@ -53,7 +53,7 @@ public class Enshroud : ISlotResolver
         //{ 
         //    return -6;  // burst prep
         //}
-        if (!Qt.Instance.GetQt("倾泻资源"))  // ignore all if dump qt is set
+        if (!Qt.Instance.GetQt("倾泻资源") && !Core.Me.HasAura(AurasDef.IdealHost))  // ignore all if dump qt is set
         {
             if (Core.Resolve<JobApi_Reaper>().ShroudGauge < 100)
             {
@@ -72,7 +72,8 @@ public class Enshroud : ISlotResolver
                     return -7;
                 }
             }
-            if (SpellsDef.SoulSlice.GetSpell().Charges > 1.6f && Core.Resolve<JobApi_Reaper>().ShroudGauge < 90)
+            if (SpellsDef.SoulSlice.GetSpell().Charges > 1.6f && 
+                    Core.Resolve<JobApi_Reaper>().ShroudGauge < 90)
             {
                 return -11;  // SoulSlice overcap protection
             }

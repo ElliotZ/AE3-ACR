@@ -200,6 +200,8 @@ public class EventHandler : IRotationEventHandler
         };
 
         if (!inTN &&
+                (!Qt.Instance.GetQt("AOE") || 
+                    TargetHelper.GetNearbyEnemyCount(8) < 3) &&
                 !Core.Me.HasAura(AurasDef.Enshrouded) &&
                 Core.Me.GetCurrTarget() is not null &&
                 Core.Me.GetCurrTarget().HasPositional())
