@@ -1,0 +1,65 @@
+﻿<Project Sdk="Dalamud.CN.Net.Sdk/12.0.2">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0-windows</TargetFramework>
+		<RootNamespace>EZACR_Offline</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<BaseOutputPath>C:\etc\FFXIV_CN\Launcher\devplugins\ACR</BaseOutputPath>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<Platforms>x64</Platforms>
+		<Configurations>Debug;Release</Configurations>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<WarningLevel>8</WarningLevel>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<WarningLevel>8</WarningLevel>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<DalamudLibPath>$(AppData)\XIVLauncherCN\addon\Hooks\dev\</DalamudLibPath>
+		<AEAssistLibPath>C:\etc\FFXIV_CN\Launcher\devplugins\AEAssistCNVersion\AEAssist\</AEAssistLibPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Reference Include="AEAssist">
+			<HintPath>$(AEAssistLibPath)AEAssist.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Dalamud">
+			<HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="ECommons">
+			<HintPath>..\..\..\Launcher\devplugins\AEAssistCNVersion\AEAssist\ECommons.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="FFXIVClientStructs">
+			<HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="ImGui.NET">
+			<HintPath>$(DalamudLibPath)ImGui.NET.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Remove="DalamudPackager" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ElliotZ\ElliotZ.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Gnb\SlotResolvers\FixedSeq\" />
+	  <Folder Include="Gnb\SlotResolvers\oGCD\" />
+	</ItemGroup>
+
+</Project>

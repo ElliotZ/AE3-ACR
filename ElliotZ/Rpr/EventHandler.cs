@@ -63,7 +63,7 @@ public class EventHandler : IRotationEventHandler
         //{
         //    BattleData.Instance.NoTarget = true;
         //}
-        StopHelper.StopActions(1000);
+        if (RprSettings.Instance.HandleStopMechs) StopHelper.StopActions(1000);
 
         if (RprSettings.Instance.Debug) LogHelper.Print("no target");
 
@@ -181,7 +181,7 @@ public class EventHandler : IRotationEventHandler
         //}
 
         // stop action during accel bombs, pyretics and/or when boss is invuln
-        StopHelper.StopActions(1000);
+        if (RprSettings.Instance.HandleStopMechs) StopHelper.StopActions(1000);
 
         // positional indicator
         var gcdProgPctg = (int)((GCDHelper.GetGCDCooldown() / (double)BattleData.Instance.GcdDuration) * 100);

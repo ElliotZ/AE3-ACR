@@ -128,6 +128,7 @@ public static class SettingTab
                     ImGui.PopStyleColor();
                     ImGui.PopTextWrapPos();
                 }
+                ImGui.Checkbox("加速度炸弹/热病/目标无敌/自身无法行动期间自动停手", ref RprSettings.Instance.HandleStopMechs);
                 if (ImGui.CollapsingHeader("自动回复/减伤设置"))
                 {
                     ImGui.Text("血量阈值是最大血量的比例。");
@@ -263,6 +264,7 @@ public static class SettingTab
                 RprSettings.Instance.AutoCrest = true;
                 RprSettings.Instance.AutoSecondWind = true;
                 RprSettings.Instance.AutoFeint = true;
+                RprSettings.Instance.HandleStopMechs = true;
                 Qt.Instance.NewDefault("起手", true);
                 Qt.Instance.SetQt("起手", true);
                 Qt.Instance.NewDefault("单魂衣", false);
@@ -312,6 +314,7 @@ public static class SettingTab
                 RprSettings.Instance.AutoCrest = false;
                 RprSettings.Instance.AutoSecondWind = false;
                 RprSettings.Instance.AutoFeint = false;
+                RprSettings.Instance.HandleStopMechs = false;
                 Qt.Instance.NewDefault("起手", true);
                 Qt.Instance.SetQt("起手", true);
                 Qt.Instance.NewDefault("单魂衣", false);
