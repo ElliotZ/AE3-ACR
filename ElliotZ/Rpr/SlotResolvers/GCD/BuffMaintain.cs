@@ -53,12 +53,12 @@ public class BuffMaintain : ISlotResolver
         {
             return 5;
         }
-        //if (Qt.Instance.GetQt("神秘环") && 
-        //        SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds < 11000 && 
-        //        Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 11000 + GCDHelper.GetGCDDuration(), false))
-        //{
-        //    return 3;
-        //}
+        if (Qt.Instance.GetQt("神秘环") &&
+                SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds < 11000 &&
+                Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 35000, false))
+        {
+            return 6;
+        }
         if (SpellsDef.WhorlOfDeath.IsUnlock() && AOEAuraCheck()) { return 4; }
         ;
         //if (Core.Resolve<JobApi_Reaper>().ShroudGauge >= 50 &&)

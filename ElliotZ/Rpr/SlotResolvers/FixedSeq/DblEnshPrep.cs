@@ -15,7 +15,7 @@ public class DblEnshPrep : ISlotSequence
     public Action? CompletedAction { get; set; }
 
     //private static bool needShadow(int t) => Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, t, false);
-    public static double PreAcEnshTimer => GCDHelper.GetGCDDuration() * 2.5 + 800;
+    public static double PreAcEnshTimer => GCDHelper.GetGCDDuration() * 2 + 1500 - RprSettings.Instance.AnimLock;
 
     public int StartCheck()
     {
@@ -62,7 +62,7 @@ public class DblEnshPrep : ISlotSequence
     private static void Step0(Slot slot)
     {
         slot.Add(SpellsDef.Enshroud.GetSpell());
-        slot.Add(GCD.BuffMaintain.Solve().GetSpell());
+        //slot.Add(GCD.BuffMaintain.Solve().GetSpell());
     }
 
     private static void Step1(Slot slot)
