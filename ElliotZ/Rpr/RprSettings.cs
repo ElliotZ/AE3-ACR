@@ -72,6 +72,7 @@ public class RprSettings
     public float MinMobHpPercent = 0.1f;
     public float ConcentrationThreshold = 0.75f;
     public int minTTK = 15;
+    public bool HandleStopMechs = true;
 
     // Opener Settings
     public bool TripleWeavePot = false;
