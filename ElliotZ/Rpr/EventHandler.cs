@@ -19,10 +19,6 @@ public class EventHandler : IRotationEventHandler
     private MobPullHelper? mobPullHelper;
     //private static long _lastCheckTime = 0L;
     private static bool _burstSettingsAltered = false;
-    //private readonly Dictionary<string, string> _qtKeyDict = new(StringComparer.OrdinalIgnoreCase);
-    //private readonly Dictionary<string, IHotkeyResolver> _hotkeyDict = new(StringComparer.OrdinalIgnoreCase);
-    //private static readonly List<string> QtToastBuffer = [];
-    //private static bool _qtToastScheduled = false;
 
     public void OnResetBattle()
     {
@@ -248,127 +244,12 @@ public class EventHandler : IRotationEventHandler
             LogHelper.PrintError("建议在acr全局设置中取消勾选【全局能力技不卡GCD】选项");
 
         Qt.macroMan.Init();
-        //try
-        //{
-        //    ECHelper.Commands.RemoveHandler(RprHelper.TxtCmdHandle);
-        //}
-        //catch (Exception) { }
 
-        //ECHelper.Commands.AddHandler(RprHelper.TxtCmdHandle, new Dalamud.Game.Command.CommandInfo(RprCommandHandler));
-        ////_qtKeyDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        //foreach ((string name, string enName, bool defVal, string tooltip) in Qt.QtKeys)
-        //{
-        //    _qtKeyDict.TryAdd(name, name);
-        //    _qtKeyDict.TryAdd(enName.ToLower(), name);
-        //}
-        ////_hotkeyDict = new Dictionary<string, IHotkeyResolver>(StringComparer.OrdinalIgnoreCase);
-        //foreach ((string name, string enName, IHotkeyResolver hkr) in Qt.HKResolvers)
-        //{
-        //    _hotkeyDict.TryAdd(enName.ToLower(), hkr);
-        //    _hotkeyDict.TryAdd(name, hkr);
-        //}
     }
-
-    //private void RprCommandHandler(string command, string args)
-    //{
-    //    if (string.IsNullOrWhiteSpace(args))
-    //    {
-    //        LogHelper.PrintError(RprHelper.TxtCmdHandle[1..] + " 命令无效，请提供参数");
-    //        return;
-    //    }
-
-    //    string processed = args.Trim().ToLower();
-    //    if (processed.EndsWith("_qt"))
-    //    {
-    //        if (_qtKeyDict.ContainsKey(processed[..^3]))
-    //        {
-    //            ToggleQtSetting(_qtKeyDict.GetValueOrDefault(processed[..^3]));
-    //        }
-    //        else
-    //        {
-    //            LogHelper.PrintError("未知QT参数：" + args);
-    //        }
-    //        return;
-    //    }
-
-    //    if (processed.EndsWith("_hk"))
-    //    {
-    //        if (_hotkeyDict.ContainsKey(processed[..^3]))
-    //        {
-    //            ExecuteHotkey(_hotkeyDict.GetValueOrDefault(processed[..^3]));
-    //        }
-    //        else
-    //        {
-    //            LogHelper.PrintError("未知Hotkey参数：" + args);
-    //        }
-    //        return;
-    //    }
-
-    //    if (processed == "hello")
-    //    {
-    //        LogHelper.Print("Hello World!");
-    //    }
-    //    else
-    //    {
-    //        LogHelper.PrintError("未知参数：" + args);
-    //    }
-    //}
-
-    //private static void ExecuteHotkey(IHotkeyResolver? hkr)
-    //{
-    //    if (hkr is null)
-    //    {
-    //        LogHelper.PrintError("HotkeyResolver未初始化");
-    //    }
-    //    else if (hkr.Check() >= 0)
-    //    {
-    //        hkr.Run();
-    //    }
-    //    else
-    //    {
-    //        LogHelper.Print("无法执行Hotkey，可能条件不满足或技能不可用。");
-    //    }
-    //}
-
-    //private static void ToggleQtSetting(string? qtName)
-    //{
-    //    if (!string.IsNullOrEmpty(qtName))
-    //    {
-    //        if (Qt.Instance.ReverseQt(qtName))
-    //        {
-    //            var SuccessNote = $"QT\"{qtName}\"已设置为 {Qt.Instance.GetQt(qtName)}。";
-    //            LogHelper.Print(SuccessNote);
-    //            if (RprSettings.Instance.ShowToast)
-    //            {
-    //                QtToastBuffer.Add(SuccessNote);
-    //                if (!_qtToastScheduled)
-    //                {
-    //                    _qtToastScheduled = true;
-    //                    Task.Delay(50).ContinueWith(delegate
-    //                    {
-    //                        string msg = string.Join("\n", QtToastBuffer);
-    //                        Helper.SendTips(msg, 1, 1000);
-    //                        QtToastBuffer.Clear();
-    //                        _qtToastScheduled = false;
-    //                    });
-    //                }
-    //            }
-    //        }
-    //        else
-    //        {
-    //            LogHelper.PrintError("Failed to Toggle QT");
-    //        }
-    //    }
-    //    else
-    //    {
-    //        LogHelper.PrintError("Empty QT name");
-    //    }
-    //}
 
     public void OnExitRotation() //退出ACR
     {
         Qt.macroMan.Exit();
-        //ECHelper.Commands.RemoveHandler(RprHelper.TxtCmdHandle);
     }
 
     public void OnTerritoryChanged()

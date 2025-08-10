@@ -17,8 +17,9 @@ namespace EZACR_Offline.Gnb.QtUI;
 public static class Qt
 {
     public static JobViewWindow Instance { get; set; }
+    public static MacroManager macroMan;
 
-    public static readonly (string name, string ENname, bool defval, string tooltip)[] QtKeys =
+    public static readonly List<(string name, string ENname, bool defval, string tooltip)> QtKeys =
     [
         ("使用基础Gcd", "BaseGCD", true, ""),
         ("AOE", "AOE", true, ""),
@@ -51,15 +52,15 @@ public static class Qt
         ("优先音速破", "SonicBreakPrio", false, "优先打音速破，对1G2.5起手生效"),
     ];
 
-    public static readonly (string name, string ENname, IHotkeyResolver hkr)[] HKResolvers =
+    public static readonly List<(string name, string ENname, IHotkeyResolver hkr)> HKResolvers =
     [
         ("超火", "Bolide", new HotKeyResolver(SpellsDef.Superbolide, SpellTargetType.Self, false)),
         ("亲疏", "Armslength", new HotKeyResolver(SpellsDef.ArmsLength, SpellTargetType.Self)),
-        ("极光<me>", "Nebula<me>", new HotKeyResolver(SpellsDef.Nebula, SpellTargetType.Self)),
+        ("极光<me>", "Nebula<me>", new HotKeyResolver(SpellsDef.Aurora, SpellTargetType.Self)),
         ("刚玉<me>", "HoC<me>", new HotKeyResolver(SpellsDef.HeartOfCorundum, SpellTargetType.Self)),
         ("雪仇", "Reprisal", new HotKeyResolver(SpellsDef.Reprisal, SpellTargetType.Self)),
         ("光之心", "HoL", new HotKeyResolver(SpellsDef.HeartofLight, SpellTargetType.Self)),
-        ("极光<2>", "Nebula<2>", new HotKeyResolver(SpellsDef.Nebula, SpellTargetType.Pm2)),
+        ("极光<2>", "Nebula<2>", new HotKeyResolver(SpellsDef.Aurora, SpellTargetType.Pm2)),
         ("刚玉<2>", "HoC<2>", new HotKeyResolver(SpellsDef.HeartOfCorundum, SpellTargetType.Pm2)),
         ("挑衅", "Voke", new HotKeyResolver(SpellsDef.Provoke, SpellTargetType.Target, false)),
         ("退避<2>", "Shirk<2>", new HotKeyResolver(SpellsDef.Shirk, SpellTargetType.Pm2, false)),
@@ -73,8 +74,6 @@ public static class Qt
         ("爆发药", "Pot", new HotKeyResolver_Potion()),
         ("一键减伤", "OneKeyMits", new OneKeyMits()),
     ];
-
-    private static readonly List<(string cmdType, string CNCmd, string ENCmd)> cmdList = [];
 
     public static void SaveQtStates()
     {
@@ -116,21 +115,7 @@ public static class Qt
     {
         Instance = new JobViewWindow(GnbSettings.Instance.JobViewSave, GnbSettings.Instance.Save, "EZGnb");
         Instance.SetUpdateAction(OnUIUpdate);
-        foreach ((string name, string en, bool defVal, string tooltip) in QtKeys)
-        {
-            Instance.AddQt(name, defVal, tooltip);
-            var cncmd = GnbHelper.TxtCmdHandle + " " + name + "_qt";
-            var encmd = GnbHelper.TxtCmdHandle + " " + en.ToLower() + "_qt";
-            cmdList.Add(("QT", cncmd, encmd));
-        }
-
-        foreach ((string name, string en, IHotkeyResolver hkr) in HKResolvers)
-        {
-            Instance.AddHotkey(name, hkr);
-            var cncmd = GnbHelper.TxtCmdHandle + " " + name + "_hk";
-            var encmd = GnbHelper.TxtCmdHandle + " " + en.ToLower() + "_hk";
-            cmdList.Add(("Hotkey", cncmd, encmd));
-        }
+        macroMan = new MacroManager(Instance, "/EZGnb", QtKeys, HKResolvers, true);
 
         //其余tab窗口
         ReadmeTab.Build(Instance);
@@ -139,16 +124,12 @@ public static class Qt
 
     }
 
-    public static List<(string cmdType, string CNCmd, string ENCmd)> CmdList()
-    {
-        return cmdList;
-    }
-
     public static void OnUIUpdate()
     {
+        //macroMan.UseToast2 = false;
         if (GnbSettings.Instance.CommandWindowOpen)
         {
-            GnbCmdWindow.Draw();
+            macroMan.DrawCommandWindow(ref GnbSettings.Instance.CommandWindowOpen);
         }
     }
 }

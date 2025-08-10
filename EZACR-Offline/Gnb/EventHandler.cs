@@ -177,10 +177,13 @@ public class EventHandler : IRotationEventHandler
         LogHelper.Print("悬浮窗增加自动开盾姿及ST不自动关选项(奇怪的倒计时处理问题 正常不正常交替出现)  出现问题请带上设置去DC使用问题反馈@KKxb");
         LogHelper.Print("本ACR使用须知请查看悬浮窗");
         Core.Resolve<MemApiChatMessage>().Toast2("KKxb绝枪ACR 使用请确认悬浮窗设置说明与QT", 1, 4000);
+
+        Qt.macroMan.Init();
     }
 
     public void OnExitRotation()
     {
+        Qt.macroMan.Exit();
     }
 
     public void OnTerritoryChanged()
