@@ -21,8 +21,8 @@ public class HotKeyResolver(uint spellId,
                                 bool useHighPrioritySlot = true,
                                 bool waitCoolDown = true) : IHotkeyResolver
 {
-    protected readonly uint SpellId = spellId;
-    protected readonly SpellTargetType TargetType = targetType;
+    protected uint SpellId = spellId;
+    protected SpellTargetType TargetType = targetType;
     protected readonly bool UseHighPrioritySlot = useHighPrioritySlot;
     protected readonly bool WaitCoolDown = waitCoolDown;
 

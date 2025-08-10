@@ -57,9 +57,4 @@
 	  <ProjectReference Include="..\ElliotZ\ElliotZ.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Gnb\SlotResolvers\FixedSeq\" />
-	  <Folder Include="Gnb\SlotResolvers\oGCD\" />
-	</ItemGroup>
-
 </Project>

@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EZACR_Offline.Gnb;
+
+public class BattleData
+{
+    public DateTime lastFalseTime = default(DateTime);
+    public float TotalHpPercentage = 0f;
+    public float AverageTTK = 0f;
+
+    public static BattleData Instance = new BattleData();
+}

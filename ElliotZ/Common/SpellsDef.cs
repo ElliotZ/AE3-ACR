@@ -460,6 +460,14 @@ namespace ElliotZ.Common
         public const uint HeartOfCorundum = 25758;
         public const uint DoubleDown = 25760;
         public const uint Hypervelocity = 25759;
+        // DT skills
+        public const uint Trajectory = 36934;
+        public const uint GreatNebula = 36935;
+        public const uint FatedBrand = 36936;
+        public const uint ReignOfBeasts = 36937;
+        public const uint NobleBlood = 36938;
+        public const uint LionHeart = 36939;
+        public const uint ReleaseRoyalGuard = 32068;
 
         #endregion
 
