@@ -182,12 +182,12 @@ public class MacroManager(JobViewWindow instance,
         {
             if (_handleAddingQTs) instance.AddHotkey(name, hkr);
 
-            _hotkeyDict.TryAdd(en.ToLower(), hkr);
+            _hotkeyDict.TryAdd(name, hkr);
             var cncmd = commandHandle + " " + name + "_hk";
             string encmd = "";
             if (!en.IsNullOrEmpty())
             {
-                _hotkeyDict.TryAdd(name, hkr);
+                _hotkeyDict.TryAdd(en.ToLower(), hkr);
                 encmd = commandHandle + " " + en.ToLower() + "_hk";
             }
             cmdList.Add(("Hotkey", cncmd, encmd));
