@@ -4,6 +4,8 @@ using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
 using AEAssist.Helper;
 using ECommons;
 using ElliotZ.Common;
+using ElliotZ.Common.Hotkey;
+using EZACR_Offline.Gnb.QtUI.Hotkey;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,22 +53,25 @@ public static class Qt
 
     public static readonly (string name, string ENname, IHotkeyResolver hkr)[] HKResolvers =
     [
-        ("超火", "Bolide", new IngressHK(IngressHK.CurrDir)),
+        ("超火", "Bolide", new HotKeyResolver(SpellsDef.Superbolide, SpellTargetType.Self, false)),
         ("亲疏", "Armslength", new HotKeyResolver(SpellsDef.ArmsLength, SpellTargetType.Self)),
-        ("极光", "Egress", new EgressHK(IngressHK.CurrDir)),
-        ("入境<t>", "Ingress<t>", new IngressHK(IngressHK.FaceTarget)),
-        ("出境<t>", "Egress<t>", new EgressHK(IngressHK.FaceTarget)),
-        ("入境<cam>", "Ingress<cam>", new IngressHK(IngressHK.FaceCam)),
-        ("出境<cam>", "Egress<cam>", new EgressHK(IngressHK.FaceCam)),
-        ("神秘纹", "Crest", new HotKeyResolver(SpellsDef.ArcaneCrest, SpellTargetType.Self)),
+        ("极光<me>", "Nebula<me>", new HotKeyResolver(SpellsDef.Nebula, SpellTargetType.Self)),
+        ("刚玉<me>", "HoC<me>", new HotKeyResolver(SpellsDef.HeartOfCorundum, SpellTargetType.Self)),
+        ("雪仇", "Reprisal", new HotKeyResolver(SpellsDef.Reprisal, SpellTargetType.Self)),
+        ("光之心", "HoL", new HotKeyResolver(SpellsDef.HeartofLight, SpellTargetType.Self)),
+        ("极光<2>", "Nebula<2>", new HotKeyResolver(SpellsDef.Nebula, SpellTargetType.Pm2)),
+        ("刚玉<2>", "HoC<2>", new HotKeyResolver(SpellsDef.HeartOfCorundum, SpellTargetType.Pm2)),
+        ("挑衅", "Voke", new HotKeyResolver(SpellsDef.Provoke, SpellTargetType.Target, false)),
+        ("退避<2>", "Shirk<2>", new HotKeyResolver(SpellsDef.Shirk, SpellTargetType.Pm2, false)),
         ("LB", "LB", new HotKeyResolver_LB()),
-        ("内丹", "SecondWind", new HotKeyResolver(SpellsDef.SecondWind, SpellTargetType.Self)),
-        ("浴血", "BloodBath", new HotKeyResolver(SpellsDef.Bloodbath, SpellTargetType.Self)),
-        ("牵制", "Feint", new HotKeyResolver(SpellsDef.Feint)),
-        ("真北", "TrueNorth", new HotKeyResolver(SpellsDef.TrueNorth, SpellTargetType.Self)),
-        ("播魂种", "Soulsow", new SoulSowHvstMnHK()),
+        ("插言", "Interject", new HotKeyResolver(SpellsDef.Interject, SpellTargetType.Target, false)),
+        ("下踢", "LowBlow", new HotKeyResolver(SpellsDef.LowBlow, SpellTargetType.Target)),
+        ("选自己", "TargetSelf", new SelectSelf()),
+        ("清理HPQ", "ClearHPQ", new ToiletFlusher()),
+        ("刚玉血量最低", "HoCLowest", new HoCLowest()),
         ("疾跑", "Sprint", new HotKeyResolver_疾跑()),
         ("爆发药", "Pot", new HotKeyResolver_Potion()),
+        ("一键减伤", "OneKeyMits", new OneKeyMits()),
     ];
 
     private static readonly List<(string cmdType, string CNCmd, string ENCmd)> cmdList = [];
@@ -98,16 +103,13 @@ public static class Qt
     {
         foreach (KeyValuePair<string, bool> qtState in GnbSettings.Instance.QtStates)
         {
-            if (qtState.Key is not ("爆发药" or
-                                    "智能AOE" or
-                                    "爆发药2分" or
-                                    "自动突进"))
+            if (qtState.Key is not "爆发药")
             {
                 Instance.SetQt(qtState.Key, qtState.Value);
             }
         }
 
-        if (GnbSettings.Instance.Debug) LogHelper.Print("除爆发药和智能AOE以外QT设置已重载");
+        if (GnbSettings.Instance.Debug) LogHelper.Print("除爆发药以外QT设置已重载");
     }
 
     public static void Build()
