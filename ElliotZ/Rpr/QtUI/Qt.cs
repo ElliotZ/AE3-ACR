@@ -56,8 +56,6 @@ public static class Qt
         ("爆发药", "Pot", new HotKeyResolver_Potion()),
     ];
 
-    private static readonly List<(string cmdType, string CNCmd, string ENCmd)> cmdList = [];
-
     public static void SaveQtStates()
     {
         string[] qtArray = Instance.GetQtArray();
@@ -101,35 +99,14 @@ public static class Qt
     {
         Instance = new JobViewWindow(RprSettings.Instance.JobViewSave, RprSettings.Instance.Save, "EZRpr");
         Instance.SetUpdateAction(OnUIUpdate);
-        macroMan = new MacroManager(Instance, "/EZRpr", QtKeys, HKResolvers, true);
-        
-        //macroMan.BuildCommandList();
-        //foreach ((string name, string en, bool defVal, string tooltip) in QtKeys)
-        //{
-        //    Instance.AddQt(name, defVal, tooltip);
-        //    var cncmd = RprHelper.TxtCmdHandle + " " + name + "_qt";
-        //    var encmd = RprHelper.TxtCmdHandle + " " + en.ToLower() + "_qt";
-        //    cmdList.Add(("QT", cncmd, encmd));
-        //}
 
-        //foreach ((string name, string en, IHotkeyResolver hkr) in HKResolvers)
-        //{
-        //    Instance.AddHotkey(name, hkr);
-        //    var cncmd = RprHelper.TxtCmdHandle + " " + name + "_hk";
-        //    var encmd = RprHelper.TxtCmdHandle + " " + en.ToLower() + "_hk";
-        //    cmdList.Add(("Hotkey", cncmd, encmd));
-        //}
+        macroMan = new MacroManager(Instance, "/EZRpr", QtKeys, HKResolvers, true);
 
         //其余tab窗口
         ReadmeTab.Build(Instance);
         SettingTab.Build(Instance);
         DevTab.Build(Instance);
 
-    }
-
-    public static List<(string cmdType, string CNCmd, string ENCmd)> CmdList()
-    {
-        return cmdList;
     }
 
     public static void OnUIUpdate()
