@@ -10,8 +10,8 @@ namespace ElliotZ.Rpr.QtUI;
 public static class Qt
 {
     public static JobViewWindow Instance { get; set; }
-
-    public static readonly (string name, string ENname, bool defval, string tooltip)[] QtKeys =
+    public static MacroManager macroMan;
+    public static readonly List<(string name, string ENname, bool defval, string tooltip)> QtKeys =
     [
         ("爆发药", "Pot", false, ""),
         ("爆发药2分", "Pot2min", true, ""),
@@ -36,7 +36,7 @@ public static class Qt
         ("自动突进", "AutoIngress", false, "只会在跳了之后能打到的时候跳，能用勾刃就不会跳"),
     ];
 
-    public static readonly (string name, string ENname, IHotkeyResolver hkr)[] HKResolvers =
+    public static readonly List<(string name, string ENname, IHotkeyResolver hkr)> HKResolvers =
     [
         ("入境", "Ingress", new IngressHK(IngressHK.CurrDir)),
         ("出境", "Egress", new EgressHK(IngressHK.CurrDir)),
@@ -101,21 +101,24 @@ public static class Qt
     {
         Instance = new JobViewWindow(RprSettings.Instance.JobViewSave, RprSettings.Instance.Save, "EZRpr");
         Instance.SetUpdateAction(OnUIUpdate);
-        foreach ((string name, string en, bool defVal, string tooltip) in QtKeys)
-        {
-            Instance.AddQt(name, defVal, tooltip);
-            var cncmd = RprHelper.TxtCmdHandle + " " + name + "_qt";
-            var encmd = RprHelper.TxtCmdHandle + " " + en.ToLower() + "_qt";
-            cmdList.Add(("QT", cncmd, encmd));
-        }
+        macroMan = new MacroManager(Instance, "/EZRpr", QtKeys, HKResolvers, true);
+        
+        //macroMan.BuildCommandList();
+        //foreach ((string name, string en, bool defVal, string tooltip) in QtKeys)
+        //{
+        //    Instance.AddQt(name, defVal, tooltip);
+        //    var cncmd = RprHelper.TxtCmdHandle + " " + name + "_qt";
+        //    var encmd = RprHelper.TxtCmdHandle + " " + en.ToLower() + "_qt";
+        //    cmdList.Add(("QT", cncmd, encmd));
+        //}
 
-        foreach ((string name, string en, IHotkeyResolver hkr) in HKResolvers)
-        {
-            Instance.AddHotkey(name, hkr);
-            var cncmd = RprHelper.TxtCmdHandle + " " + name + "_hk";
-            var encmd = RprHelper.TxtCmdHandle + " " + en.ToLower() + "_hk";
-            cmdList.Add(("Hotkey", cncmd, encmd));
-        }
+        //foreach ((string name, string en, IHotkeyResolver hkr) in HKResolvers)
+        //{
+        //    Instance.AddHotkey(name, hkr);
+        //    var cncmd = RprHelper.TxtCmdHandle + " " + name + "_hk";
+        //    var encmd = RprHelper.TxtCmdHandle + " " + en.ToLower() + "_hk";
+        //    cmdList.Add(("Hotkey", cncmd, encmd));
+        //}
 
         //其余tab窗口
         ReadmeTab.Build(Instance);
@@ -131,9 +134,10 @@ public static class Qt
 
     public static void OnUIUpdate()
     {
+        macroMan.UseToast2 = RprSettings.Instance.ShowToast;
         if (RprSettings.Instance.CommandWindowOpen)
         {
-            RprCmdWindow.Draw();
+            macroMan.DrawCommandWindow(ref RprSettings.Instance.CommandWindowOpen);
         }
     }
 }

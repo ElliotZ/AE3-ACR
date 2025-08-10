@@ -42,7 +42,7 @@ public static class SettingTab
                 ImGui.Text("动画锁长度(ms)");
                 ImGui.SetNextItemWidth(200f);
                 ImGui.SliderInt("(10-1000)", ref RprSettings.Instance.AnimLock, 10, 1000);
-                ImGui.PushStyleColor(ImGuiCol.Text, ImGui.ColorConvertFloat4ToU32(new System.Numerics.Vector4(1f, 1f, 0f, 1f)));
+                ImGui.PushStyleColor(ImGuiCol.Text, ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 0f, 1f)));
                 ImGui.Text("↑没装FuckAnimationLock或者类似插件的建议装一个，设置同样的数字。如果要三插的话这里也记得改。");
                 ImGui.Text("除了起手的爆发药三插以外本ACR无特定支持三插的技能逻辑，不回答相关问题");
                 ImGui.PopStyleColor();
