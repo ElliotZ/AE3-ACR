@@ -18,7 +18,7 @@ public class EventHandler : IRotationEventHandler
 {
     private MobPullHelper? mobPullHelper;
     //private static long _lastCheckTime = 0L;
-    private static bool _burstSettingsAltered = false;
+    //private static bool _burstSettingsAltered = false;
 
     public void OnResetBattle()
     {
@@ -78,22 +78,22 @@ public class EventHandler : IRotationEventHandler
             await SpellsDef.Soulsow.GetSpell().Cast();
         }
 
-        if (!Core.Resolve<MemApiDuty>().IsOver && Core.Resolve<MemApiDuty>().InMission)
-        {
-            if (Core.Resolve<MemApiDuty>().DutyMembersNumber() == 8 && RprSettings.Instance.NoBurst)
-            {
-                LogHelper.Print("检测到你在8人本开了“小怪低血量不交爆发”，为防止出错已自动为你关闭该设置。");
-                RprSettings.Instance.NoBurst = false;
-                _burstSettingsAltered = true;
-            }
-        }
+        //if (!Core.Resolve<MemApiDuty>().IsOver && Core.Resolve<MemApiDuty>().InMission)
+        //{
+        //    if (Core.Resolve<MemApiDuty>().DutyMembersNumber() == 8 && RprSettings.Instance.NoBurst)
+        //    {
+        //        LogHelper.Print("检测到你在8人本开了“小怪低血量不交爆发”，为防止出错已自动为你关闭该设置。");
+        //        RprSettings.Instance.NoBurst = false;
+        //        _burstSettingsAltered = true;
+        //    }
+        //}
 
-        if (Core.Resolve<MemApiDuty>().IsOver && _burstSettingsAltered)
-        {
-            LogHelper.Print("改变过“小怪低血量不交爆发”的设置，现在复原。");
-            RprSettings.Instance.NoBurst = true;
-            _burstSettingsAltered = false;
-        }
+        //if (Core.Resolve<MemApiDuty>().IsOver && _burstSettingsAltered)
+        //{
+        //    LogHelper.Print("改变过“小怪低血量不交爆发”的设置，现在复原。");
+        //    RprSettings.Instance.NoBurst = true;
+        //    _burstSettingsAltered = false;
+        //}
 
         StopHelper.StopActions(1000);
     }
@@ -149,8 +149,10 @@ public class EventHandler : IRotationEventHandler
         BattleData.Instance.AverageTTK = MobPullHelper.GetAverageTTKOfNearbyEnemies();
 
         if (RprSettings.Instance.NoBurst &&
+            Core.Resolve<MemApiDuty>().InMission &&
+            Core.Resolve<MemApiDuty>().DutyMembersNumber() != 8 &&
             !Core.Resolve<MemApiDuty>().InBossBattle &&  // exclude boss battles and msq ultima wep
-            !Core.Me.GetCurrTarget().IsDummy() &&
+            //!Core.Me.GetCurrTarget().IsDummy() &&
             Helper.GetTerritoyId != 1048 &&
             AI.Instance.BattleData.CurrBattleTimeInMs > 10000 &&
                 (BattleData.Instance.TotalHpPercentage < RprSettings.Instance.MinMobHpPercent ||

@@ -129,8 +129,9 @@ public class EventHandler : IRotationEventHandler
         BattleData.Instance.AverageTTK = MobPullHelper.GetAverageTTKOfNearbyEnemies();
 
         if (GnbSettings.Instance.NoBurst &&
+            Core.Resolve<MemApiDuty>().InMission &&
+            Core.Resolve<MemApiDuty>().DutyMembersNumber() != 8 &&
             !Core.Resolve<MemApiDuty>().InBossBattle &&  // exclude boss battles and msq ultima wep
-            !Core.Me.GetCurrTarget().IsDummy() &&
             Helper.GetTerritoyId != 1048 &&
             AI.Instance.BattleData.CurrBattleTimeInMs > 10000 &&
                 (BattleData.Instance.TotalHpPercentage < GnbSettings.Instance.MinMobHpPercent ||
