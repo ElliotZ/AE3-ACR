@@ -1,13 +1,7 @@
 ﻿using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.GUI;
-using ElliotZ.Rpr.QtUI;
 using ImGuiNET;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZACR_Offline.Gnb.QtUI;
 
@@ -135,6 +129,7 @@ public class SettingTab
                 ImGui.EndCombo();
             }
             ImGui.Checkbox("日随停手", ref GnbSettings.Instance.HandleStopMechs);
+            ImGui.Checkbox("小怪留爆发", ref GnbSettings.Instance.NoBurst);
             ImGui.Text("点击按钮设置为高难默认设置（超火减伤默认关闭 突进默认开启） ");
             if (ImGui.Button("高难设置"))
             {

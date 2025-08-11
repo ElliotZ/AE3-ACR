@@ -1,13 +1,6 @@
 ﻿using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Helper;
 using AEAssist.IO;
-using ElliotZ.Rpr;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZACR_Offline.Gnb;
 

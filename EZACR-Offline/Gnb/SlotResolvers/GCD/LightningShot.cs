@@ -5,11 +5,6 @@ using AEAssist.Define;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using EZACR_Offline.Gnb.QtUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZACR_Offline.Gnb.SlotResolvers.GCD;
 
@@ -39,10 +34,10 @@ public class LightningShot : ISlotResolver
             return -5;
         }
 
-        if (Core.Me.Distance(Core.Me.GetCurrTarget(), DistanceMode.IgnoreHitbox) > 
-                (float)(SettingMgr.GetSetting<GeneralSettings>().AttackRange + 2) && 
-            Core.Me.Distance(Core.Me.GetCurrTarget(), DistanceMode.IgnoreHitbox) < 
-                (float)(SettingMgr.GetSetting<GeneralSettings>().AttackRange + 17) && 
+        if (Core.Me.Distance(Core.Me.GetCurrTarget(), DistanceMode.IgnoreHitbox) >
+                (float)(SettingMgr.GetSetting<GeneralSettings>().AttackRange + 2) &&
+            Core.Me.Distance(Core.Me.GetCurrTarget(), DistanceMode.IgnoreHitbox) <
+                (float)(SettingMgr.GetSetting<GeneralSettings>().AttackRange + 17) &&
             Qt.Instance.GetQt("闪雷弹"))
         {
             return 0;

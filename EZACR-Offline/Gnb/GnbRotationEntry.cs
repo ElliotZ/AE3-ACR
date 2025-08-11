@@ -8,11 +8,6 @@ using EZACR_Offline.Gnb.SlotResolvers.GCD;
 using EZACR_Offline.Gnb.SlotResolvers.Mits;
 using EZACR_Offline.Gnb.SlotResolvers.oGCD;
 using EZACR_Offline.Gnb.Triggers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZACR_Offline.Gnb;
 
