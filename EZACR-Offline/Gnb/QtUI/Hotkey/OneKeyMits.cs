@@ -1,11 +1,6 @@
 ﻿using AEAssist.CombatRoutine;
 using AEAssist.Helper;
 using ElliotZ.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZACR_Offline.Gnb.QtUI.Hotkey;
 

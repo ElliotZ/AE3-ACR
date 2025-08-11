@@ -7,11 +7,6 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using EZACR_Offline.Gnb.QtUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZACR_Offline.Gnb.SlotResolvers.GCD;
 
@@ -28,8 +23,8 @@ public class Base : ISlotResolver
             int nearbyEnemyCount2 = TargetHelper.GetNearbyEnemyCount(Core.Me, 5, 5);
             if (Qt.Instance.GetQt("自动拉怪") && PartyHelper.Party.Count <= 4)
             {
-                if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 16141 && 
-                        Core.Me.Level >= 40 && 
+                if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 16141 &&
+                        Core.Me.Level >= 40 &&
                         nearbyEnemyCount >= 2)
                 {
                     return 16149u.GetSpell();
@@ -38,12 +33,12 @@ public class Base : ISlotResolver
             }
             if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 16141 && Core.Me.Level >= 40)
             {
-                if (Core.Me.Level < 88 && 
+                if (Core.Me.Level < 88 &&
                         Core.Resolve<JobApi_GunBreaker>().Ammo < 2)
                 {
                     return 16149u.GetSpell();
                 }
-                if (Core.Me.Level >= 88 && 
+                if (Core.Me.Level >= 88 &&
                         Core.Resolve<JobApi_GunBreaker>().Ammo < 3)
                 {
                     return 16149u.GetSpell();
@@ -95,39 +90,39 @@ public class Base : ISlotResolver
         //}
 
         if (!Qt.Instance.GetQt("使用基础Gcd")) { return -3; }
-        if (Core.Me.Distance(Core.Me.GetCurrTarget(), DistanceMode.IgnoreHitbox) > 
+        if (Core.Me.Distance(Core.Me.GetCurrTarget(), DistanceMode.IgnoreHitbox) >
                 (float)SettingMgr.GetSetting<GeneralSettings>().AttackRange)
         {
             return -1;
-        } 
-        if (Qt.Instance.GetQt("自动拉怪")) { return 1; } 
+        }
+        if (Qt.Instance.GetQt("自动拉怪")) { return 1; }
         if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 16146) { return -20; } // while in gnashing fang
         if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 16147) { return -30; }
 
         if (Core.Me.Level >= 60)
         {
-            if (Core.Resolve<JobApi_GunBreaker>().Ammo == 3 && 
-                Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 16139 && 
-                Qt.Instance.GetQt("爆发") && 
-                Qt.Instance.GetQt("子弹连") && 
+            if (Core.Resolve<JobApi_GunBreaker>().Ammo == 3 &&
+                Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 16139 &&
+                Qt.Instance.GetQt("爆发") &&
+                Qt.Instance.GetQt("子弹连") &&
                 16146u.CoolDownInGCDs(1))  // gnashing fang
             {
                 return -5;
-            } 
-            if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd && 
-                Core.Resolve<JobApi_GunBreaker>().Ammo >= 2 && 
-                Qt.Instance.GetQt("爆发") && 
-                25760u.GetSpell().Cooldown.TotalMilliseconds > 0.0 && 
+            }
+            if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd &&
+                Core.Resolve<JobApi_GunBreaker>().Ammo >= 2 &&
+                Qt.Instance.GetQt("爆发") &&
+                25760u.GetSpell().Cooldown.TotalMilliseconds > 0.0 &&
                 25760u.GetSpell().Cooldown.TotalMilliseconds <= 500.0)  // double down
             {
                 return -55;
             }
 
-            if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd && 
-                Core.Resolve<JobApi_GunBreaker>().Ammo >= 1 
-                && Qt.Instance.GetQt("爆发") && 
-                Qt.Instance.GetQt("子弹连") && 
-                16146u.GetSpell().Cooldown.TotalMilliseconds > 0.0 && 
+            if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd &&
+                Core.Resolve<JobApi_GunBreaker>().Ammo >= 1
+                && Qt.Instance.GetQt("爆发") &&
+                Qt.Instance.GetQt("子弹连") &&
+                16146u.GetSpell().Cooldown.TotalMilliseconds > 0.0 &&
                 16146u.GetSpell().Cooldown.TotalMilliseconds <= 500.0)  // gnashing fang
             {
                 return -54;

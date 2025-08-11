@@ -6,15 +6,10 @@ using AEAssist.DynamicComplie;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using EZACR_Offline.Gnb.QtUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZACR_Offline.Gnb.SlotResolvers.FixedSeq;
 
-public class Opener100_3gcd_mk2: IOpener, ISlotSequence, IScript
+public class Opener100_3gcd_mk2 : IOpener, ISlotSequence, IScript
 {
     public List<Action<Slot>> Sequence { get; } =
     [

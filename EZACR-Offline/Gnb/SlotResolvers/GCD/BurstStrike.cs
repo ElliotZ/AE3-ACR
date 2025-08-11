@@ -7,11 +7,6 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using EZACR_Offline.Gnb.QtUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZACR_Offline.Gnb.SlotResolvers.GCD;
 
@@ -21,15 +16,15 @@ public class BurstStrike : ISlotResolver
 
     public static Spell GetSpell()
     {
-        if ((Qt.Instance.GetQt("AOE") || 
-            Qt.Instance.GetQt("强制变命运")) && 
+        if ((Qt.Instance.GetQt("AOE") ||
+            Qt.Instance.GetQt("强制变命运")) &&
             Core.Me.Level >= 72)
         {
             int nearbyEnemyCount = TargetHelper.GetNearbyEnemyCount(Core.Me, 8, 8);
             int nearbyEnemyCount2 = TargetHelper.GetNearbyEnemyCount(Core.Me, 5, 5);
-            if ((nearbyEnemyCount2 >= 2 || 
-                    (!Qt.Instance.GetQt("强制变命运") && 
-                        nearbyEnemyCount >= 2)) && 
+            if ((nearbyEnemyCount2 >= 2 ||
+                    (!Qt.Instance.GetQt("强制变命运") &&
+                        nearbyEnemyCount >= 2)) &&
                     16163u.GetSpell().IsReadyWithCanCast())
             {
                 return 16163u.GetSpell();
@@ -58,49 +53,49 @@ public class BurstStrike : ISlotResolver
         //}
 
         if (Core.Me.Level < 30) { return -50; }
-        if (Qt.Instance.GetQt("自动拉怪")) { return -1; } 
-        if (Core.Me.Distance(Core.Me.GetCurrTarget(), DistanceMode.IgnoreHitbox) > 
+        if (Qt.Instance.GetQt("自动拉怪")) { return -1; }
+        if (Core.Me.Distance(Core.Me.GetCurrTarget(), DistanceMode.IgnoreHitbox) >
                 (float)SettingMgr.GetSetting<GeneralSettings>().AttackRange)
         {
             return -30;
         }
 
-        if (Core.Resolve<JobApi_GunBreaker>().Ammo <= 0) { return -20; } 
-        if (Core.Resolve<JobApi_GunBreaker>().Ammo > 0 && 
-                Qt.Instance.GetQt("倾泻爆发")) 
+        if (Core.Resolve<JobApi_GunBreaker>().Ammo <= 0) { return -20; }
+        if (Core.Resolve<JobApi_GunBreaker>().Ammo > 0 &&
+                Qt.Instance.GetQt("倾泻爆发"))
         {
             return 10;
-        } 
-        if (!Qt.Instance.GetQt("爆发击")) { return -10; } 
+        }
+        if (!Qt.Instance.GetQt("爆发击")) { return -10; }
 
         if (!Qt.Instance.GetQt("爆发"))
         {
             if (Core.Me.Level >= 88 && Core.Resolve<JobApi_GunBreaker>().Ammo == 3)
             {
-                if (nearbyEnemyCount >= 2 && 
-                    Qt.Instance.GetQt("AOE") && 
+                if (nearbyEnemyCount >= 2 &&
+                    Qt.Instance.GetQt("AOE") &&
                     Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 16141)
                 {
                     return 122;
-                } 
+                }
                 if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 16139)
                 {
                     return 123;
                 }
-            } 
+            }
             if (Core.Me.Level < 88 && Core.Resolve<JobApi_GunBreaker>().Ammo == 2)
             {
-                if (nearbyEnemyCount >= 2 && 
-                    Qt.Instance.GetQt("AOE") && 
+                if (nearbyEnemyCount >= 2 &&
+                    Qt.Instance.GetQt("AOE") &&
                     Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 16141)
                 {
                     return 124;
-                } 
+                }
                 if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 16139)
                 {
                     return 125;
                 }
-            } 
+            }
             return -10;
         }
 
@@ -130,17 +125,17 @@ public class BurstStrike : ISlotResolver
             }
         }
 
-        if (GnbSettings.Instance.ACRMode == "HighEnd5" && 
-            Core.Resolve<JobApi_GunBreaker>().Ammo > 1 && 
-            16138u.CoolDownInGCDs(2) && 
+        if (GnbSettings.Instance.ACRMode == "HighEnd5" &&
+            Core.Resolve<JobApi_GunBreaker>().Ammo > 1 &&
+            16138u.CoolDownInGCDs(2) &&
             16164u.CoolDownInGCDs(6))
         {
             return 500;
         }
 
-        if (GnbSettings.Instance.ACRMode == "HighEnd2" && 
-            Core.Resolve<JobApi_GunBreaker>().Ammo > 1 && 
-            16138u.CoolDownInGCDs(2) && 
+        if (GnbSettings.Instance.ACRMode == "HighEnd2" &&
+            Core.Resolve<JobApi_GunBreaker>().Ammo > 1 &&
+            16138u.CoolDownInGCDs(2) &&
             16164u.CoolDownInGCDs(6))
         {
             return 520;
@@ -148,82 +143,82 @@ public class BurstStrike : ISlotResolver
 
         if (Core.Me.Level >= 91)
         {
-            if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 16139 && 
-                16138u.GetSpell().IsReadyWithCanCast() && 
-                25760u.GetSpell().IsReadyWithCanCast() && 
-                16146u.GetSpell().IsReadyWithCanCast() && 
+            if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 16139 &&
+                16138u.GetSpell().IsReadyWithCanCast() &&
+                25760u.GetSpell().IsReadyWithCanCast() &&
+                16146u.GetSpell().IsReadyWithCanCast() &&
                 Core.Resolve<JobApi_GunBreaker>().Ammo == 3)
             {
                 return 985;
             }
 
-            if (Core.Resolve<JobApi_GunBreaker>().Ammo == 1 && 
-                16146u.CoolDownInGCDs(2) && 
-                Qt.Instance.GetQt("子弹连") && 
-                16164u.GetSpell().IsReadyWithCanCast() && 
+            if (Core.Resolve<JobApi_GunBreaker>().Ammo == 1 &&
+                16146u.CoolDownInGCDs(2) &&
+                Qt.Instance.GetQt("子弹连") &&
+                16164u.GetSpell().IsReadyWithCanCast() &&
                 Qt.Instance.GetQt("血壤"))
             {
                 return 530;
             }
 
-            if (Core.Resolve<JobApi_GunBreaker>().Ammo == 3 && 
-                Core.Me.HasAura(1831u) && 
+            if (Core.Resolve<JobApi_GunBreaker>().Ammo == 3 &&
+                Core.Me.HasAura(1831u) &&
                 !16146u.CoolDownInGCDs(1))
             {
                 return 533;
             }
 
-            if (Core.Resolve<JobApi_GunBreaker>().Ammo == 1 && 
-                16164u.CoolDownInGCDs(2) && 
+            if (Core.Resolve<JobApi_GunBreaker>().Ammo == 1 &&
+                16164u.CoolDownInGCDs(2) &&
                 Qt.Instance.GetQt("血壤"))
             {
                 return 78;
             }
 
-            if (Core.Resolve<JobApi_GunBreaker>().Ammo > 0 && 
-                Core.Me.HasAura(1831u) && 
-                !25760u.CoolDownInGCDs(5) && 
-                Qt.Instance.GetQt("倍攻") && 
-                !16146u.CoolDownInGCDs(1) && 
-                (!36937u.GetSpell().IsReadyWithCanCast() || 
-                !36938u.GetSpell().IsReadyWithCanCast() || 
+            if (Core.Resolve<JobApi_GunBreaker>().Ammo > 0 &&
+                Core.Me.HasAura(1831u) &&
+                !25760u.CoolDownInGCDs(5) &&
+                Qt.Instance.GetQt("倍攻") &&
+                !16146u.CoolDownInGCDs(1) &&
+                (!36937u.GetSpell().IsReadyWithCanCast() ||
+                !36938u.GetSpell().IsReadyWithCanCast() ||
                 !36939u.GetSpell().IsReadyWithCanCast()))
             {
                 return 9;
             }
 
-            if (16146u.CoolDownInGCDs(2) && 
-                Qt.Instance.GetQt("子弹连") && 
-                25760u.CoolDownInGCDs(1) && 
-                Qt.Instance.GetQt("倍攻") && 
+            if (16146u.CoolDownInGCDs(2) &&
+                Qt.Instance.GetQt("子弹连") &&
+                25760u.CoolDownInGCDs(1) &&
+                Qt.Instance.GetQt("倍攻") &&
                 Core.Resolve<JobApi_GunBreaker>().Ammo == 2)
             {
                 return -50;
             }
 
-            if (Core.Resolve<JobApi_GunBreaker>().Ammo > 0 
-                && !25760u.CoolDownInGCDs(5) && 
-                !16146u.CoolDownInGCDs(2) && 
-                Core.Me.HasAura(49u) && 
+            if (Core.Resolve<JobApi_GunBreaker>().Ammo > 0
+                && !25760u.CoolDownInGCDs(5) &&
+                !16146u.CoolDownInGCDs(2) &&
+                Core.Me.HasAura(49u) &&
                 Qt.Instance.GetQt("爆发药卸豆子"))
             {
                 return 211;
             }
 
-            if (Core.Resolve<JobApi_GunBreaker>().Ammo > 0 
-                && (!25760u.CoolDownInGCDs(5) || 
-                (!Qt.Instance.GetQt("倍攻") && 
-                (!16146u.CoolDownInGCDs(2) || 
-                !Qt.Instance.GetQt("子弹连")))) && 
+            if (Core.Resolve<JobApi_GunBreaker>().Ammo > 0
+                && (!25760u.CoolDownInGCDs(5) ||
+                (!Qt.Instance.GetQt("倍攻") &&
+                (!16146u.CoolDownInGCDs(2) ||
+                !Qt.Instance.GetQt("子弹连")))) &&
                 Qt.Instance.GetQt("强制爆发击"))
             {
                 return 211;
             }
         }
 
-        if (Core.Me.Level >= 100 && 
-            (36937u.GetSpell().IsReadyWithCanCast() || 
-            36938u.GetSpell().IsReadyWithCanCast() || 
+        if (Core.Me.Level >= 100 &&
+            (36937u.GetSpell().IsReadyWithCanCast() ||
+            36938u.GetSpell().IsReadyWithCanCast() ||
             36939u.GetSpell().IsReadyWithCanCast()))
         {
             return -100;
@@ -256,8 +251,8 @@ public class BurstStrike : ISlotResolver
 
         if (Core.Me.Level >= 88 && Core.Resolve<JobApi_GunBreaker>().Ammo == 3)
         {
-            if (nearbyEnemyCount >= 2 && 
-                Qt.Instance.GetQt("AOE") && 
+            if (nearbyEnemyCount >= 2 &&
+                Qt.Instance.GetQt("AOE") &&
                 Core.Resolve<MemApiSpell>().GetLastComboSpellId() != 16141)
             {
                 return -5;
@@ -269,13 +264,13 @@ public class BurstStrike : ISlotResolver
             }
         }
 
-        if (Core.Me.Level < 88 && 
-            Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() != 777 && 
+        if (Core.Me.Level < 88 &&
+            Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() != 777 &&
             Core.Resolve<JobApi_GunBreaker>().Ammo == 2)
         {
-            if (nearbyEnemyCount >= 2 && 
-                Qt.Instance.GetQt("AOE") && 
-                Core.Me.Level >= 72 && 
+            if (nearbyEnemyCount >= 2 &&
+                Qt.Instance.GetQt("AOE") &&
+                Core.Me.Level >= 72 &&
                 Core.Resolve<MemApiSpell>().GetLastComboSpellId() != 16141)
             {
                 return -5;

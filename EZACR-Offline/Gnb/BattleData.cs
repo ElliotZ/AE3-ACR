@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EZACR_Offline.Gnb;
+﻿namespace EZACR_Offline.Gnb;
 
 public class BattleData
 {

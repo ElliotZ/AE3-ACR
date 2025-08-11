@@ -7,11 +7,6 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using EZACR_Offline.Gnb.QtUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZACR_Offline.Gnb.SlotResolvers.GCD;
 
@@ -70,16 +65,16 @@ public class GnashingFang : ISlotResolver
         //    return -2;
         //}
 
-        if (Core.Resolve<MemApiSpell>().CheckActionChange(36937u) == 36938 || 
+        if (Core.Resolve<MemApiSpell>().CheckActionChange(36937u) == 36938 ||
             Core.Resolve<MemApiSpell>().CheckActionChange(36937u) == 36939)
         {
             return -25;
         }
 
-        if (Core.Me.Level < 100 && 
-            25760u.IsUnlock() && 
-            Qt.Instance.GetQt("倍攻") && 
-            (25760u.GetSpell().IsReadyWithCanCast() || 
+        if (Core.Me.Level < 100 &&
+            25760u.IsUnlock() &&
+            Qt.Instance.GetQt("倍攻") &&
+            (25760u.GetSpell().IsReadyWithCanCast() ||
             25760u.CoolDownInGCDs(3)))
         {
             return -4;
@@ -87,20 +82,20 @@ public class GnashingFang : ISlotResolver
 
         if (Core.Me.Level >= 100)
         {
-            if (25760u.GetSpell().IsReadyWithCanCast() && 
-                Qt.Instance.GetQt("倍攻") && 
-                Core.Resolve<MemApiSpell>().CheckActionChange(16146u) == 16147 && 
+            if (25760u.GetSpell().IsReadyWithCanCast() &&
+                Qt.Instance.GetQt("倍攻") &&
+                Core.Resolve<MemApiSpell>().CheckActionChange(16146u) == 16147 &&
                 Core.Resolve<JobApi_GunBreaker>().Ammo >= 1)
             {
                 return -8;
             }
-            if (25760u.CoolDownInGCDs(1) && 
-                Qt.Instance.GetQt("倍攻") && 
-                (Core.Me.HasAura(1831u) || 
-                Qt.Instance.GetQt("无视无情")) && 
-                Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 16139 && 
-                Core.Resolve<JobApi_GunBreaker>().Ammo == 1 && 
-                !16147u.GetSpell().IsReadyWithCanCast() && 
+            if (25760u.CoolDownInGCDs(1) &&
+                Qt.Instance.GetQt("倍攻") &&
+                (Core.Me.HasAura(1831u) ||
+                Qt.Instance.GetQt("无视无情")) &&
+                Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 16139 &&
+                Core.Resolve<JobApi_GunBreaker>().Ammo == 1 &&
+                !16147u.GetSpell().IsReadyWithCanCast() &&
                 !16150u.GetSpell().IsReadyWithCanCast())
             {
                 return -9;
@@ -109,14 +104,14 @@ public class GnashingFang : ISlotResolver
 
         if (!16146u.GetSpell().IsReadyWithCanCast())
         {
-            if (16147u.GetSpell().IsReadyWithCanCast() && 
-                (!25760u.GetSpell().IsReadyWithCanCast() || 
+            if (16147u.GetSpell().IsReadyWithCanCast() &&
+                (!25760u.GetSpell().IsReadyWithCanCast() ||
                 !Qt.Instance.GetQt("倍攻")))
             {
                 return 155;
             }
-            if (16150u.GetSpell().IsReadyWithCanCast() && 
-                (!25760u.GetSpell().IsReadyWithCanCast() || 
+            if (16150u.GetSpell().IsReadyWithCanCast() &&
+                (!25760u.GetSpell().IsReadyWithCanCast() ||
                 !Qt.Instance.GetQt("倍攻")))
             {
                 return 156;
@@ -125,9 +120,9 @@ public class GnashingFang : ISlotResolver
         }
 
         int nearbyEnemyCount = TargetHelper.GetNearbyEnemyCount(Core.Me, 5, 5);
-        if (Qt.Instance.GetQt("倾泻爆发") && 
-            Core.Resolve<JobApi_GunBreaker>().Ammo > 0 && 
-            nearbyEnemyCount < 3 && 
+        if (Qt.Instance.GetQt("倾泻爆发") &&
+            Core.Resolve<JobApi_GunBreaker>().Ammo > 0 &&
+            nearbyEnemyCount < 3 &&
             Core.Me.Level >= 72)
         {
             return 10;
@@ -143,9 +138,9 @@ public class GnashingFang : ISlotResolver
             return -9;
         }
 
-        if (16138u.CoolDownInGCDs(2) && 
-            !Qt.Instance.GetQt("无视无情") && 
-            !16147u.GetSpell().IsReadyWithCanCast() && 
+        if (16138u.CoolDownInGCDs(2) &&
+            !Qt.Instance.GetQt("无视无情") &&
+            !16147u.GetSpell().IsReadyWithCanCast() &&
             !16150u.GetSpell().IsReadyWithCanCast())
         {
             return -5;

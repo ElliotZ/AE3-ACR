@@ -27,6 +27,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Rdm\**" />
+	  <EmbeddedResource Remove="Rdm\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Reference Include="AEAssist">
 			<HintPath>$(AEAssistLibPath)AEAssist.dll</HintPath>
 			<Private>False</Private>

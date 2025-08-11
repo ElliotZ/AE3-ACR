@@ -3,14 +3,8 @@ using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
-using ElliotZ.Rpr.QtUI;
 using ImGuiNET;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZACR_Offline.Gnb.QtUI;
 
@@ -29,7 +23,7 @@ public class DevTab
             ImGui.Text($"小队DPS数量：{PartyHelper.CastableDps.Count}");
             ImGui.Text($"小队奶妈数量：{PartyHelper.CastableHealers.Count}");
             ImGui.Separator();
-            ImGui.TextColored(new Vector4(0.2f, 0.8f, 0.8f, 1f), "当前起手式: " + 
+            ImGui.TextColored(new Vector4(0.2f, 0.8f, 0.8f, 1f), "当前起手式: " +
                                   GetOpenerName(GnbSettings.Instance.opener));
             try
             {
@@ -59,7 +53,7 @@ public class DevTab
             try
             {
                 bool flag = Core.Me.HasAura(1833u);
-                ImGui.TextColored(flag ? new Vector4(0f, 1f, 0f, 1f) : new Vector4(1f, 0f, 0f, 1f), 
+                ImGui.TextColored(flag ? new Vector4(0f, 1f, 0f, 1f) : new Vector4(1f, 0f, 0f, 1f),
                                   "盾姿状态: " + (flag ? "已开启" : "未开启"));
             }
             catch (Exception ex2)
@@ -71,13 +65,13 @@ public class DevTab
             ImGui.TextColored(new Vector4(0.8f, 0.8f, 0.2f, 1f), "当前盾姿配置状态:");
             ImGui.Text("自动盾姿(仅日随外起手判断): ");
             ImGui.SameLine();
-            ImGui.TextColored(GnbSettings.Instance.倒计时自动盾姿 ? 
-                                  new Vector4(0f, 1f, 0f, 1f) : new Vector4(1f, 0f, 0f, 1f), 
+            ImGui.TextColored(GnbSettings.Instance.倒计时自动盾姿 ?
+                                  new Vector4(0f, 1f, 0f, 1f) : new Vector4(1f, 0f, 0f, 1f),
                               GnbSettings.Instance.倒计时自动盾姿 ? "已启用" : "已禁用");
             ImGui.Text("ST自动关盾: ");
             ImGui.SameLine();
-            ImGui.TextColored(GnbSettings.Instance.倒计时是否ST关盾姿 ? 
-                                  new Vector4(0f, 1f, 0f, 1f) : new Vector4(1f, 0f, 0f, 1f), 
+            ImGui.TextColored(GnbSettings.Instance.倒计时是否ST关盾姿 ?
+                                  new Vector4(0f, 1f, 0f, 1f) : new Vector4(1f, 0f, 0f, 1f),
                               GnbSettings.Instance.倒计时是否ST关盾姿 ? "已启用" : "已禁用");
             ImGui.TreePop();
 

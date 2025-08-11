@@ -1,20 +1,12 @@
 ﻿using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
-using AEAssist.CombatRoutine.Module.Target;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
-using Dalamud.Game.ClientState.Statuses;
 using ElliotZ.Common;
-using ElliotZ.Rpr;
 using EZACR_Offline.Gnb.QtUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZACR_Offline.Gnb;
 
@@ -28,6 +20,7 @@ public class EventHandler : IRotationEventHandler
 
     public async Task OnPreCombat()
     {
+        Qt.LoadQtStatesNoPot();
         if (GnbSettings.Instance.UsePotion && GnbSettings.Instance.ACRMode != "Normal")
         {
             Qt.Instance.NewDefault("自动拉怪", newDefault: false);
@@ -69,7 +62,12 @@ public class EventHandler : IRotationEventHandler
     {
         BattleData.Instance = new BattleData();
         TimerReset = false;
-        if (GnbSettings.Instance.自动拉怪 && GnbSettings.Instance.ACRMode == "Normal")
+
+        Qt.LoadQtStatesNoPot();
+        if (GnbSettings.Instance.自动拉怪 &&
+            GnbSettings.Instance.ACRMode == "Normal" &&
+            Core.Resolve<MemApiDuty>().InMission &&
+            Core.Resolve<MemApiDuty>().DutyMembersNumber() is 4 or 24)
         {
             Qt.Instance.NewDefault("自动拉怪", newDefault: true);
             Qt.Instance.SetQt("自动拉怪", qtValue: true);
@@ -97,9 +95,9 @@ public class EventHandler : IRotationEventHandler
     public void OnBattleUpdate(int currTimeInMs)
     {
         IBattleChara? currTarget = Core.Me.GetCurrTarget();
-        if (currTarget != null && 
-                currTarget.IsBoss() && 
-                !Core.Me.GetCurrTarget().IsDummy() && 
+        if (currTarget != null &&
+                currTarget.IsBoss() &&
+                !Core.Me.GetCurrTarget().IsDummy() &&
                 Qt.Instance.GetQt("自动拉怪"))
         {
             Qt.Instance.NewDefault("自动拉怪", newDefault: false);

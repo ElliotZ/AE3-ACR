@@ -5,11 +5,6 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using EZACR_Offline.Gnb.QtUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZACR_Offline.Gnb.SlotResolvers.GCD;
 
@@ -36,10 +31,10 @@ public class DoubleDown : ISlotResolver
         //    return -152;
         //}
 
-        if (Core.Me.Level < 90) { return -5;  } 
-        if (Qt.Instance.GetQt("自动拉怪")) { return -1; } 
-        if (!25760u.GetSpell().IsReadyWithCanCast()) { return -3; } 
-        if (Core.Resolve<JobApi_GunBreaker>().Ammo < 1) { return -2; } 
+        if (Core.Me.Level < 90) { return -5; }
+        if (Qt.Instance.GetQt("自动拉怪")) { return -1; }
+        if (!25760u.GetSpell().IsReadyWithCanCast()) { return -3; }
+        if (Core.Resolve<JobApi_GunBreaker>().Ammo < 1) { return -2; }
         if (Core.Me.Distance(Core.Me.GetCurrTarget(), DistanceMode.IgnoreHitbox) > 5f) { return -4; }
 
         //if (!战斗爽Helper.战斗爽())

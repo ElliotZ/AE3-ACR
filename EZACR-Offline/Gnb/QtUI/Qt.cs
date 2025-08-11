@@ -2,15 +2,9 @@
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
 using AEAssist.Helper;
-using ECommons;
 using ElliotZ.Common;
 using ElliotZ.Common.Hotkey;
 using EZACR_Offline.Gnb.QtUI.Hotkey;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZACR_Offline.Gnb.QtUI;
 

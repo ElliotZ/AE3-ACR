@@ -1,11 +1,6 @@
 ﻿using EZACR_Offline.Gnb.QtUI;
 using ImGuiNET;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZACR_Offline.Gnb.Triggers;
 

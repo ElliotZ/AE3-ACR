@@ -5,11 +5,6 @@ using AEAssist.Define;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using EZACR_Offline.Gnb.QtUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZACR_Offline.Gnb.SlotResolvers.oGCD;
 
