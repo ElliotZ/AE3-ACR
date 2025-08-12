@@ -51,7 +51,7 @@ public class GnbSettings
         QtUnVisibleList = []
     };
 
-    public bool UsePotion = false;
+    //public bool UsePotion = false;
     public bool CommandWindowOpen = true;
     public bool HandleStopMechs = true;
     public bool NoBurst = true;
