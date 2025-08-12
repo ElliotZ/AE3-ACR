@@ -1,6 +1,7 @@
 ﻿using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.GUI;
+
 using ImGuiNET;
 
 namespace EZACR_Offline.Gnb.QtUI;
@@ -130,6 +131,15 @@ public class SettingTab
             }
             ImGui.Checkbox("日随停手", ref GnbSettings.Instance.HandleStopMechs);
             ImGui.Checkbox("小怪留爆发", ref GnbSettings.Instance.NoBurst);
+            ImGui.Separator();
+            //ImGui.Checkbox("自动重置QT", ref GnbSettings.Instance.RestoreQtSet);
+            //ImGui.SameLine();
+            if (ImGui.Button("记录当前QT设置"))
+            {
+                Qt.SaveQtStates();
+            }
+            ImGui.Text("会从当前记录过的QT设置重置，爆发药、爆发药2分、智能AOE以及自动突进这几个QT不会被重置。");
+            ImGui.Separator();
             ImGui.Text("点击按钮设置为高难默认设置（超火减伤默认关闭 突进默认开启） ");
             if (ImGui.Button("高难设置"))
             {

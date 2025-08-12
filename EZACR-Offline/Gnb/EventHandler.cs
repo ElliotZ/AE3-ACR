@@ -21,10 +21,17 @@ public class EventHandler : IRotationEventHandler
     public async Task OnPreCombat()
     {
         Qt.LoadQtStatesNoPot();
-        if (GnbSettings.Instance.UsePotion && GnbSettings.Instance.ACRMode != "Normal")
+        if (GnbSettings.Instance.ACRMode != "Normal")
         {
             Qt.Instance.NewDefault("自动拉怪", newDefault: false);
             Qt.Instance.SetQt("自动拉怪", qtValue: false);
+        }
+        else if (GnbSettings.Instance.自动拉怪 &&
+                    Core.Resolve<MemApiDuty>().InMission &&
+                    Core.Resolve<MemApiDuty>().DutyMembersNumber() is 4 or 24)
+        {
+            Qt.Instance.NewDefault("自动拉怪", newDefault: true);
+            Qt.Instance.SetQt("自动拉怪", qtValue: true);
         }
 
         StopHelper.StopActions(1000);
@@ -100,7 +107,7 @@ public class EventHandler : IRotationEventHandler
                 !Core.Me.GetCurrTarget().IsDummy() &&
                 Qt.Instance.GetQt("自动拉怪"))
         {
-            Qt.Instance.NewDefault("自动拉怪", newDefault: false);
+            //Qt.Instance.NewDefault("自动拉怪", newDefault: false);
             Qt.Instance.SetQt("自动拉怪", qtValue: false);
         }
 
