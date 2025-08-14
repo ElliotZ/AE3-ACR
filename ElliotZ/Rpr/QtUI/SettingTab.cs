@@ -48,6 +48,7 @@ public static class SettingTab
                 ImGui.PopStyleColor();
                 ImGui.Checkbox("读条技能施放忽略移动状态（移动中也会使用）", ref RprSettings.Instance.ForceCast);
                 ImGui.Checkbox("Hotkeys使用强制队列（可能会造成卡GCD）", ref RprSettings.Instance.ForceNextSlotsOnHKs);
+                ImGui.Text("设置之后需要保存设置并重新加载ACR生效");
                 ImGui.Separator();
                 ImGui.Checkbox("真北期间不绘制身位", ref RprSettings.Instance.NoPosDrawInTN);
                 string PosStyle = RprSettings.Instance.PosDrawStyle switch
