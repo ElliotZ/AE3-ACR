@@ -6,7 +6,6 @@ using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
 using ElliotZ.Common;
-using ElliotZ.Rpr;
 using EZACR_Offline.Gnb.QtUI;
 
 namespace EZACR_Offline.Gnb;
