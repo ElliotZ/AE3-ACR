@@ -108,7 +108,8 @@ public class BloodStalk : ISlotResolver
             if (!Helper.AuraTimerMoreThan(AurasDef.TrueNorth,
                                   BattleData.Instance.GcdDuration - GCDHelper.GetGCDCooldown()) &&
                     Qt.Instance.GetQt("真北") && Qt.Instance.GetQt("真北优化") &&
-                    Core.Me.GetCurrTarget().HasPositional() &&
+                    (Core.Me.GetCurrTarget() is not null &&
+                    Core.Me.GetCurrTarget()!.HasPositional()) &&
                     !SpellsDef.TrueNorth.IsMaxChargeReady(1.8f) &&
                     ((Core.Me.HasAura(AurasDef.EnhancedGallows) && !Helper.AtRear) ||
                         (Core.Me.HasAura(AurasDef.EnhancedGibbet) && !Helper.AtFlank)))  // &&
