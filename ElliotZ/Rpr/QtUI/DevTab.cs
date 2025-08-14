@@ -6,6 +6,7 @@ using AEAssist.GUI;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
+using ElliotZ.Common;
 using ImGuiNET;
 
 namespace ElliotZ.Rpr.QtUI;
@@ -21,8 +22,8 @@ public static class DevTab
                 if (ECHelper.ClientState.LocalPlayer != null)
                 {
                     var rre = new RprRotationEntry();
-                    ImGui.Text($"周围小怪总当前血量百分比: {BattleData.Instance.TotalHpPercentage:F2}%" + "%");
-                    ImGui.Text($"预估周围小怪平均死亡时间: {BattleData.Instance.AverageTTK / 1000f:F2} 秒");
+                    ImGui.Text($"周围小怪总当前血量百分比: {MobPullManager.GetTotalHealthPercentageOfNearbyEnemies() * 100f:F2}%" + "%");
+                    ImGui.Text($"预估周围小怪平均死亡时间: {MobPullManager.GetAverageTTKOfNearbyEnemies() / 1000f:F2} 秒");
                     ImGui.Text($"上一个连击: {Core.Resolve<MemApiSpell>().GetLastComboSpellId()}");
                     ImGui.Text($"上一个GCD: {Core.Resolve<MemApiSpellCastSuccess>().LastGcd}");
                     ImGui.Text($"上一个能力技: {Core.Resolve<MemApiSpellCastSuccess>().LastAbility}");
@@ -54,7 +55,7 @@ public static class DevTab
                     ImGui.Text("Target GameObjectId:" + targetGOID);
                     ImGui.Text("Self Casting Spell ID" + (Core.Me.CastActionId).ToString());
                     ImGui.PopTextWrapPos();
-                    ImGui.Text("IsPulling: " + BattleData.Instance.IsPulling);
+                    ImGui.Text("Qt.mobMan.Holding: " + Qt.mobMan.Holding);
                     ImGui.Text($"自身面向 ({Core.Me.Rotation:F2})");
                 }
 

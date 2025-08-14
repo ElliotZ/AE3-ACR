@@ -6,6 +6,7 @@ using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
 using ElliotZ.Common;
+using ElliotZ.Rpr;
 using EZACR_Offline.Gnb.QtUI;
 
 namespace EZACR_Offline.Gnb;
@@ -33,6 +34,7 @@ public class EventHandler : IRotationEventHandler
             Qt.Instance.NewDefault("自动拉怪", newDefault: true);
             Qt.Instance.SetQt("自动拉怪", qtValue: true);
         }
+        if (GnbSettings.Instance.NoBurst) Qt.mobMan.Reset();
 
         StopHelper.StopActions(1000);
         await Task.CompletedTask;
@@ -79,6 +81,7 @@ public class EventHandler : IRotationEventHandler
             Qt.Instance.NewDefault("自动拉怪", newDefault: true);
             Qt.Instance.SetQt("自动拉怪", qtValue: true);
         }
+        if (GnbSettings.Instance.NoBurst) Qt.mobMan.Reset();
 
         Qt.Instance.NewDefault("倾泻爆发", newDefault: false);
         Qt.Instance.SetQt("倾泻爆发", qtValue: false);
@@ -132,49 +135,29 @@ public class EventHandler : IRotationEventHandler
         }
 
         // logic for holding bursts when mob pack is about to die
-        BattleData.Instance.TotalHpPercentage = MobPullHelper.GetTotalHealthPercentageOfNearbyEnemies();
-        BattleData.Instance.AverageTTK = MobPullHelper.GetAverageTTKOfNearbyEnemies();
+        //BattleData.Instance.TotalHpPercentage = MobPullManager.GetTotalHealthPercentageOfNearbyEnemies();
+        //BattleData.Instance.AverageTTK = MobPullManager.GetAverageTTKOfNearbyEnemies();
 
-        if (GnbSettings.Instance.NoBurst &&
-            Core.Resolve<MemApiDuty>().InMission &&
-            Core.Resolve<MemApiDuty>().DutyMembersNumber() != 8 &&
-            !Core.Resolve<MemApiDuty>().InBossBattle &&  // exclude boss battles and msq ultima wep
-            Helper.GetTerritoyId != 1048 &&
-            AI.Instance.BattleData.CurrBattleTimeInMs > 10000 &&
-                (BattleData.Instance.TotalHpPercentage < GnbSettings.Instance.MinMobHpPercent ||
-                 BattleData.Instance.AverageTTK < (GnbSettings.Instance.minTTK * 1000)))
+        //if (GnbSettings.Instance.NoBurst &&
+        //    Core.Resolve<MemApiDuty>().InMission &&
+        //    Core.Resolve<MemApiDuty>().DutyMembersNumber() != 8 &&
+        //    !Core.Resolve<MemApiDuty>().InBossBattle &&  // exclude boss battles and msq ultima wep
+        //    Helper.GetTerritoyId != 1048 &&
+        //    AI.Instance.BattleData.CurrBattleTimeInMs > 10000 &&
+        //        (BattleData.Instance.TotalHpPercentage < GnbSettings.Instance.MinMobHpPercent ||
+        //         BattleData.Instance.AverageTTK < (GnbSettings.Instance.minTTK * 1000)))
+        //{
+        //    Qt.Instance.SetQt("爆发", false);
+        //    //Qt.Instance.SetQt("神秘环", false);
+        //}
+        if (GnbSettings.Instance.NoBurst)
         {
-            Qt.Instance.SetQt("爆发", false);
-            //Qt.Instance.SetQt("神秘环", false);
+            Qt.mobMan.HoldBurstIfMobsDying(currTimeInMs,
+                                           GnbSettings.Instance.MinMobHpPercent,
+                                           GnbSettings.Instance.minTTK * 1000);
         }
 
         if (GnbSettings.Instance.HandleStopMechs) StopHelper.StopActions(1000);
-        //if (Helper.AnyAuraTimerLessThan(Buff.停手Buff, 3000) && 
-        //        !IsStopped && 
-        //        !Map.高难地图.Contains(Core.Resolve<MemApiZoneInfo>().GetCurrTerrId()))
-        //{
-        //    IsStopped = true;
-        //    Core.Me.SetTarget(Core.Me);
-        //    LogHelper.Print("检测到需要停手的BUFF，已停止并设置目标为自己。");
-        //}
-
-        //if (!Core.Me.HasAnyAura(Buff.停手Buff, 3000) && 
-        //        IsStopped && 
-        //        TargetMgr.Instance.EnemysIn20.Count > 0 && 
-        //        !Map.高难地图.Contains(Core.Resolve<MemApiZoneInfo>().GetCurrTerrId()))
-        //{
-        //    IsStopped = false;
-        //    IBattleChara battleChara = TargetMgr.Instance.EnemysIn20.Values.FirstOrDefault();
-        //    if (battleChara != null)
-        //    {
-        //        Core.Me.SetTarget(battleChara);
-        //        LogHelper.Print("需要停手的BUFF已消失，已恢复并设置目标为最近的敌人。");
-        //    }
-        //    else
-        //    {
-        //        LogHelper.Print("没有找到最近的敌人。");
-        //    }
-        //}
     }
 
     public async void OnEnterRotation()
