@@ -12,6 +12,7 @@ public static class Qt
     public static JobViewWindow Instance { get; set; }
     public static MacroManager macroMan;
     public static MobPullManager mobMan;
+    private static readonly bool ForceNextSlots = RprSettings.Instance.ForceNextSlotsOnHKs;
 
     public static readonly List<(string name, string ENname, bool defval, string tooltip)> QtKeys =
     [
@@ -46,13 +47,13 @@ public static class Qt
         ("出境<t>", "Egress<t>", new EgressHK(IngressHK.FaceTarget)),
         ("入境<cam>", "Ingress<cam>", new IngressHK(IngressHK.FaceCam)),
         ("出境<cam>", "Egress<cam>", new EgressHK(IngressHK.FaceCam)),
-        ("神秘纹", "Crest", new HotKeyResolver(SpellsDef.ArcaneCrest, SpellTargetType.Self)),
+        ("神秘纹", "Crest", new HotKeyResolver(SpellsDef.ArcaneCrest, SpellTargetType.Self, ForceNextSlots)),
         ("LB", "LB", new HotKeyResolver_LB()),
-        ("亲疏", "Armslength", new HotKeyResolver(SpellsDef.ArmsLength, SpellTargetType.Self)),
-        ("内丹", "SecondWind", new HotKeyResolver(SpellsDef.SecondWind, SpellTargetType.Self)),
-        ("浴血", "BloodBath", new HotKeyResolver(SpellsDef.Bloodbath, SpellTargetType.Self)),
-        ("牵制", "Feint", new HotKeyResolver(SpellsDef.Feint)),
-        ("真北", "TrueNorth", new HotKeyResolver(SpellsDef.TrueNorth, SpellTargetType.Self)),
+        ("亲疏", "Armslength", new HotKeyResolver(SpellsDef.ArmsLength, SpellTargetType.Self, ForceNextSlots)),
+        ("内丹", "SecondWind", new HotKeyResolver(SpellsDef.SecondWind, SpellTargetType.Self, ForceNextSlots)),
+        ("浴血", "BloodBath", new HotKeyResolver(SpellsDef.Bloodbath, SpellTargetType.Self, ForceNextSlots)),
+        ("牵制", "Feint", new HotKeyResolver(SpellsDef.Feint, useHighPrioritySlot: ForceNextSlots)),
+        ("真北", "TrueNorth", new HotKeyResolver(SpellsDef.TrueNorth, SpellTargetType.Self, ForceNextSlots)),
         ("播魂种", "Soulsow", new SoulSowHvstMnHK()),
         ("疾跑", "Sprint", new HotKeyResolver_疾跑()),
         ("爆发药", "Pot", new HotKeyResolver_Potion()),

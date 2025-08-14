@@ -93,9 +93,9 @@ public class HotKeyResolver(uint spellId,
         if (delay > 0) await Coroutine.Instance.WaitAsync(delay);
 
         if (UseHighPrioritySlot &&
-                !RprSettings.Instance.ForceNextSlotsOnHKs &&
+                //!RprSettings.Instance.ForceNextSlotsOnHKs &&
                 Core.Me.GetCurrTarget() is not null &&
-                Core.Me.GetCurrTarget().CanAttack() &&
+                Core.Me.GetCurrTarget()!.CanAttack() &&
                 Core.Me.InCombat())
         {
             var slot = new Slot();
