@@ -16,32 +16,17 @@ namespace ElliotZ.Rpr;
 
 public class EventHandler : IRotationEventHandler
 {
-    private MobPullHelper? mobPullHelper;
-    //private static long _lastCheckTime = 0L;
-    //private static bool _burstSettingsAltered = false;
-
     public void OnResetBattle()
     {
-        // initializing MobPullHelper's static data and other data in BattleData
         BattleData.Instance = new BattleData();
-        MobPullHelper._lastCheckTime = 0L;
-        MobPullHelper._currentPosition = Vector3.Zero;
-        MobPullHelper._lastPosition = Vector3.Zero;
 
         // initialize pull record
         if (AI.Instance.BattleData.CurrBattleTimeInMs >= 0)
         {
-            if (Core.Resolve<MemApiDuty>().InMission &&
-                Core.Resolve<MemApiDuty>().DutyMembersNumber() == 4 &&
-                RprSettings.Instance.PullingNoBurst)
+            if (RprSettings.Instance.PullingNoBurst)
             {
-                BattleData.Instance.IsPulling = true;
+                Qt.mobMan.Reset();
             }
-            else
-            {
-                BattleData.Instance.IsPulling = false;
-            }
-
             //MeleePosHelper.Clear();
             if (RprSettings.Instance.RestoreQtSet)
             {
@@ -55,10 +40,6 @@ public class EventHandler : IRotationEventHandler
     public async Task OnNoTarget()
     {
         // maybe add soulsow, idk
-        //if (BattleData.Instance.IsStopped == false)
-        //{
-        //    BattleData.Instance.NoTarget = true;
-        //}
         if (RprSettings.Instance.HandleStopMechs) StopHelper.StopActions(1000);
 
         if (RprSettings.Instance.Debug) LogHelper.Print("no target");
@@ -72,30 +53,17 @@ public class EventHandler : IRotationEventHandler
 
     public async Task OnPreCombat()
     {
+        if (RprSettings.Instance.PullingNoBurst)
+        {
+            Qt.mobMan.Reset();
+        }
+        StopHelper.StopActions(1000);
+
         // out of combat soulsow
         if (SpellsDef.Soulsow.GetSpell().IsReadyWithCanCast() && Qt.Instance.GetQt("播魂种"))
         {
             await SpellsDef.Soulsow.GetSpell().Cast();
         }
-
-        //if (!Core.Resolve<MemApiDuty>().IsOver && Core.Resolve<MemApiDuty>().InMission)
-        //{
-        //    if (Core.Resolve<MemApiDuty>().DutyMembersNumber() == 8 && RprSettings.Instance.NoBurst)
-        //    {
-        //        LogHelper.Print("检测到你在8人本开了“小怪低血量不交爆发”，为防止出错已自动为你关闭该设置。");
-        //        RprSettings.Instance.NoBurst = false;
-        //        _burstSettingsAltered = true;
-        //    }
-        //}
-
-        //if (Core.Resolve<MemApiDuty>().IsOver && _burstSettingsAltered)
-        //{
-        //    LogHelper.Print("改变过“小怪低血量不交爆发”的设置，现在复原。");
-        //    RprSettings.Instance.NoBurst = true;
-        //    _burstSettingsAltered = false;
-        //}
-
-        StopHelper.StopActions(1000);
     }
 
     public void AfterSpell(Slot slot, Spell spell)
@@ -119,64 +87,17 @@ public class EventHandler : IRotationEventHandler
             Core.Resolve<MemApiSpell>().CancelCast();
         }
 
-        // detect if tank is pulling in dungeons
-        mobPullHelper = new MobPullHelper();
-        if (mobPullHelper.CurrTank is not null && RprSettings.Instance.PullingNoBurst)
+        if (RprSettings.Instance.PullingNoBurst)
         {
-            if (AI.Instance.BattleData.CurrBattleTimeInMs - MobPullHelper._lastCheckTime >= 1000)
-            {
-                mobPullHelper.CheckTankPosition();
-                MobPullHelper._lastCheckTime = AI.Instance.BattleData.CurrBattleTimeInMs;
-            }
-
-            if (mobPullHelper.IsPulling == false)
-            {
-                mobPullHelper.CheckEnemiesAroundTank();
-                if (mobPullHelper.ConcentrationPctg > RprSettings.Instance.ConcentrationThreshold)
-                {
-                    BattleData.Instance.IsPulling = false;
-                }
-            }
-        }
-        // exclude bosses
-        if (BattleData.Instance.IsPulling && Core.Me.GetCurrTarget().IsBoss())
-        {
-            BattleData.Instance.IsPulling = false;
+            Qt.mobMan.HoldBurstIfPulling(currTime, RprSettings.Instance.ConcentrationThreshold);
         }
 
-        // logic for holding bursts when mob pack is about to die
-        BattleData.Instance.TotalHpPercentage = MobPullHelper.GetTotalHealthPercentageOfNearbyEnemies();
-        BattleData.Instance.AverageTTK = MobPullHelper.GetAverageTTKOfNearbyEnemies();
-
-        if (RprSettings.Instance.NoBurst &&
-            Core.Resolve<MemApiDuty>().InMission &&
-            Core.Resolve<MemApiDuty>().DutyMembersNumber() != 8 &&
-            !Core.Resolve<MemApiDuty>().InBossBattle &&  // exclude boss battles and msq ultima wep
-            //!Core.Me.GetCurrTarget().IsDummy() &&
-            Helper.GetTerritoyId != 1048 &&
-            AI.Instance.BattleData.CurrBattleTimeInMs > 10000 &&
-                (BattleData.Instance.TotalHpPercentage < RprSettings.Instance.MinMobHpPercent ||
-                 BattleData.Instance.AverageTTK < (RprSettings.Instance.minTTK * 1000)))
+        if (RprSettings.Instance.NoBurst)
         {
-            Qt.Instance.SetQt("魂衣", false);
-            Qt.Instance.SetQt("神秘环", false);
+            Qt.mobMan.HoldBurstIfMobsDying(currTime, 
+                                           RprSettings.Instance.MinMobHpPercent, 
+                                           RprSettings.Instance.minTTK * 1000);
         }
-
-        //if (Helper.AnyAuraTimerLessThan(StopHelper.AccelBomb, 3200) && 
-        //    //Core.Me.HasAnyAura(StopHelper.AccelBomb, BattleData.Instance.GcdDuration) &&
-        //    PlayerOptions.Instance.Stop == false)
-        //{
-        //    if (Core.Me.GetCurrTarget() is not null && 
-        //            Qt.Instance.GetQt("收获月") && 
-        //            SpellsDef.HarvestMoon.GetSpell().IsReadyWithCanCast())
-        //    {
-        //        if (AI.Instance.BattleData.NextSlot is null)
-        //        {
-        //            AI.Instance.BattleData.NextSlot = new Slot();
-        //        }
-        //        AI.Instance.BattleData.NextSlot.Add(SpellsDef.HarvestMoon.GetSpell());
-        //    }
-        //}
 
         // stop action during accel bombs, pyretics and/or when boss is invuln
         if (RprSettings.Instance.HandleStopMechs) StopHelper.StopActions(1000);
@@ -201,8 +122,8 @@ public class EventHandler : IRotationEventHandler
                 (!Qt.Instance.GetQt("AOE") || 
                     TargetHelper.GetNearbyEnemyCount(8) < 3) &&
                 !Core.Me.HasAura(AurasDef.Enshrouded) &&
-                Core.Me.GetCurrTarget() is not null &&
-                Core.Me.GetCurrTarget().HasPositional())
+                (Core.Me.GetCurrTarget() is not null &&
+                 Core.Me.GetCurrTarget()!.HasPositional()))
         {
             if (GibGallowsReady && !GibGallowsJustUsed)
             {
@@ -236,17 +157,14 @@ public class EventHandler : IRotationEventHandler
 
     public void OnEnterRotation() //切换到当前ACR
     {
-        //LogHelper.Print(
-        //    "欢迎使用yoyo舞者ACR，反馈请到：https://discord.com/channels/1191648233454313482/1326201786046087329");
         Helper.SendTips("欢迎使用EZRpr，使用前请把左上角悬浮窗拉大查看README。");
-        LogHelper.Print("如有问题和反馈可以在DC找我。");
+        LogHelper.Print("欢迎使用EZRpr，如有问题和反馈可以在DC找我。");
 
         //检查全局设置
         if (Helper.GlblSettings.NoClipGCD3)
             LogHelper.PrintError("建议在acr全局设置中取消勾选【全局能力技不卡GCD】选项");
 
         Qt.macroMan.Init();
-
     }
 
     public void OnExitRotation() //退出ACR

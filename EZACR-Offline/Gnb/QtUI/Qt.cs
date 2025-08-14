@@ -12,6 +12,7 @@ public static class Qt
 {
     public static JobViewWindow Instance { get; set; }
     public static MacroManager macroMan;
+    public static MobPullManager mobMan;
 
     public static readonly List<(string name, string ENname, bool defval, string tooltip)> QtKeys =
     [
@@ -110,6 +111,7 @@ public static class Qt
         Instance = new JobViewWindow(GnbSettings.Instance.JobViewSave, GnbSettings.Instance.Save, "EZGnb");
         Instance.SetUpdateAction(OnUIUpdate);
         macroMan = new MacroManager(Instance, "/EZGnb", QtKeys, HKResolvers, true);
+        mobMan = new MobPullManager(Instance, "爆发");
 
         //其余tab窗口
         ReadmeTab.Build(Instance);

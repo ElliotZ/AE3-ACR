@@ -11,6 +11,8 @@ public static class Qt
 {
     public static JobViewWindow Instance { get; set; }
     public static MacroManager macroMan;
+    public static MobPullManager mobMan;
+
     public static readonly List<(string name, string ENname, bool defval, string tooltip)> QtKeys =
     [
         ("爆发药", "Pot", false, ""),
@@ -101,6 +103,9 @@ public static class Qt
         Instance.SetUpdateAction(OnUIUpdate);
 
         macroMan = new MacroManager(Instance, "/EZRpr", QtKeys, HKResolvers, true);
+        mobMan = new MobPullManager(Instance);
+        mobMan.BurstQTs.Add("神秘环");
+        mobMan.BurstQTs.Add("魂衣");
 
         //其余tab窗口
         ReadmeTab.Build(Instance);
