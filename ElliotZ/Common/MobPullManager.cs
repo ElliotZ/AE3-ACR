@@ -45,7 +45,7 @@ public class MobPullManager(JobViewWindow qtInstance, string holdQT = "")
             if (HoldQtName.IsNullOrEmpty())
                 _holding = value;
             else
-                instance.SetQt(HoldQtName, value);
+                instance.SetQt(HoldQtName, !value);
         } 
     }
 

@@ -112,7 +112,8 @@ public static class DevTab
                                  ImGuiWindowFlags.HorizontalScrollbar);
                 ImGui.TextWrapped("更新日志：\n\n" +
                                   "2025/08/03: 初版。\n" +
-                                  "2025/08/10: 重构宏命令系统。");
+                                  "2025/08/10: 重构宏命令系统。\n" +
+                                  "2025/08/14: 重构，以及加入爆发总控QT。");
                 ImGui.EndChild();
             }
         });
