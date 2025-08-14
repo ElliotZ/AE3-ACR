@@ -20,7 +20,7 @@ public class EventHandler : IRotationEventHandler
 
     public async Task OnPreCombat()
     {
-        Qt.LoadQtStatesNoPot();
+        //Qt.LoadQtStatesNoPot();
         if (GnbSettings.Instance.ACRMode != "Normal")
         {
             Qt.Instance.NewDefault("自动拉怪", newDefault: false);
