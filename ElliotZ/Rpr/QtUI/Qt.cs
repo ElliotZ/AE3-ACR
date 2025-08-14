@@ -103,9 +103,15 @@ public static class Qt
         Instance.SetUpdateAction(OnUIUpdate);
 
         macroMan = new MacroManager(Instance, "/EZRpr", QtKeys, HKResolvers, true);
+        macroMan.BuildCommandList();
+        macroMan.AddQt("爆发", "burst", true, "", delegate (bool isSet)
+        {
+            Instance.SetQt("神秘环", isSet);
+            Instance.SetQt("魂衣", isSet);
+        });
+
         mobMan = new MobPullManager(Instance);
-        mobMan.BurstQTs.Add("神秘环");
-        mobMan.BurstQTs.Add("魂衣");
+        mobMan.BurstQTs.Add("爆发");
 
         //其余tab窗口
         ReadmeTab.Build(Instance);

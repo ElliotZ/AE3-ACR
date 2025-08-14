@@ -20,7 +20,7 @@ public class BuffMaintain : ISlotResolver
         {
             return -2;  // -2 for not in range
         }
-        if (BattleData.Instance.IsPulling) return -3;
+        if (Qt.mobMan.Holding) return -3;
 
         if (SpellsDef.WhorlOfDeath.RecentlyUsed(5000)) { return -5; }  // -5 for Avoiding Spam
 
