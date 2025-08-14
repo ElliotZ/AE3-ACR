@@ -26,7 +26,7 @@ public class Gluttony : ISlotResolver
         {
             return -2;  // -2 for not in range
         }
-        if (BattleData.Instance.IsPulling) return -3;
+        if (Qt.mobMan.Holding) return -3;
 
         if (Core.Me.HasAura(AurasDef.Executioner) ||
                 Core.Me.HasAura(AurasDef.SoulReaver) ||
@@ -54,6 +54,6 @@ public class Gluttony : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(SpellsDef.Gluttony.GetSpell(Target));
+        slot.Add(SpellsDef.Gluttony.GetSpell(Target!));
     }
 }

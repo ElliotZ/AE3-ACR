@@ -29,8 +29,8 @@ public class MacroManager(JobViewWindow instance,
 
     private string commandHandle = cmdHandle;
     private JobViewWindow instance = instance;
-    List<(string name, string en, bool defVal, string tooltip)> QtKeys = qtKeys;
-    List<(string name, string en, IHotkeyResolver hkr)> HKResolvers = hkResolvers;
+    private readonly List<(string name, string en, bool defVal, string tooltip)> QtKeys = qtKeys;
+    private readonly List<(string name, string en, IHotkeyResolver hkr)> HKResolvers = hkResolvers;
 
     // 这三条会自动生成
     private readonly List<(string cmdType, string CNCmd, string ENCmd)> cmdList = [];
@@ -53,6 +53,76 @@ public class MacroManager(JobViewWindow instance,
     /// 在OnExitRotation()里面需要用到的方法
     /// </summary>
     public void Exit() => ECHelper.Commands.RemoveHandler(commandHandle);
+
+    /// <summary>
+    /// 单个QT的添加
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="en"></param>
+    /// <param name="defVal"></param>
+    /// <param name="tooltip"></param>
+    public void AddQt(string name, string en, bool defVal, string tooltip)
+    {
+        if (_handleAddingQTs) instance.AddQt(name, defVal, tooltip);
+
+        _qtKeyDict.TryAdd(name, name);
+        var cncmd = commandHandle + " " + name + "_qt";
+        string encmd = "";
+        if (!en.IsNullOrEmpty())
+        {
+            _qtKeyDict.TryAdd(en.ToLower(), name);
+            encmd = commandHandle + " " + en.ToLower() + "_qt";
+        }
+        cmdList.Add(("QT", cncmd, encmd));
+    }
+
+    /// <summary>
+    /// 单个QT的添加，支持Action callback
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="en"></param>
+    /// <param name="defVal"></param>
+    /// <param name="tooltip"></param>
+    /// <param name="callback"></param>
+    public void AddQt(string name, string en, bool defVal, string tooltip, Action<bool> callback)
+    {
+        if (_handleAddingQTs)
+        {
+            instance.AddQt(name, defVal, callback);
+            instance.SetQtToolTip(tooltip);
+        }
+
+        _qtKeyDict.TryAdd(name, name);
+        var cncmd = commandHandle + " " + name + "_qt";
+        string encmd = "";
+        if (!en.IsNullOrEmpty())
+        {
+            _qtKeyDict.TryAdd(en.ToLower(), name);
+            encmd = commandHandle + " " + en.ToLower() + "_qt";
+        }
+        cmdList.Add(("QT", cncmd, encmd));
+    }
+
+    /// <summary>
+    /// 单个Hotkey的添加
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="en"></param>
+    /// <param name="hkr"></param>
+    public void AddHotkey(string name, string en, IHotkeyResolver hkr)
+    {
+        if (_handleAddingQTs) instance.AddHotkey(name, hkr);
+
+        _hotkeyDict.TryAdd(name, hkr);
+        var cncmd = commandHandle + " " + name + "_hk";
+        string encmd = "";
+        if (!en.IsNullOrEmpty())
+        {
+            _hotkeyDict.TryAdd(en.ToLower(), hkr);
+            encmd = commandHandle + " " + en.ToLower() + "_hk";
+        }
+        cmdList.Add(("Hotkey", cncmd, encmd));
+    }
 
     private void RegisterHandle()
     {
@@ -161,36 +231,17 @@ public class MacroManager(JobViewWindow instance,
         }
     }
 
-    private void BuildCommandList()
+    public void BuildCommandList()
     {
+        if (cmdList.Count > 0) { return; }  // protect against multiple calls
         foreach ((string name, string en, bool defVal, string tooltip) in QtKeys)
         {
-            if (_handleAddingQTs) instance.AddQt(name, defVal, tooltip);
-
-            _qtKeyDict.TryAdd(name, name);
-            var cncmd = commandHandle + " " + name + "_qt";
-            string encmd = "";
-            if (!en.IsNullOrEmpty())
-            {
-                _qtKeyDict.TryAdd(en.ToLower(), name);
-                encmd = commandHandle + " " + en.ToLower() + "_qt";
-            }
-            cmdList.Add(("QT", cncmd, encmd));
+            AddQt(name, en, defVal, tooltip);
         }
 
         foreach ((string name, string en, IHotkeyResolver hkr) in HKResolvers)
         {
-            if (_handleAddingQTs) instance.AddHotkey(name, hkr);
-
-            _hotkeyDict.TryAdd(name, hkr);
-            var cncmd = commandHandle + " " + name + "_hk";
-            string encmd = "";
-            if (!en.IsNullOrEmpty())
-            {
-                _hotkeyDict.TryAdd(en.ToLower(), hkr);
-                encmd = commandHandle + " " + en.ToLower() + "_hk";
-            }
-            cmdList.Add(("Hotkey", cncmd, encmd));
+            AddHotkey(name, en, hkr);
         }
     }
 
