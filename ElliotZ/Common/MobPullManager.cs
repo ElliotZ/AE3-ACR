@@ -75,6 +75,7 @@ public class MobPullManager(JobViewWindow qtInstance, string holdQT = "")
     /// <summary>
     /// 重置状态，需要在OnPreCombat和OnResetBattle中调用
     /// </summary>
+    public void 重置() => Reset();
     public void Reset()
     {
         _lastCheckTime = 0L;
@@ -89,6 +90,7 @@ public class MobPullManager(JobViewWindow qtInstance, string holdQT = "")
     /// </summary>
     /// <param name="currTime">当前战斗持续时间，可以直接把OnBattleUpdate的currTime参数填入</param>
     /// <param name="ConcentrationThreshold">设定的小怪集中度</param>
+    public void 拉怪中留爆发(int 当前时间, float 集中度) => HoldBurstIfPulling(当前时间, 集中度);
     public void HoldBurstIfPulling(int currTime, float ConcentrationThreshold)
     {
         if (CurrTank is not null)
@@ -119,6 +121,7 @@ public class MobPullManager(JobViewWindow qtInstance, string holdQT = "")
     /// <param name="currTime">当前战斗持续时间，可以直接把OnBattleUpdate的currTime参数填入</param>
     /// <param name="mobHPThreshold">设定的小怪血量阈值</param>
     /// <param name="minTTK">设定的小怪平均死亡时间阈值，用ms计算</param>
+    public void 小怪死亡留爆发(int 当前时间, float 血量阈值, int 死亡时间阈值) => HoldBurstIfMobsDying(当前时间, 血量阈值, 死亡时间阈值);
     public void HoldBurstIfMobsDying(int currTime, float mobHPThreshold, int minTTK)
     {
         // exclude boss battles, msq ultima wep, and 8 man duties in general
@@ -196,6 +199,7 @@ public class MobPullManager(JobViewWindow qtInstance, string holdQT = "")
     /// 求25米内敌人的总HP百分比
     /// </summary>
     /// <returns></returns>
+    public static float 附近敌人总血量比例() => GetTotalHealthPercentageOfNearbyEnemies();
     public static float GetTotalHealthPercentageOfNearbyEnemies()
     {
         Dictionary<uint, IBattleChara> enemysIn = TargetMgr.Instance.EnemysIn25;
@@ -224,6 +228,7 @@ public class MobPullManager(JobViewWindow qtInstance, string holdQT = "")
     /// 求25米内敌人的平均死亡时间
     /// </summary>
     /// <returns></returns>
+    public static float 附近敌人平均死亡时间() => GetAverageTTKOfNearbyEnemies();
     public static float GetAverageTTKOfNearbyEnemies()
     {
         Dictionary<uint, IBattleChara> enemysIn = TargetMgr.Instance.EnemysIn25;

@@ -4,11 +4,13 @@ using AEAssist.CombatRoutine.Module.Target;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 
 namespace ElliotZ.Common;
 
 public static class StopHelper
 {
+    #region Singular Defs
     public const uint AccelerationBomb4144 = 4144u;
     public const uint AccelerationBomb3802 = 3802u;
     public const uint AccelerationBomb3793 = 3793u;
@@ -40,15 +42,19 @@ public static class StopHelper
     public const uint VortexBarrier = 3012u;
 
     public const uint NoPos = 3808u;
+    #endregion
 
     private static bool _manualOverride = false;
     private static bool _untargeted = false;
     private static bool _lastStopVal = false;
 
+    public static List<uint> 加速度炸弹 => AccelBomb;
     public static readonly List<uint> AccelBomb = [4144, 3802, 3793, 1384, 2657, 1072];
 
+    public static List<uint> 热病 => Pyretic;
     public static readonly List<uint> Pyretic = [960, 639, 3522, 1599, 1133, 1049];
 
+    public static List<uint> 无敌 => Invulns;
     public static readonly List<uint> Invulns =
     [
         325,  // 无敌：一切攻击都无法造成伤害
@@ -75,6 +81,7 @@ public static class StopHelper
         1567, // 召唤兽的加护：受到了召唤兽的加护，处于暂时无敌的状态
     ];
 
+    public static List<uint> 无法行动 => Incapacitated;
     public static readonly List<uint> Incapacitated =
     [
         1,    // 石化：手足被石化，无法做出任何行动
@@ -168,6 +175,7 @@ public static class StopHelper
     /// <summary>
     /// 敌人物理攻击无效Buff
     /// </summary>
+    public static List<uint> 物理免疫 => PhysImmune;
     public static readonly List<uint> PhysImmune =
     [
         941, // 远程物理攻击无效化：远程物理攻击无法造成伤害
@@ -177,6 +185,7 @@ public static class StopHelper
     /// <summary>
     /// 敌人魔法攻击无效Buff
     /// </summary>
+    public static List<uint> 魔法免疫 => MagicImmune;
     public static readonly List<uint> MagicImmune =
     [
         942,  // 魔法攻击无效化：魔法攻击无法造成伤害
@@ -187,6 +196,7 @@ public static class StopHelper
     /// <summary>
     /// 敌人物理反击Buff
     /// </summary>
+    public static List<uint> 物理反射 => PhysReflect;
     public static readonly List<uint> PhysReflect =
     [
         89,   // 复仇：受到攻击的伤害减少并且受到物理攻击时会发动反击
@@ -225,6 +235,7 @@ public static class StopHelper
     /// <summary>
     /// 敌人魔法反击Buff
     /// </summary>
+    public static List<uint> 魔法反射 => MagicReflect;
     public static readonly List<uint> MagicReflect =
     [
         342,  // 对射：对魔法攻击发动反击
@@ -249,17 +260,91 @@ public static class StopHelper
         2450, // 模仿：模仿对手的行动，对于物理攻击将进行物理反击，对于魔法攻击将进行魔法反击
     ];
 
+    /// <summary>
+    /// 移动限制效果
+    /// </summary>
+    public static List<uint> 无法移动 => Snared;
+    public static readonly List<uint> Snared =
+    [
+        13, // 止步：无法自由移动
+        88, // 死斗：无法自由移动，受到伤害也不会解除
+        436, // 荆棘：被荆棘缠住了双脚，移动速度降低，并且体力会逐渐减少
+        445, // 荆棘丛生：被荆棘缠住，体力会逐渐减少
+        1147, // 影之脚镣：被影之脚镣铐住，移动速度降低，体力逐渐减少
+        1790, // 影之脚镣：被影之脚镣铐住，移动速度降低，体力逐渐减少
+        2386, // 暗之荆棘：被暗之荆棘缠住，体力会逐渐减少
+    ];
+
+    /// <summary>
+    /// 技能效果降低相关的Buff
+    /// </summary>
+    public static List<uint> 效果降低 => EffectDown;
+    public static readonly List<uint> EffectDown =
+    [
+        15, // 失明：陷于黑暗之中，命中率降低
+        27, // 命中率降低：命中率减弱
+        36, // 魔法治疗力降低：魔法治疗力减弱
+        51, // 力量降低：力量值降低
+        52, // 耐力降低：耐力值降低
+        54, // 物理伤害降低：物理攻击所造成的伤害降低
+        58, // 魔法伤害降低：魔法攻击所造成的伤害降低
+        62, // 伤害降低：攻击所造成的伤害降低
+        172, // 虚弱：自身所受的治疗魔法效果降低
+        181, // 病弱：移动速度降低，自身所受的治疗魔法效果也会降低
+        186, // 以眼还眼：攻击所造成的伤害降低
+        191, // 疾病：自身所受的治疗魔法效果降低
+        193, // 减速：自动攻击间隔延长，同时战技与魔法的咏唱及复唱时间也会延长
+        215, // 伤害降低：攻击所造成的伤害降低
+        677, // 剧毒：身中剧毒，自身所受的治疗魔法效果降低，体力逐渐减少
+        1011, // 剧毒：身中剧毒，自身所受的治疗魔法效果降低，体力逐渐减少
+        1046, // 剧毒：身中剧毒，自身所受的治疗魔法效果降低，体力逐渐减少
+        1087, // 诅咒：攻击所造成的伤害降低，体力无法自然恢复并且会逐渐减少
+        3261, // 剧毒：身中剧毒，自身所受的治疗魔法效果降低，体力逐渐减少
+        3692, // 剧毒：身中剧毒，自身所受的体力恢复效果降低，体力逐渐减少
+
+    ];
+
     public static readonly HashSet<string> WhiteList = [ "18014449513685488",
                                                          "18014449511049086",
                                                          "19014409515763009",
                                                          "19014419509512110" ];
 
+    /// <summary>
+    /// 可以用按位OR "|" 操作符组合不同条件。
+    /// </summary>
+    public enum StopMode : byte
+    {
+        /// <summary>
+        /// 只考虑热病、加速度炸弹、敌人无敌和完全无法施法的buff
+        /// </summary>
+        默认 = 0,
+        Ignore = 默认,
+        /// <summary>
+        /// 加入物理免疫和反射类buff
+        /// </summary>
+        物理 = 1,
+        PhysRangedCond = 物理,
+        /// <summary>
+        /// 加入魔法免疫和反射类buff
+        /// </summary>
+        魔法 = 2,
+        MagicCond = 魔法,
+        /// <summary>
+        /// 加入所有免疫和反射类buff
+        /// </summary>
+        全属性 = 3,
+        Both = 全属性,
+    }
+
+    public static StopMode mode = 0;
+
     public static bool Debug = false;
 
-    public static void StopActions(int time, bool retarget = false)
+    public static void 停手(int time) => StopActions(time);
+    public static void StopActions(int time)
     {
         var check = StopCheck(time);
-        if (check is 1 or 2)
+        if (check is > 0)
         {
             PlayerOptions.Instance.Stop = true;
             _manualOverride = false;
@@ -303,9 +388,23 @@ public static class StopHelper
         if (Core.Me.HasAnyAura(Incapacitated)) { return 2; }
         if (Core.Me.GetCurrTarget() is not null &&
                 //!(Core.Me.GetCurrTarget()!.GameObjectId == Core.Me.GameObjectId) &&  <- this does nothing
-                Core.Me.GetCurrTarget().HasAnyAura(Invulns))
+                Core.Me.GetCurrTarget()!.HasAnyAura(Invulns))
         {
             return 2;
+        }
+        if (Core.Me.GetCurrTarget() is not null && 
+               (mode & StopMode.PhysRangedCond) != 0 &&
+               (Core.Me.GetCurrTarget()!.HasAnyAura(PhysImmune) || 
+                Core.Me.GetCurrTarget()!.HasAnyAura(PhysReflect)))
+        {
+            return 3;
+        }
+        if (Core.Me.GetCurrTarget() is not null && 
+               (mode & StopMode.MagicCond) != 0 &&
+               (Core.Me.GetCurrTarget()!.HasAnyAura(MagicImmune) || 
+                Core.Me.GetCurrTarget()!.HasAnyAura(MagicReflect)))
+        {
+            return 4;
         }
         return -1;
     }
