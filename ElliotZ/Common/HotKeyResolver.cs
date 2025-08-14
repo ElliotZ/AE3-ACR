@@ -4,7 +4,6 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using ElliotZ.Rpr;
 using System.Numerics;
 
 namespace ElliotZ.Common;
@@ -93,9 +92,8 @@ public class HotKeyResolver(uint spellId,
         if (delay > 0) await Coroutine.Instance.WaitAsync(delay);
 
         if (UseHighPrioritySlot &&
-                !RprSettings.Instance.ForceNextSlotsOnHKs &&
                 Core.Me.GetCurrTarget() is not null &&
-                Core.Me.GetCurrTarget().CanAttack() &&
+                Core.Me.GetCurrTarget()!.CanAttack() &&
                 Core.Me.InCombat())
         {
             var slot = new Slot();
