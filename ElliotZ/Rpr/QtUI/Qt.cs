@@ -22,6 +22,7 @@ public static class Qt
         ("单魂衣", "SingleShroud", false, "不给爆发留魂衣，爆发只会有1个大丰收送的魂衣"),
         ("神秘环", "ArcaneCircle", true, ""),
         ("大丰收", "PlenHar", true, ""),
+        ("印记", "DeathsDesign", true, "死亡之影和死亡之涡"),
         ("灵魂割", "SoulSkill", true, "灵魂切割以及AOE灵魂钐割"),
         ("挥割/爪", "Bloodstalk", true, "隐匿挥割以及派生的缢杀爪/绞决爪，以及AOE束缚挥割"),
         ("暴食", "Gluttony", true, ""),
@@ -113,6 +114,8 @@ public static class Qt
 
         mobMan = new MobPullManager(Instance);
         mobMan.BurstQTs.Add("爆发");
+        mobMan.BurstQTs.Add("神秘环");
+        mobMan.BurstQTs.Add("魂衣");
 
         //其余tab窗口
         ReadmeTab.Build(Instance);
