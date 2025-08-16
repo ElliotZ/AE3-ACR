@@ -24,43 +24,46 @@ public class BuffMaintain : ISlotResolver
 
         if (SpellsDef.WhorlOfDeath.RecentlyUsed(5000)) { return -5; }  // -5 for Avoiding Spam
 
-        if (Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, GCDHelper.GetGCDDuration(), false))
+        if (Qt.Instance.GetQt("印记"))
         {
-            return 1;  // 1 for buff maintain within a GCD
+            if (Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, GCDHelper.GetGCDDuration(), false))
+            {
+                return 1;  // 1 for buff maintain within a GCD
+            }
+            if (Qt.Instance.GetQt("暴食") && GluttonyCD < 10000 &&
+                    Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, GluttonyCD + 7500) &&
+                    Helper.TgtAuraTimerMoreThan(AurasDef.DeathsDesign, GluttonyCD + 2500))
+            {
+                return 2;  // 2 for pre gluttony, earlier use because Gib/Gallows must be covered
+            }
+            if (Qt.Instance.GetQt("单魂衣") &&
+                    Core.Me.HasAura(AurasDef.Enshrouded) &&
+                    Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 10000))
+            {
+                return 3;
+            }
+            if (Core.Me.HasAura(AurasDef.Enshrouded) &&
+                    //SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 5000 &&
+                    Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 30000, false))
+            {
+                return 3;  // 3 for burst prep
+            }
+            if (Core.Resolve<JobApi_Reaper>().SoulGauge == 100 &&
+                    !SpellsDef.Perfectio.GetSpell().IsReadyWithCanCast() &&
+                    !SpellsDef.PlentifulHarvest.GetSpell().IsReadyWithCanCast() &&
+                    Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 30000, false))
+            {
+                return 5;
+            }
+            //if (Qt.Instance.GetQt("神秘环") && 
+            //        SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds < 11000 && 
+            //        Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 11000 + GCDHelper.GetGCDDuration(), false))
+            //{
+            //    return 3;
+            //}
+            if (SpellsDef.WhorlOfDeath.IsUnlock() && AOEAuraCheck()) { return 4; }
         }
-        if (Qt.Instance.GetQt("暴食") && GluttonyCD < 10000 &&
-                Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, GluttonyCD + 7500) &&
-                Helper.TgtAuraTimerMoreThan(AurasDef.DeathsDesign, GluttonyCD + 2500))
-        {
-            return 2;  // 2 for pre gluttony, earlier use because Gib/Gallows must be covered
-        }
-        if (Qt.Instance.GetQt("单魂衣") &&
-                Core.Me.HasAura(AurasDef.Enshrouded) &&
-                Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 10000))
-        {
-            return 3;
-        }
-        if (Core.Me.HasAura(AurasDef.Enshrouded) &&
-                //SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 5000 &&
-                Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 30000, false))
-        {
-            return 3;  // 3 for burst prep
-        }
-        if (Core.Resolve<JobApi_Reaper>().SoulGauge == 100 &&
-                !SpellsDef.Perfectio.GetSpell().IsReadyWithCanCast() &&
-                !SpellsDef.PlentifulHarvest.GetSpell().IsReadyWithCanCast() &&
-                Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 30000, false))
-        {
-            return 5;
-        }
-        //if (Qt.Instance.GetQt("神秘环") && 
-        //        SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds < 11000 && 
-        //        Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 11000 + GCDHelper.GetGCDDuration(), false))
-        //{
-        //    return 3;
-        //}
-        if (SpellsDef.WhorlOfDeath.IsUnlock() && AOEAuraCheck()) { return 4; }
-        ;
+
         //if (Core.Resolve<JobApi_Reaper>().ShroudGauge >= 50 &&)
         return -1;  // -1 for general unmatch
     }
