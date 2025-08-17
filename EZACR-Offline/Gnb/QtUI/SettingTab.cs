@@ -1,7 +1,7 @@
 ﻿using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.GUI;
-
+using JobViewWindow = ElliotZ.Common.ModernJobViewFramework.JobViewWindow;
 using ImGuiNET;
 
 namespace EZACR_Offline.Gnb.QtUI;

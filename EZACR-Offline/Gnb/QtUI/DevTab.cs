@@ -5,6 +5,7 @@ using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using ImGuiNET;
 using System.Numerics;
+using JobViewWindow = ElliotZ.Common.ModernJobViewFramework.JobViewWindow;
 
 namespace EZACR_Offline.Gnb.QtUI;
 

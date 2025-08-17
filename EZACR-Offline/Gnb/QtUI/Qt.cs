@@ -4,7 +4,9 @@ using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
 using AEAssist.Helper;
 using ElliotZ.Common;
 using ElliotZ.Common.Hotkey;
+using ElliotZ.Common.ModernJobViewFramework;
 using EZACR_Offline.Gnb.QtUI.Hotkey;
+using JobViewWindow = ElliotZ.Common.ModernJobViewFramework.JobViewWindow;
 
 namespace EZACR_Offline.Gnb.QtUI;
 
