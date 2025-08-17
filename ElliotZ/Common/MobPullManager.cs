@@ -1,12 +1,12 @@
 ﻿using AEAssist;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Module.Target;
-using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Utility;
+using ElliotZ.Common.ModernJobViewFramework;
 using System.Numerics;
 
 namespace ElliotZ.Common;

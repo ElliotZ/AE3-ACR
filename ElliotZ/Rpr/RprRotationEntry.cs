@@ -17,6 +17,7 @@ public class RprRotationEntry : IRotationEntry, IDisposable
     private readonly int _minLevel = 1;
     private readonly int _maxLevel = 100;
     private readonly string _description = "RPR试水";
+    public static string SettingsFolderPath = "";
 
     private List<SlotResolverData> _slotResolvers =
     [
@@ -54,7 +55,9 @@ public class RprRotationEntry : IRotationEntry, IDisposable
 
     public Rotation? Build(string settingFolder)
     {
-        RprSettings.Build(settingFolder);
+        SettingsFolderPath = settingFolder;
+        RprSettings.Build(SettingsFolderPath);
+        GlobalSetting.Build(SettingsFolderPath, "EZRpr", false);
         Qt.Build();
         var rot = new Rotation(_slotResolvers)
         {

@@ -33,6 +33,8 @@ public class EventHandler : IRotationEventHandler
         }
         //BattleData.Instance.IsPulling = false;
         MeleePosHelper.Clear();
+
+        BattleData.ReBuildSettings();
     }
 
     public async Task OnNoTarget()

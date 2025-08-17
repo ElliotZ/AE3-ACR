@@ -4,6 +4,7 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Extension;
 using AEAssist.Helper;
+using ElliotZ.Common.ModernJobViewFramework.HotKey;
 using System.Numerics;
 
 namespace ElliotZ.Common;
@@ -24,6 +25,10 @@ public class HotKeyResolver(uint spellId,
     protected SpellTargetType TargetType = targetType;
     protected readonly bool UseHighPrioritySlot = useHighPrioritySlot;
     protected readonly bool WaitCoolDown = waitCoolDown;
+
+    public HotKeyResolver(Spell spell, HotKeyTarget target) : this(spell.Id, target.SpellTargetType!)
+    {
+    }
 
     public virtual void Draw(Vector2 size)
     {
