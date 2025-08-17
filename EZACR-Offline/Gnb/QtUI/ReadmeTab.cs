@@ -2,6 +2,7 @@
 using AEAssist.GUI;
 using Dalamud.Interface.Colors;
 using ImGuiNET;
+using JobViewWindow = ElliotZ.Common.ModernJobViewFramework.JobViewWindow;
 
 namespace EZACR_Offline.Gnb.QtUI;
 

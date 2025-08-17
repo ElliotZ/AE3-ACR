@@ -1,6 +1,7 @@
-﻿using AEAssist.CombatRoutine.View.JobView;
+﻿
 using AEAssist.Helper;
 using AEAssist.IO;
+using ElliotZ.Common.ModernJobViewFramework;
 
 namespace ElliotZ.Rpr;
 
@@ -87,6 +88,7 @@ public class RprSettings
     public Dictionary<String, bool> QtStates = [];
     public JobViewSave JobViewSave = new()
     {
+        CurrentTheme = ModernTheme.ThemePreset.RPR,
         QtLineCount = 3,
         QtUnVisibleList = ["挥割/爪", "暴食", "灵魂割", "祭牲",]
     };

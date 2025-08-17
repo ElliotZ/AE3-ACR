@@ -180,6 +180,39 @@ public static class Helper
         return true;
     }
 
+    public static IBattleChara 获取距离最远成员()
+    {
+        IBattleChara RescueTarget = PartyHelper.CastableAlliesWithin30
+            .Where(r => r.CurrentHp > 0)
+            .MaxBy(r => r.Distance(PartyHelper.CastableAlliesWithin30.FirstOrDefault()!))!;
+
+        return RescueTarget;
+    }
+
+    public static IBattleChara 获取血量最低成员()
+    {
+        if (PartyHelper.CastableAlliesWithin30.Count == 0)
+            return Core.Me;
+        return PartyHelper.CastableAlliesWithin30
+            .Where(r => r.CurrentHp > 0)
+            .MinBy(r => r.CurrentHpPercent())!;
+    }
+
+    public static IBattleChara 获取最低血量T()
+    {
+        if (PartyHelper.CastableTanks.Count == 0)
+            return Core.Me;
+        if (PartyHelper.CastableTanks.Count == 2 && PartyHelper.CastableTanks[1].CurrentHpPercent() <
+            PartyHelper.CastableTanks[0].CurrentHpPercent())
+            return PartyHelper.CastableTanks[1];
+        return PartyHelper.CastableTanks[0];
+    }
+
+    public static IBattleChara? 没有复活状态的死亡队友()
+    {
+        return PartyHelper.DeadAllies.FirstOrDefault(r => !r.HasAura(148u) && r.IsTargetable);
+    }
+
     public static bool RdyInGCDs(this uint spellID, int numOfGcds)
     {
         double gcd = GCDHelper.GetGCDDuration() > 0 ? GCDHelper.GetGCDDuration() : 2500;

@@ -1,6 +1,6 @@
-﻿using AEAssist.CombatRoutine.View.JobView;
-using AEAssist.Helper;
+﻿using AEAssist.Helper;
 using ECommons;
+using ElliotZ.Common.ModernJobViewFramework;
 using ImGuiNET;
 using System.Numerics;
 
@@ -18,7 +18,7 @@ namespace ElliotZ.Common;  // 改成你需要的Namespace，或者由IDE自动�
 public class MacroManager(JobViewWindow instance,
                          string cmdHandle,
                          List<(string name, string en, bool defVal, string tooltip)> qtKeys,
-                         List<(string name, string en, IHotkeyResolver hkr)> hkResolvers,
+                         List<(string name, string en, AEAssist.CombatRoutine.View.JobView.IHotkeyResolver hkr)> hkResolvers,
                          bool HandleAddingQT = false)
 {
     private bool _handleAddingQTs = HandleAddingQT;
@@ -30,12 +30,12 @@ public class MacroManager(JobViewWindow instance,
     private string commandHandle = cmdHandle;
     private JobViewWindow instance = instance;
     private readonly List<(string name, string en, bool defVal, string tooltip)> QtKeys = qtKeys;
-    private readonly List<(string name, string en, IHotkeyResolver hkr)> HKResolvers = hkResolvers;
+    private readonly List<(string name, string en, AEAssist.CombatRoutine.View.JobView.IHotkeyResolver hkr)> HKResolvers = hkResolvers;
 
     // 这三条会自动生成
     private readonly List<(string cmdType, string CNCmd, string ENCmd)> cmdList = [];
     private readonly Dictionary<string, string> _qtKeyDict = new(StringComparer.OrdinalIgnoreCase);
-    private readonly Dictionary<string, IHotkeyResolver> _hotkeyDict = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, AEAssist.CombatRoutine.View.JobView.IHotkeyResolver> _hotkeyDict = new(StringComparer.OrdinalIgnoreCase);
 
     // 是否用Toast2提示QT状态
     public bool UseToast2 = false;
@@ -109,7 +109,7 @@ public class MacroManager(JobViewWindow instance,
     /// <param name="name"></param>
     /// <param name="en"></param>
     /// <param name="hkr"></param>
-    public void AddHotkey(string name, string en, IHotkeyResolver hkr)
+    public void AddHotkey(string name, string en, AEAssist.CombatRoutine.View.JobView.IHotkeyResolver hkr)
     {
         if (_handleAddingQTs) instance.AddHotkey(name, hkr);
 
@@ -180,7 +180,7 @@ public class MacroManager(JobViewWindow instance,
         }
     }
 
-    private static void ExecuteHotkey(IHotkeyResolver? hkr)
+    private static void ExecuteHotkey(AEAssist.CombatRoutine.View.JobView.IHotkeyResolver? hkr)
     {
         if (hkr is null)
         {
@@ -239,7 +239,7 @@ public class MacroManager(JobViewWindow instance,
             AddQt(name, en, defVal, tooltip);
         }
 
-        foreach ((string name, string en, IHotkeyResolver hkr) in HKResolvers)
+        foreach ((string name, string en, AEAssist.CombatRoutine.View.JobView.IHotkeyResolver hkr) in HKResolvers)
         {
             AddHotkey(name, en, hkr);
         }
