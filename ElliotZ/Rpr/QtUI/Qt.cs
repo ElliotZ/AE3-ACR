@@ -1,8 +1,8 @@
 ﻿using AEAssist.CombatRoutine;
-using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
 using AEAssist.Helper;
 using ElliotZ.Common;
+using ElliotZ.Common.ModernJobViewFramework;
 using ElliotZ.Rpr.QtUI.Hotkey;
 
 namespace ElliotZ.Rpr.QtUI;
@@ -40,7 +40,7 @@ public static class Qt
         ("自动突进", "AutoIngress", false, "只会在跳了之后能打到的时候跳，能用勾刃就不会跳"),
     ];
 
-    public static readonly List<(string name, string ENname, IHotkeyResolver hkr)> HKResolvers =
+    public static readonly List<(string name, string ENname, AEAssist.CombatRoutine.View.JobView.IHotkeyResolver hkr)> HKResolvers =
     [
         ("入境", "Ingress", new IngressHK(IngressHK.CurrDir)),
         ("出境", "Egress", new EgressHK(IngressHK.CurrDir)),

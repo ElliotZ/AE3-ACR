@@ -1,12 +1,12 @@
 ﻿using AEAssist;
 using AEAssist.CombatRoutine.Module;
-using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Extension;
 using AEAssist.GUI;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
 using ElliotZ.Common;
+using ElliotZ.Common.ModernJobViewFramework;
 using ImGuiNET;
 
 namespace ElliotZ.Rpr.QtUI;
@@ -114,7 +114,8 @@ public static class DevTab
                                   "2025/08/03: 初版。\n" +
                                   "2025/08/10: 重构宏命令系统。\n" +
                                   "2025/08/14: 重构，以及加入爆发总控QT。\n" +
-                                  "2025/08/16：加入印记QT。");
+                                  "2025/08/16：加入印记QT。\n" +
+                                  "2025/08/17: UI重做，感谢HSS老师。");
                 ImGui.EndChild();
             }
         });

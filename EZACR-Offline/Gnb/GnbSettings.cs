@@ -1,6 +1,6 @@
-﻿using AEAssist.CombatRoutine.View.JobView;
-using AEAssist.Helper;
+﻿using AEAssist.Helper;
 using AEAssist.IO;
+using ElliotZ.Common.ModernJobViewFramework;
 
 namespace EZACR_Offline.Gnb;
 

@@ -1,6 +1,7 @@
-﻿using AEAssist.CombatRoutine.View.JobView;
+﻿
 using AEAssist.GUI;
 using Dalamud.Interface.Colors;
+using ElliotZ.Common.ModernJobViewFramework;
 using ImGuiNET;
 
 namespace ElliotZ.Rpr.QtUI;
@@ -17,7 +18,8 @@ public static class ReadmeTab
             ImGuiHelper.Separator();
             ImGui.Bullet();
             ImGui.SameLine();
-            ImGui.Text("单魂衣：神秘环期间只会有一个免费送的变身。暂时不要开，逻辑还没有优化完。");
+            ImGui.Text("单魂衣：神秘环期间只会有一个免费送的变身。暂时逻辑还没有优化完，不保证开了之后循环最优化。" +
+                       "如果高难环境以及写轴时有需要的话，请先联系我。");
             ImGui.Bullet();
             ImGui.SameLine();
             ImGui.Text("神秘环/大丰收/灵魂割/挥割/暴食/魂衣/完人……：比较简单，开了就会打这个技能，不开就不会打。");
@@ -45,6 +47,10 @@ public static class ReadmeTab
             ImGui.PushStyleColor(ImGuiCol.Text, ImGui.ColorConvertFloat4ToU32(new System.Numerics.Vector4(1f, 0f, 0f, 1f)));
             ImGui.Text("播魂种和收获月的Hotkey不要一直猛点，否则后果自负，You have been warned.");
             ImGui.PopStyleColor();
+            ImGui.Bullet();
+            ImGui.SameLine(); 
+            ImGui.Text("因为镰刀的读条还挺多的，推荐安装OrbWalker。");
+
         }
     };
 

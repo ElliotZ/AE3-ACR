@@ -1,7 +1,8 @@
-﻿using AEAssist.CombatRoutine.View.JobView;
+﻿
 using AEAssist.GUI;
 using Dalamud.Interface.Colors;
 using ElliotZ.Common;
+using ElliotZ.Common.ModernJobViewFramework;
 using ImGuiNET;
 using System.Numerics;
 
