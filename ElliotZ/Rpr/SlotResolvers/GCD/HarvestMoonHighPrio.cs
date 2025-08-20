@@ -30,6 +30,6 @@ public class HarvestMoonHighPrio : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(SpellsDef.HarvestMoon.GetSpell(Target));
+        slot.Add(SpellsDef.HarvestMoon.GetSpell(Target!));
     }
 }

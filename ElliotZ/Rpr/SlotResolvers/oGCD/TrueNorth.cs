@@ -21,7 +21,7 @@ public class TrueNorth : ISlotResolver
         if (Qt.Instance.GetQt("AOE") && TargetHelper.GetNearbyEnemyCount(8) >= 3) return -3;
 
         if (Core.Me.GetCurrTarget() is not null &&
-                Core.Me.GetCurrTarget().HasPositional() &&
+                Core.Me.GetCurrTarget()!.HasPositional() &&
                 GCDHelper.GetGCDCooldown() < RprSettings.Instance.AnimLock + 100 &&
                 GCDHelper.GetGCDCooldown() >= RprSettings.Instance.AnimLock &&
                 (Core.Me.HasAura(AurasDef.SoulReaver) ||

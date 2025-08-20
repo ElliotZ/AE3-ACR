@@ -37,6 +37,6 @@ public class Sacrificum : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(SpellsDef.Sacrificium.GetSpell(Target));
+        slot.Add(SpellsDef.Sacrificium.GetSpell(Target!));
     }
 }

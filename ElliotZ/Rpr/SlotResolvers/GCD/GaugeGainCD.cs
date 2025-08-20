@@ -10,17 +10,15 @@ namespace ElliotZ.Rpr.SlotResolvers.GCD;
 
 public class GaugeGainCD : ISlotResolver
 {
-    private static int Soul => Core.Resolve<JobApi_Reaper>().SoulGauge;
-
     public int Check()
     {
         if (SpellsDef.SoulSlice.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Qt.Instance.GetQt("灵魂割") == false) { return -98; }  // -98 for QT toggled off
         if (!Qt.Instance.GetQt("倾泻资源"))
         {
-            if (Soul > 50) { return -4; }  // -4 for Overcapped Resources
+            if (RprHelper.Soul > 50) { return -4; }  // -4 for Overcapped Resources
             if (Core.Me.Level < 78 && 
-                    Soul == 50 && 
+                    RprHelper.Soul == 50 && 
                     SpellsDef.Gluttony.CoolDownInGCDs(3)) { return -4; }
         }
         if (SpellsDef.Enshroud.IsUnlock() && 
