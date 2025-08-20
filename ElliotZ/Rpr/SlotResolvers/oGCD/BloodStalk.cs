@@ -13,8 +13,6 @@ namespace ElliotZ.Rpr.SlotResolvers.oGCD;
 public class BloodStalk : ISlotResolver
 {
     private IBattleChara? Target { get; set; }
-    private static int Soul => Core.Resolve<JobApi_Reaper>().SoulGauge;
-    private static int Shroud => Core.Resolve<JobApi_Reaper>().ShroudGauge;
 
     public int Check()
     {
@@ -32,7 +30,7 @@ public class BloodStalk : ISlotResolver
         if (Qt.Instance.GetQt("挥割/爪") == false) { return -98; }
         if (Core.Me.HasAura(AurasDef.Enshrouded)) { return -1; }  // not this slot resolver
 
-        if (Shroud == 100 ||
+        if (RprHelper.Shroud == 100 ||
                 Core.Me.HasAura(AurasDef.SoulReaver) ||
                 Core.Me.HasAura(AurasDef.Executioner))
         {
@@ -67,11 +65,16 @@ public class BloodStalk : ISlotResolver
             {
                 return -21;
             }
-            if (Soul == 100 && GCDHelper.GetGCDCooldown() >= RprSettings.Instance.AnimLock) return 1;
+            if (RprHelper.Soul == 100
+                && GCDHelper.GetGCDCooldown() >= RprSettings.Instance.AnimLock) 
+            { 
+                return 1; 
+            }
             if (SpellsDef.Gluttony.IsUnlock() &&
-                    SpellsDef.Gluttony.RdyInGCDs(GcdsToOvercap()) &&
-                    !(SpellsDef.Gluttony.RdyInGCDs(2) && SpellsDef.SoulSlice.GetSpell().Charges > 1.7f)) // &&
-                                                                                                         //Soul < 100)
+                    SpellsDef.Gluttony.RdyInGCDs(RprHelper.GcdsToSoulOvercap()) &&
+                    !(SpellsDef.Gluttony.RdyInGCDs(2) 
+                    && SpellsDef.SoulSlice.GetSpell().Charges > 1.7f)) // &&
+                                                                       //Soul < 100)
             {
                 return -22;  // delay for gluttony gauge cost
             }
@@ -80,7 +83,7 @@ public class BloodStalk : ISlotResolver
         {
             if (Qt.Instance.GetQt("神秘环") &&
                     SpellsDef.ArcaneCircle.IsUnlock() &&
-                    !SpellsDef.ArcaneCircle.RdyInGCDs(GcdsToOvercap() + 3))  // &&
+                    !SpellsDef.ArcaneCircle.RdyInGCDs(RprHelper.GcdsToSoulOvercap() + 3))  // &&
                                                                              //Soul < 100)
             {
                 return -31;
@@ -92,16 +95,20 @@ public class BloodStalk : ISlotResolver
                     //Soul < 100 &&
                     SpellsDef.ArcaneCircle.IsUnlock() &&
                     SpellsDef.ArcaneCircle.RdyInGCDs(2) &&
-                    Shroud != 40)
+                    RprHelper.Shroud != 40)
             {
                 return -17;  // delay for gluttony after burst window
             }
-            if (Soul == 100 && GCDHelper.GetGCDCooldown() >= RprSettings.Instance.AnimLock) return 1;
+            if (RprHelper.Soul == 100
+                && GCDHelper.GetGCDCooldown() >= RprSettings.Instance.AnimLock)
+            { 
+                return 1; 
+            }
             if (Qt.Instance.GetQt("神秘环") &&
                     //Soul < 100 &&
                     SpellsDef.ArcaneCircle.IsUnlock() &&
-                    SpellsDef.ArcaneCircle.RdyInGCDs(Math.Min(6, GcdsToOvercap() + 3)) &&
-                    Shroud != 40)
+                    SpellsDef.ArcaneCircle.RdyInGCDs(Math.Min(6, RprHelper.GcdsToSoulOvercap() + 3)) &&
+                    RprHelper.Shroud != 40)
             {
                 return -12;  // delay for gluttony after burst window
             }
@@ -132,21 +139,6 @@ public class BloodStalk : ISlotResolver
             return SpellsDef.GrimSwathe.GetSpell(Target!);
         }
         return Helper.GetActionChange(SpellsDef.BloodStalk).GetSpell();
-    }
-
-    private static int GcdsToOvercap()
-    {
-        int res = (100 - Core.Resolve<JobApi_Reaper>().SoulGauge) / 10;
-        if (Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign,
-                                            BattleData.Instance.GcdDuration * (res + 3),
-                                            false) ||
-            Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign,
-                                            30000 + BattleData.Instance.GcdDuration * res,
-                                            false))
-        {
-            res++;
-        }
-        return res;
     }
 
     public void Build(Slot slot)
