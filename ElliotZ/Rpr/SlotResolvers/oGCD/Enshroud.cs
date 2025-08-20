@@ -48,19 +48,18 @@ public class Enshroud : ISlotResolver
 
         if (Qt.mobMan.Holding) return -3;
 
-        //if (Qt.Instance.GetQt("单魂衣") && Qt.Instance.GetQt("神秘环") &&
-        //    SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 20000) 
-        //{ 
-        //    return -6;  // burst prep
-        //}
+        // delay for ideal host when entering combat with gauge, perfectio can be fit into opener burst this way
+        if (Core.Me.HasAura(AurasDef.BloodsownCircle)
+                || Core.Me.HasAura(AurasDef.ImmortalSacrifice)
+                    && !Core.Me.HasAura(AurasDef.IdealHost))
+        {
+            return -8;
+        }
         if (!Qt.Instance.GetQt("倾泻资源") && !Core.Me.HasAura(AurasDef.IdealHost))  // ignore all if dump qt is set
         {
-            if (Core.Resolve<JobApi_Reaper>().ShroudGauge < 100)
+            if (!Qt.Instance.GetQt("单魂衣") && RprHelper.Shroud < 100)
             {
-                if (!Qt.Instance.GetQt("单魂衣") &&
-                    // Qt.Instance.GetQt("神秘环") &&
-                    //SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 40000)
-                    !DeadZoneCheck())
+                if (!DeadZoneCheck())
                 {
                     return -6;
                 }
@@ -71,6 +70,11 @@ public class Enshroud : ISlotResolver
                 {
                     return -7;
                 }
+            }
+            if (RprHelper.Shroud == 100 && RprHelper.Soul <= 90
+                && SpellsDef.ArcaneCircle.RdyInGCDs(RprHelper.GcdsToSoulOvercap())) 
+            { 
+                return -9; 
             }
             if (SpellsDef.SoulSlice.GetSpell().Charges > 1.6f && 
                     Core.Resolve<JobApi_Reaper>().ShroudGauge < 90)

@@ -8,8 +8,16 @@
         "resolved": "1.2.25",
         "contentHash": "xCXiw7BCxHJ8pF6wPepRUddlh2dlQlbr81gXA72hdk4FLHkKXas7EH/n+fk5UCA/YfMqG1Z6XaPiUjDbUNBUzg=="
       },
+      "AEAssist.NET": {
+        "type": "Transitive",
+        "resolved": "1.0.14",
+        "contentHash": "qg9+uVvIoCwaffQZMeRLGD2IZPABdDB/h1ruJaxMSbjE2BpGM+WKdKwDdlLAIq7wU9+EVs0vuQGRNrD9FKuqFQ=="
+      },
       "elliotz": {
-        "type": "Project"
+        "type": "Project",
+        "dependencies": {
+          "AEAssist.NET": "[1.0.14, )"
+        }
       }
     }
   }

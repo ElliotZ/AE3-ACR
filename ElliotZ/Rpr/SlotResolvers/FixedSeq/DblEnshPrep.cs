@@ -24,17 +24,16 @@ public class DblEnshPrep : ISlotSequence
         {
             return -6;
         }
-        //if (!needShadow(30000)  && 
-        //        SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds > GCDHelper.GetGCDDuration() + 800)
-        //{
-        //    return -6;
-        //}
+
+        // only weave in 1st weaving window
+        if (GCDHelper.GetGCDCooldown() < 1000) return -8;
+
         if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Qt.Instance.GetQt("神秘环") == false || Qt.Instance.GetQt("魂衣") == false) { return -98; }
         if (Qt.Instance.GetQt("单魂衣")) return -98;
-        if (!Core.Resolve<MemApiDuty>().InBossBattle &&
-                Core.Resolve<MemApiDuty>().InMission &&
-                Core.Resolve<MemApiDuty>().DutyMembersNumber() != 8)
+        if (Core.Resolve<MemApiDuty>().InMission &&
+                Core.Resolve<MemApiDuty>().DutyMembersNumber() is 4 or 24 &&
+                !Core.Resolve<MemApiDuty>().InBossBattle)
         {
             return -98;
         }
@@ -77,29 +76,22 @@ public class DblEnshPrep : ISlotSequence
             slot.Add(SpellsDef.HarvestMoon.GetSpell());
         else
             slot.Add(GCD.BuffMaintain.Solve().GetSpell());
-        if (Qt.Instance.GetQt("爆发药"))
+        if (BattleData.Instance.numBurstPhases == 0)
         {
-            if (BattleData.Instance.numBurstPhases == 0)
+            if (Qt.Instance.GetQt("爆发药") && ItemHelper.CheckCurrJobPotion())
             {
-                if (ItemHelper.CheckCurrJobPotion())
-                {
-                    slot.Add(new SlotAction(SlotAction.WaitType.None, 0, Spell.CreatePotion()));
-                    slot.Add(SpellsDef.ArcaneCircle.GetSpell());
-                }
-                else
-                {
-                    slot.Add(new SlotAction(SlotAction.WaitType.WaitForSndHalfWindow, 0, SpellsDef.ArcaneCircle.GetSpell()));
-                }
+                slot.Add(new SlotAction(SlotAction.WaitType.None, 0, Spell.CreatePotion()));
+                slot.Add(SpellsDef.ArcaneCircle.GetSpell());
             }
             else
             {
-                slot.Add(SpellsDef.ArcaneCircle.GetSpell());
-                slot.Add(new SlotAction(SlotAction.WaitType.None, 0, Spell.CreatePotion()));
+                slot.Add(new SlotAction(SlotAction.WaitType.WaitForSndHalfWindow, 0, SpellsDef.ArcaneCircle.GetSpell()));
             }
         }
         else
         {
-            slot.Add(new SlotAction(SlotAction.WaitType.WaitForSndHalfWindow, 0, SpellsDef.ArcaneCircle.GetSpell()));
+            slot.Add(SpellsDef.ArcaneCircle.GetSpell());
+            slot.Add(new SlotAction(SlotAction.WaitType.None, 0, Spell.CreatePotion()));
         }
         BattleData.Instance.numBurstPhases++;
     }

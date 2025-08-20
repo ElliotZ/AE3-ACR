@@ -19,7 +19,7 @@ public class RprRotationEntry : IRotationEntry, IDisposable
     private readonly string _description = "RPR试水";
     public static string SettingsFolderPath = "";
 
-    private List<SlotResolverData> _slotResolvers =
+    private readonly List<SlotResolverData> _slotResolvers =
     [
         // GCD
         new(new EnshroudSk(), SlotMode.Gcd),

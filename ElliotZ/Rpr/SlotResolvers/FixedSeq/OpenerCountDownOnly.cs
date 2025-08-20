@@ -55,7 +55,7 @@ public class OpenerCountDownOnly : IOpener
 
         if (SpellsDef.HellsIngress.GetSpell().IsReadyWithCanCast() &&
                 //Core.Me.GetCurrTarget().Distance(Core.Me) < 15 + targetRing + atkRange &&
-                Core.Me.GetCurrTarget().Distance(Core.Me) > 15 - targetRing - atkRange)
+                Core.Me.GetCurrTarget()!.Distance(Core.Me) > 15 - targetRing - atkRange)
         {
             return true;
         }

@@ -50,4 +50,8 @@
     <PackageReference Remove="DalamudPackager" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AEAssist.NET" Version="1.0.14" />
+  </ItemGroup>
+
 </Project>

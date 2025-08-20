@@ -24,6 +24,7 @@ public class Opener100 : IOpener
             return -2;  // -2 for not in range
         }
         if (SpellsDef.Gluttony.CoolDownInGCDs(3) == false) { return -6; }
+        //if (RprHelper.Shroud >= 50) return -7;
         if (TargetHelper.GetNearbyEnemyCount(25) > 2)
         {
             return -13; // opener is basically only meant for single target
@@ -67,7 +68,7 @@ public class Opener100 : IOpener
 
         if (SpellsDef.HellsIngress.GetSpell().IsReadyWithCanCast() &&
                 //Core.Me.GetCurrTarget().Distance(Core.Me) < 15 + targetRing + atkRange &&
-                Core.Me.GetCurrTarget().Distance(Core.Me) > 15 - targetRing - atkRange)
+                Core.Me.GetCurrTarget()!.Distance(Core.Me) > 15 - targetRing - atkRange)
         {
             return true;
         }

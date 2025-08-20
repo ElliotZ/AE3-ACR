@@ -24,8 +24,8 @@ public class Ingress : ISlotResolver
                     Core.Resolve<JobApi_Reaper>().LemureShroud > 2) &&
                 Qt.Instance.GetQt("自动突进") &&
                 //GCDHelper.GetGCDCooldown() < 1100 &&
-                Core.Me.GetCurrTarget().Distance(Core.Me) < 15 + targetRing + atkRange &&
-                Core.Me.GetCurrTarget().Distance(Core.Me) > 15 - targetRing - atkRange &&
+                Core.Me.GetCurrTarget()!.Distance(Core.Me) < 15 + targetRing + atkRange &&
+                Core.Me.GetCurrTarget()!.Distance(Core.Me) > 15 - targetRing - atkRange &&
                 GCDHelper.GetGCDCooldown() >= RprSettings.Instance.AnimLock)
         {
             return 0;
