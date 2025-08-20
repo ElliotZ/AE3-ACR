@@ -12,7 +12,6 @@ namespace ElliotZ.Rpr.SlotResolvers.oGCD;
 
 public class EnshroudAb : ISlotResolver
 {
-    private int purpOrb => Core.Resolve<JobApi_Reaper>().VoidShroud;
     //private int enemyCount => TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 8, 180);
     private IBattleChara? Target { get; set; }
 
@@ -35,7 +34,7 @@ public class EnshroudAb : ISlotResolver
         //{
         //    return -6;  // -6 for delaying for burst prep
         //}
-        if (purpOrb < 2) { return -3; }
+        if (RprHelper.PurpOrb < 2) { return -3; }
         //if (GCDHelper.GetGCDCooldown() < 800) return -7;  // -7 for avoiding clipping
         if (GCDHelper.GetGCDCooldown() < RprSettings.Instance.AnimLock) return -89;
         return 0;

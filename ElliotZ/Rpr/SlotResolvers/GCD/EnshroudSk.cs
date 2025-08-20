@@ -13,7 +13,6 @@ namespace ElliotZ.Rpr.SlotResolvers.GCD;
 
 public class EnshroudSk : ISlotResolver
 {
-    private static int BlueOrb => Core.Resolve<JobApi_Reaper>().LemureShroud;
     private IBattleChara? Target { get; set; }
     private IBattleChara? CommunioTarget { get; set; }
 
@@ -31,7 +30,7 @@ public class EnshroudSk : ISlotResolver
         {
             return -3;  // -3 for Unmet Prereq Conditions
         }
-        if ((!SpellsDef.Communio.IsUnlock() || BlueOrb > 1) &&
+        if ((!SpellsDef.Communio.IsUnlock() || RprHelper.BlueOrb > 1) &&
                 Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
@@ -41,14 +40,20 @@ public class EnshroudSk : ISlotResolver
         {
             return -6;
         }
-        if (!Core.Me.HasAura(AurasDef.PerfectioOculta) && Core.Me.HasAura(AurasDef.Enshrouded, 8500))
+        if (!Core.Me.HasAura(AurasDef.ArcaneCircle)
+                || Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 
+                                               Helper.GetAuraTimeLeft(AurasDef.ArcaneCircle), 
+                                               false)
+                && Core.Me.HasAura(AurasDef.Enshrouded, 8500)
+                // && !Core.Me.HasAura(AurasDef.PerfectioOculta)
+            )
         {
             if (TargetMgr.Instance.EnemysIn20.Count <= 2 &&
                 Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 30000, false))
             {
                 return -6;
             }
-            else if (TargetMgr.Instance.EnemysIn20.Count > 2 && BuffMaintain.AOEAuraCheck())
+            if (TargetMgr.Instance.EnemysIn20.Count > 2 && BuffMaintain.AOEAuraCheck())
             {
                 return -7;
             }
@@ -63,7 +68,7 @@ public class EnshroudSk : ISlotResolver
 
         if (CommunioTarget is not null &&
                 SpellsDef.Communio.GetSpell().IsReadyWithCanCast() &&
-                BlueOrb < 2)
+                RprHelper.BlueOrb < 2)
         {
             return SpellsDef.Communio.GetSpell(CommunioTarget!);
         }

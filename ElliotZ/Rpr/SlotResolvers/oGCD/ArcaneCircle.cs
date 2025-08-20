@@ -14,7 +14,10 @@ public class ArcaneCircle : ISlotResolver
         if (SpellsDef.ArcaneCircle.GetSpell().IsReadyWithCanCast() == false) { return -99; }
         if (Qt.Instance.GetQt("神秘环") == false) { return -98; }
 
-        if (Helper.AoeTtkCheck() && TTKHelper.IsTargetTTK(Core.Me.GetCurrTarget()))
+        // mostly unused
+        if (Core.Me.GetCurrTarget() is null 
+            || Helper.AoeTtkCheck() 
+            && TTKHelper.IsTargetTTK(Core.Me.GetCurrTarget()!))
         {
             return -16;  // delay for next pack
         }

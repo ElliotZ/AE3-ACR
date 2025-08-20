@@ -29,6 +29,6 @@ public class Perfectio : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(SpellsDef.Perfectio.GetSpell(Target));
+        slot.Add(SpellsDef.Perfectio.GetSpell(Target!));
     }
 }

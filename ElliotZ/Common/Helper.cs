@@ -170,6 +170,18 @@ public static class Helper
         return (lowHPCount / (double)enemyCount > 0.667);
     }
 
+    public static bool AoeTtkCheck(int time)
+    {
+        var enemyCount = TargetHelper.GetNearbyEnemyCount(8);
+        var enemyList = TargetMgr.Instance.EnemysIn12;
+        var lowHPCount = enemyList.Count(v =>
+                                           Core.Me.Distance(v.Value,
+                                                            DistanceMode.IgnoreTargetHitbox |
+                                                            DistanceMode.IgnoreHeight) <= 8 &&
+                                           TTKHelper.IsTargetTTK(v.Value, time, false));
+        return (lowHPCount / (double)enemyCount > 0.667);
+    }
+
     /// <summary>
     /// 在list中添加一个唯一的元素
     /// </summary>

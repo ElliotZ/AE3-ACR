@@ -2,6 +2,12 @@
   "version": 1,
   "dependencies": {
     "net9.0-windows7.0": {
+      "AEAssist.NET": {
+        "type": "Direct",
+        "requested": "[1.0.14, )",
+        "resolved": "1.0.14",
+        "contentHash": "qg9+uVvIoCwaffQZMeRLGD2IZPABdDB/h1ruJaxMSbjE2BpGM+WKdKwDdlLAIq7wU9+EVs0vuQGRNrD9FKuqFQ=="
+      },
       "DotNet.ReproducibleBuilds": {
         "type": "Direct",
         "requested": "[1.2.25, )",
