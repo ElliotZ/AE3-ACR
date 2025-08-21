@@ -32,6 +32,8 @@ public class JobViewSave
     /// 隐藏的qt列表
     public List<string> QtUnVisibleList = [];
 
+    /// QT顺序列表
+    public List<string> QtNameList = [];
 
     ///QT按钮一行有几个
     public int QtLineCount = 3;
@@ -44,10 +46,16 @@ public class JobViewSave
     /// 隐藏的hotkey列表
     public List<string> HotkeyUnVisibleList = [];
 
+    /// Hotkey顺序列表
+    public List<string> HotkeyNameList = [];
+
     ///hotkey按钮一行有几个
     public int HotkeyLineCount = 4;
 
     public bool AutoReset = false;
+
+    public bool LockQTWindow = false;
+    public bool LockHotkeyWindow = false;
 
     public bool ShowQT = true;
     public bool ShowHotkey = true;

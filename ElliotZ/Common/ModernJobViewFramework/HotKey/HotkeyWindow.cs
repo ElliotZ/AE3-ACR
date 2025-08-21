@@ -30,14 +30,14 @@ public class HotkeyWindow(
     public List<string> ActiveList = [];
 
     /// 动态按顺序储存hotkey名称的list，用于排序显示hotkey
-    public List<string> HotkeyNameList = [];
+    public List<string> HotkeyNameList => save.HotkeyNameList;
     // 记录控件名称和对应快捷键的字典
     public Dictionary<string, HotkeyConfig> HotkeyConfig => save.HotkeyConfig;
     
     ///窗口拖动
-    public bool LockWindow;
-    
-    private Dictionary<string, long> lastActiveTime = new();
+    public bool LockWindow { get => save.LockHotkeyWindow; set => save.LockHotkeyWindow = value; }
+
+private Dictionary<string, long> lastActiveTime = new();
 
     //public Dictionary<string, HotKeySpell> HotKeyConfigs = config;
 
