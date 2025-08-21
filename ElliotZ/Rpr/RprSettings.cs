@@ -92,4 +92,6 @@ public class RprSettings
         QtLineCount = 3,
         QtUnVisibleList = ["挥割/爪", "暴食", "灵魂割", "祭牲",]
     };
+
+    public AEAssist.CombatRoutine.View.JobView.JobViewSave t = new();
 }

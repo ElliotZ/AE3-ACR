@@ -22,7 +22,7 @@ public class QtWindow
     private Dictionary<string, QtControl> QtDict = new();
 
     /// 动态按顺序储存qt名称的list，用于排序显示qt
-    public List<string> QtNameList = [];
+    public List<string> QtNameList => save.QtNameList;
 
     /// 隐藏的qt列表
     public List<string> QtUnVisibleList => save.QtUnVisibleList;
@@ -30,7 +30,7 @@ public class QtWindow
     public Dictionary<string, HotkeyConfig> QtHotkeyConfig => save.QtHotkeyConfig;
 
     ///窗口拖动
-    public bool LockWindow;
+    public bool LockWindow { get => save.LockQTWindow; set => save.LockQTWindow = value; } 
 
     /// 构造函数中恢复窗口位置
     public QtWindow(JobViewSave save, string name)
