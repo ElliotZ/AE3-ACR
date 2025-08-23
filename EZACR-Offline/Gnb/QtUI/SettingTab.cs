@@ -6,56 +6,29 @@ using ImGuiNET;
 
 namespace EZACR_Offline.Gnb.QtUI;
 
-public class SettingTab
+public static class SettingTab
 {
     public static void Build(JobViewWindow instance)
     {
         instance.AddTab("设置", window =>
         {
             ImGui.Text("ACR设置");
-            string preview_value = "";
-            if (GnbSettings.Instance.ACRMode == "Normal")
+            var previewValue = GnbSettings.Instance.ACRMode switch
             {
-                preview_value = "日随";
-            }
-            else if (GnbSettings.Instance.ACRMode == "HighEnd1")
-            {
-                preview_value = "100级2.46 2G循环";
-            }
-            else if (GnbSettings.Instance.ACRMode == "HighEnd2")
-            {
-                preview_value = "100级2.5 2G循环改";
-            }
-            else if (GnbSettings.Instance.ACRMode == "HighEnd3")
-            {
-                preview_value = "100级2.46 1G循环改";
-            }
-            else if (GnbSettings.Instance.ACRMode == "HighEnd4")
-            {
-                preview_value = "100级2.5 3G循环改";
-            }
-            else if (GnbSettings.Instance.ACRMode == "HighEnd5")
-            {
-                preview_value = "100级2.5 1G快速起手";
-            }
-            else if (GnbSettings.Instance.ACRMode == "绝亚2G")
-            {
-                preview_value = "80级 2G血壤绝亚起手";
-            }
-            else if (GnbSettings.Instance.ACRMode == "绝欧1G")
-            {
-                preview_value = "90级 1G血壤无情绝欧起手";
-            }
-            else if (GnbSettings.Instance.ACRMode == "神兵5G")
-            {
-                preview_value = "70级 5G无情绝神兵起手";
-            }
-            else if (GnbSettings.Instance.ACRMode == "70级2G")
-            {
-                preview_value = "70级 2G无情起手";
-            }
+                "Normal" => "日随",
+                "HighEnd1" => "100级2.46 2G循环",
+                "HighEnd2" => "100级2.5 2G循环改",
+                "HighEnd3" => "100级2.46 1G循环改",
+                "HighEnd4" => "100级2.5 3G循环改",
+                "HighEnd5" => "100级2.5 1G快速起手",
+                "绝亚2G" => "80级 2G血壤绝亚起手",
+                "绝欧1G" => "90级 1G血壤无情绝欧起手",
+                "神兵5G" => "70级 5G无情绝神兵起手",
+                "70级2G" => "70级 2G无情起手",
+                _ => ""
+            };
 
-            if (ImGui.BeginCombo("循环选择", preview_value))
+            if (ImGui.BeginCombo("循环选择", previewValue))
             {
                 if (ImGui.Selectable("日随"))
                 {
@@ -246,7 +219,7 @@ public class SettingTab
                 GnbSettings.Instance.Save();
             }
 
-            bool v = GnbSettings.Instance.起手给MT刚玉;
+            var v = GnbSettings.Instance.起手给MT刚玉;
             ImGui.Checkbox("是否默认起手2s刚玉PM2", ref v);
             if (v != GnbSettings.Instance.起手给MT刚玉)
             {
@@ -254,7 +227,7 @@ public class SettingTab
                 GnbSettings.Instance.Save();
             }
 
-            bool v2 = GnbSettings.Instance.倒计时自动盾姿;
+            var v2 = GnbSettings.Instance.倒计时自动盾姿;
             ImGui.Checkbox("是否自动盾姿-基于时间轴职能设置", ref v2);
             if (v2 != GnbSettings.Instance.倒计时自动盾姿)
             {
@@ -262,7 +235,7 @@ public class SettingTab
                 GnbSettings.Instance.Save();
             }
 
-            bool v3 = GnbSettings.Instance.倒计时是否ST关盾姿;
+            var v3 = GnbSettings.Instance.倒计时是否ST关盾姿;
             ImGui.Checkbox("是否ST起手关盾-需求前置自动盾姿", ref v3);
             if (v3 != GnbSettings.Instance.倒计时是否ST关盾姿)
             {
@@ -270,7 +243,7 @@ public class SettingTab
                 GnbSettings.Instance.Save();
             }
 
-            bool v4 = GnbSettings.Instance.倒计时开大星云;
+            var v4 = GnbSettings.Instance.倒计时开大星云;
             ImGui.Checkbox("是否默认倒数开星云", ref v4);
             if (v4 != GnbSettings.Instance.倒计时开大星云)
             {
@@ -278,7 +251,7 @@ public class SettingTab
                 GnbSettings.Instance.Save();
             }
 
-            bool v5 = GnbSettings.Instance.倒计时开铁壁;
+            var v5 = GnbSettings.Instance.倒计时开铁壁;
             ImGui.Checkbox("是否默认倒数开铁壁", ref v5);
             if (v5 != GnbSettings.Instance.倒计时开铁壁)
             {
@@ -353,7 +326,7 @@ public class SettingTab
                     ImGui.Text("自动拉怪设置:");
                     ImGui.Text("自动拉怪QT开启时，只会使用基础连击(单体与AOE)、闪雷弹、刚玉之心。");
                     ImGui.Text("当你拉到位站在原地不动一定时间后，会自动关闭自动拉怪QT（你也可以选择手动关闭）。开始正常使用输出与减伤技能。");
-                    bool v6 = GnbSettings.Instance.自动拉怪;
+                    var v6 = GnbSettings.Instance.自动拉怪;
                     ImGui.Checkbox("是否默认打开自动拉怪", ref v6);
                     if (v6 != GnbSettings.Instance.自动拉怪)
                     {
@@ -363,7 +336,7 @@ public class SettingTab
                         GnbSettings.Instance.Save();
                     }
 
-                    float v7 = GnbSettings.Instance.自动拉怪停止时间;
+                    var v7 = GnbSettings.Instance.自动拉怪停止时间;
                     if (ImGui.SliderFloat("站定多少秒后关闭拉怪模式：", ref v7, 1f, 4f))
                     {
                         GnbSettings.Instance.自动拉怪停止时间 = v7;
@@ -376,26 +349,22 @@ public class SettingTab
                 Console.WriteLine("UI异常: " + ex.Message);
             }
 
-            if (ImGui.CollapsingHeader("插入技能状态"))
+            if (!ImGui.CollapsingHeader("插入技能状态")) return;
+            if (ImGui.Button("清除队列"))
             {
-                if (ImGui.Button("清除队列"))
-                {
-                    AI.Instance.BattleData.HighPrioritySlots_OffGCD.Clear();
-                    AI.Instance.BattleData.HighPrioritySlots_GCD.Clear();
-                }
+                AI.Instance.BattleData.HighPrioritySlots_OffGCD.Clear();
+                AI.Instance.BattleData.HighPrioritySlots_GCD.Clear();
+            }
 
-                ImGui.SameLine();
-                if (ImGui.Button("清除一个"))
-                {
-                    if (AI.Instance.BattleData.HighPrioritySlots_OffGCD.Count > 0)
-                    {
-                        AI.Instance.BattleData.HighPrioritySlots_OffGCD.Dequeue();
-                    }
-                    if (AI.Instance.BattleData.HighPrioritySlots_GCD.Count > 0)
-                    {
-                        AI.Instance.BattleData.HighPrioritySlots_GCD.Dequeue();
-                    }
-                }
+            ImGui.SameLine();
+            if (!ImGui.Button("清除一个")) return;
+            if (AI.Instance.BattleData.HighPrioritySlots_OffGCD.Count > 0)
+            {
+                AI.Instance.BattleData.HighPrioritySlots_OffGCD.Dequeue();
+            }
+            if (AI.Instance.BattleData.HighPrioritySlots_GCD.Count > 0)
+            {
+                AI.Instance.BattleData.HighPrioritySlots_GCD.Dequeue();
             }
         });
     }

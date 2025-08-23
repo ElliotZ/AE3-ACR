@@ -15,20 +15,22 @@ public static class DevTab
 {
     public static void Build(JobViewWindow instance)
     {
-        instance.AddTab("Dev", window =>
+        instance.AddTab("Dev", _ =>
         {
             if (ImGui.CollapsingHeader("Dev信息"))
             {
                 if (ECHelper.ClientState.LocalPlayer != null)
                 {
-                    var rre = new RprRotationEntry();
-                    ImGui.Text($"周围小怪总当前血量百分比: {MobPullManager.GetTotalHealthPercentageOfNearbyEnemies() * 100f:F2}%" + "%");
-                    ImGui.Text($"预估周围小怪平均死亡时间: {MobPullManager.GetAverageTTKOfNearbyEnemies() / 1000f:F2} 秒");
+                    ImGui.Text($"周围小怪总当前血量百分比: " +
+                               $"{MobPullManager.GetTotalHealthPercentageOfNearbyEnemies() * 100f:F2}%" + "%");
+                    ImGui.Text($"预估周围小怪平均死亡时间: " +
+                               $"{MobPullManager.GetAverageTTKOfNearbyEnemies() / 1000f:F2} 秒");
                     ImGui.Text($"上一个连击: {Core.Resolve<MemApiSpell>().GetLastComboSpellId()}");
                     ImGui.Text($"上一个GCD: {Core.Resolve<MemApiSpellCastSuccess>().LastGcd}");
                     ImGui.Text($"上一个能力技: {Core.Resolve<MemApiSpellCastSuccess>().LastAbility}");
-                    ImGui.Text("下一个GCD技能：" + rre.CheckFirstAvailableSkillGCD());
-                    ImGui.Text("下一个offGCD技能：" + rre.CheckFirstAvailableSkilloffGCD());
+                    ImGui.Text("下一个GCD技能：" + CheckFirstAvailableSkillGCD());
+                    ImGui.Text("下一个offGCD技能：" + CheckFirstAvailableSkillOffGCD());
+                    ImGui.Text("目标距离：" + Core.Me.Distance(Core.Me.GetCurrTarget()!));
                     ImGui.Text($"当前地图ID: {Core.Resolve<MemApiZoneInfo>().GetCurrTerrId()} ");
                     ImGui.Text($"角色当前坐标: {Core.Me.Position} ");
                     if (ImGui.Button("CID:" + ECHelper.ClientState.LocalContentId))
@@ -39,27 +41,26 @@ public static class DevTab
                     Dictionary<uint, IBattleChara> dictionary = [];
                     Core.Resolve<MemApiTarget>().GetNearbyGameObjects(20f, dictionary);
                     dictionary.Remove(Core.Me.EntityId);
-                    string text2 = string.Join(", ",
-                                               dictionary.Values.Select(character => $"{character.Name}"));
+                    var text2 = string.Join(", ",
+                                               dictionary.Values.Select(character 
+                                                   => $"{character.Name}"));
                     ImGui.PushTextWrapPos(ImGui.GetCursorPosX() + 410f);
                     ImGui.Text("周围20m目标: " + text2);
-                    string targetGOID;
-                    if (Core.Me.GetCurrTarget() is null)
-                    {
-                        targetGOID = "null";
-                    }
-                    else
-                    {
-                        targetGOID = Core.Me.GetCurrTarget()!.GameObjectId.ToString();
-                    }
+                    var targetGOID = Core.Me.GetCurrTarget() is null ? 
+                        "null" : 
+                        Core.Me.GetCurrTarget()!.GameObjectId.ToString();
                     ImGui.Text("Target GameObjectId:" + targetGOID);
                     ImGui.Text("Self Casting Spell ID" + (Core.Me.CastActionId).ToString());
                     ImGui.PopTextWrapPos();
-                    ImGui.Text("Qt.mobMan.Holding: " + Qt.mobMan.Holding);
+                    ImGui.Text("Qt.mobMan.Holding: " + Qt.MobMan.Holding);
                     ImGui.Text($"自身面向 ({Core.Me.Rotation:F2})");
                 }
 
-                ImGuiHelper.Separator(7u, 7u);
+                ImGuiHelper.Separator();
+                if (ImGui.Button("Load Settings"))
+                {
+                    RprSettings.Build(RprRotationEntry.SettingsFolderPath);
+                }
             }
 
             if (ImGui.CollapsingHeader("插入技能状态"))
@@ -116,9 +117,30 @@ public static class DevTab
                                   "2025/08/14: 重构，以及加入爆发总控QT。\n" +
                                   "2025/08/16：加入印记QT。\n" +
                                   "2025/08/17: UI重做，感谢HSS老师。\n" +
-                                  "2025/08/20: 优化技能和爆发窗口逻辑，轻度重构，迁移至新工作流。");
+                                  "2025/08/20: 优化技能和爆发窗口逻辑，轻度重构。\n" +
+                                  "2025/08/23: 重构，，迁移至新工作流。");
                 ImGui.EndChild();
             }
         });
+    }
+
+    private static string CheckFirstAvailableSkillGCD()
+    {
+        var slotResolverData =
+            RotationPrioSys.SlotResolvers.FirstOrDefault(srd =>
+                srd.SlotMode == SlotMode.Gcd &&
+                srd.SlotResolver.Check() >= 0);
+        return slotResolverData != null ?
+            slotResolverData.SlotResolver.GetType().Name : "无技能";
+    }
+
+    private static string CheckFirstAvailableSkillOffGCD()
+    {
+        var slotResolverData =
+            RotationPrioSys.SlotResolvers.FirstOrDefault(srd =>
+                srd.SlotMode == SlotMode.OffGcd &&
+                srd.SlotResolver.Check() >= 0);
+        return slotResolverData != null ?
+            slotResolverData.SlotResolver.GetType().Name : "无技能";
     }
 }

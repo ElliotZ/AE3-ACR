@@ -18,7 +18,7 @@ public class Provoke : ISlotResolver
             return -101;
         }
 
-        if ((DateTime.Now - BattleData.Instance.lastFalseTime).TotalSeconds <= 5.0)
+        if ((DateTime.Now - BattleData.Instance.LastFalseTime).TotalSeconds <= 5.0)
         {
             return -2;
         }

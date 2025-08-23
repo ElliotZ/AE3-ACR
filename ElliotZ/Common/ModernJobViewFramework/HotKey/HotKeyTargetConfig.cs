@@ -1,5 +1,5 @@
 ﻿using AEAssist.CombatRoutine;
-using Dalamud.Game.ClientState.Objects.Types;
+
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 
 namespace ElliotZ.Common.ModernJobViewFramework.HotKey;

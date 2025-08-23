@@ -4,7 +4,6 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
-using Dalamud.Game.ClientState.Objects.Types;
 using ElliotZ.Common;
 using EZACR_Offline.Gnb.QtUI;
 
@@ -12,11 +11,7 @@ namespace EZACR_Offline.Gnb;
 
 public class EventHandler : IRotationEventHandler
 {
-    private long randomSongTime;
-
     public static bool TimerReset;
-
-    public static bool IsStopped { get; set; }
 
     public async Task OnPreCombat()
     {
@@ -33,7 +28,7 @@ public class EventHandler : IRotationEventHandler
             Qt.Instance.NewDefault("自动拉怪", newDefault: true);
             Qt.Instance.SetQt("自动拉怪", qtValue: true);
         }
-        if (GnbSettings.Instance.NoBurst) Qt.mobMan.Reset();
+        if (GnbSettings.Instance.NoBurst) Qt.MobMan.Reset();
 
         StopHelper.StopActions(1000);
         await Task.CompletedTask;
@@ -80,7 +75,7 @@ public class EventHandler : IRotationEventHandler
             Qt.Instance.NewDefault("自动拉怪", newDefault: true);
             Qt.Instance.SetQt("自动拉怪", qtValue: true);
         }
-        if (GnbSettings.Instance.NoBurst) Qt.mobMan.Reset();
+        if (GnbSettings.Instance.NoBurst) Qt.MobMan.Reset();
 
         Qt.Instance.NewDefault("倾泻爆发", newDefault: false);
         Qt.Instance.SetQt("倾泻爆发", qtValue: false);
@@ -103,10 +98,10 @@ public class EventHandler : IRotationEventHandler
 
     public void OnBattleUpdate(int currTimeInMs)
     {
-        IBattleChara? currTarget = Core.Me.GetCurrTarget();
+        var currTarget = Core.Me.GetCurrTarget();
         if (currTarget != null &&
                 currTarget.IsBoss() &&
-                !Core.Me.GetCurrTarget().IsDummy() &&
+                !currTarget.IsDummy() &&
                 Qt.Instance.GetQt("自动拉怪"))
         {
             //Qt.Instance.NewDefault("自动拉怪", newDefault: false);
@@ -115,22 +110,22 @@ public class EventHandler : IRotationEventHandler
 
         if (!TimerReset)
         {
-            BattleData.Instance.lastFalseTime = DateTime.Now;
+            BattleData.Instance.LastFalseTime = DateTime.Now;
             TimerReset = true;
         }
 
         if (!Core.Me.IsMoving() && Qt.Instance.GetQt("自动拉怪"))
         {
-            if ((DateTime.Now - BattleData.Instance.lastFalseTime).TotalSeconds >= (double)GnbSettings.Instance.自动拉怪停止时间)
+            if ((DateTime.Now - BattleData.Instance.LastFalseTime).TotalSeconds >= GnbSettings.Instance.自动拉怪停止时间)
             {
                 LogHelper.Print("检测到停止移动" + GnbSettings.Instance.自动拉怪停止时间 + "秒，自动拉怪已关闭");
-                BattleData.Instance.lastFalseTime = DateTime.Now;
+                BattleData.Instance.LastFalseTime = DateTime.Now;
                 Qt.Instance.SetQt("自动拉怪", qtValue: false);
             }
         }
         else
         {
-            BattleData.Instance.lastFalseTime = DateTime.Now;
+            BattleData.Instance.LastFalseTime = DateTime.Now;
         }
 
         // logic for holding bursts when mob pack is about to die
@@ -151,7 +146,7 @@ public class EventHandler : IRotationEventHandler
         //}
         if (GnbSettings.Instance.NoBurst)
         {
-            Qt.mobMan.HoldBurstIfMobsDying(currTimeInMs,
+            Qt.MobMan.HoldBurstIfMobsDying(currTimeInMs,
                                            GnbSettings.Instance.MinMobHpPercent,
                                            GnbSettings.Instance.minTTK * 1000);
         }
@@ -159,19 +154,19 @@ public class EventHandler : IRotationEventHandler
         if (GnbSettings.Instance.HandleStopMechs) StopHelper.StopActions(1000);
     }
 
-    public async void OnEnterRotation()
+    public void OnEnterRotation()
     {
         LogHelper.Print("KKxb绝枪8.5国际服版本(国服可用)TEST");
         LogHelper.Print("悬浮窗增加自动开盾姿及ST不自动关选项(奇怪的倒计时处理问题 正常不正常交替出现)  出现问题请带上设置去DC使用问题反馈@KKxb");
         LogHelper.Print("本ACR使用须知请查看悬浮窗");
         Core.Resolve<MemApiChatMessage>().Toast2("KKxb绝枪ACR 使用请确认悬浮窗设置说明与QT", 1, 4000);
 
-        Qt.macroMan.Init();
+        Qt.MacroMan.Init();
     }
 
     public void OnExitRotation()
     {
-        Qt.macroMan.Exit();
+        Qt.MacroMan.Exit();
     }
 
     public void OnTerritoryChanged()

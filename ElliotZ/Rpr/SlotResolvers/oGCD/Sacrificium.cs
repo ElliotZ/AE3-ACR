@@ -13,9 +13,13 @@ public class Sacrificum : ISlotResolver
     private IBattleChara? Target { get; set; }
     public int Check()
     {
-        Target = SpellsDef.Sacrificium.OptimalAOETarget(1, Qt.Instance.GetQt("智能AOE"), 5);
+        Target = SpellsDef.Sacrificium.OptimalAOETarget(1,
+            Qt.Instance.GetQt("智能AOE"),
+            5);
         if (Target is null ||
-                SpellsDef.Sacrificium.GetSpell(Target).IsReadyWithCanCast() == false)
+                SpellsDef.Sacrificium
+                    .GetSpell(Target)
+                    .IsReadyWithCanCast() is false)
         {
             return -99;
         }
@@ -23,7 +27,7 @@ public class Sacrificum : ISlotResolver
         if (Qt.Instance.GetQt("神秘环") &&
                 ((!Core.Me.HasAura(AurasDef.ArcaneCircle) &&
                  SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 10000) ||
-                 BattleData.Instance.justCastAC) &&
+                 BattleData.Instance.JustCastAC) &&
                  !Qt.Instance.GetQt("倾泻资源"))
         {
             return -6;  // -6 for delaying for burst prep

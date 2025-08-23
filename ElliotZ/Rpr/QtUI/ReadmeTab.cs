@@ -56,7 +56,7 @@ public static class ReadmeTab
 
     public static void Build(JobViewWindow instance)
     {
-        instance.AddTab("README", window =>
+        instance.AddTab("README", _ =>
         {
             ImGui.Dummy(new System.Numerics.Vector2(0, 1));
             ImGui.Dummy(new System.Numerics.Vector2(5, 0));

@@ -4,22 +4,17 @@ using ElliotZ.Rpr.QtUI;
 
 namespace ElliotZ.Rpr.Triggers;
 
-public class TriggerActionHotkey : ITriggerAction
+public class TriggerActionHotkey() : ITriggerAction
 {
     public string DisplayName { get; } = "Reaper/Hotkey";
-    public string? Remark { get; set; }
+    public string Remark { get; set; } = "";
 
     public string Key = "";
     public bool Value;
 
     // 辅助数据 因为是private 所以不存档
     private int _selectIndex;
-    private readonly string[] _hotkeyArray;
-
-    public TriggerActionHotkey()
-    {
-        _hotkeyArray = Qt.Instance.GetHotkeyArray();
-    }
+    private readonly string[] _hotkeyArray = Qt.Instance.GetHotkeyArray();
 
     public bool Draw()
     {

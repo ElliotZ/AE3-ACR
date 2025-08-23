@@ -2,6 +2,9 @@
 using AEAssist.Helper;
 using AEAssist.IO;
 using ElliotZ.Common.ModernJobViewFramework;
+// ReSharper disable FieldCanBeMadeReadOnly.Global
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+#pragma warning disable CS8604 // Possible null reference argument.
 
 namespace ElliotZ.Rpr;
 
@@ -17,12 +20,12 @@ public class RprSettings
 
     #region 标准模板代码 可以直接复制后改掉类名即可
 
-    private static string path;
+    private static string _path;
 
     public static void Build(string settingPath)
     {
-        path = Path.Combine(settingPath, $"{nameof(RprSettings)}.json");
-        if (!File.Exists(path))
+        _path = Path.Combine(settingPath, $"{nameof(RprSettings)}.json");
+        if (!File.Exists(_path))
         {
             Instance = new RprSettings();
             Instance.Save();
@@ -31,19 +34,19 @@ public class RprSettings
 
         try
         {
-            Instance = JsonHelper.FromJson<RprSettings>(File.ReadAllText(path));
+            Instance = JsonHelper.FromJson<RprSettings>(File.ReadAllText(_path));
         }
         catch (Exception e)
         {
-            Instance = new();
+            Instance = new RprSettings();
             LogHelper.Error(e.ToString());
         }
     }
 
     public void Save()
     {
-        _ = Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-        File.WriteAllText(path, JsonHelper.ToJson(this));
+        Directory.CreateDirectory(Path.GetDirectoryName(_path));
+        File.WriteAllText(_path, JsonHelper.ToJson(this));
     }
 
     #endregion
@@ -72,7 +75,7 @@ public class RprSettings
     public bool AutoFeint = false;
     public float MinMobHpPercent = 0.1f;
     public float ConcentrationThreshold = 0.75f;
-    public int minTTK = 15;
+    public int MinTTK = 15;
     public bool HandleStopMechs = true;
 
     // Opener Settings
@@ -85,13 +88,11 @@ public class RprSettings
     //public bool TimeLinesDebug = false;
 
     // QT设置存档
-    public Dictionary<String, bool> QtStates = [];
+    public Dictionary<string, bool> QtStates = [];
     public JobViewSave JobViewSave = new()
     {
         CurrentTheme = ModernTheme.ThemePreset.RPR,
         QtLineCount = 3,
         QtUnVisibleList = ["挥割/爪", "暴食", "灵魂割", "祭牲",]
     };
-
-    public AEAssist.CombatRoutine.View.JobView.JobViewSave t = new();
 }

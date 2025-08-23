@@ -7,13 +7,12 @@ using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
+// ReSharper disable RedundantBoolCompare
 
 namespace ElliotZ.Rpr.SlotResolvers.FixedSeq;
 
 public class DblEnshPrep : ISlotSequence
 {
-    public Action? CompletedAction { get; set; }
-
     //private static bool needShadow(int t) => Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, t, false);
     public static double PreAcEnshTimer => GCDHelper.GetGCDDuration() * 2.5 + 800;
 
@@ -28,8 +27,8 @@ public class DblEnshPrep : ISlotSequence
         // only weave in 1st weaving window
         if (GCDHelper.GetGCDCooldown() < 1000) return -8;
 
-        if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() == false) { return -99; }
-        if (Qt.Instance.GetQt("神秘环") == false || Qt.Instance.GetQt("魂衣") == false) { return -98; }
+        if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() is false) { return -99; }
+        if (!Qt.Instance.GetQt("神秘环") || !Qt.Instance.GetQt("魂衣")) { return -98; }
         if (Qt.Instance.GetQt("单魂衣")) return -98;
         if (Core.Resolve<MemApiDuty>().InMission &&
                 Core.Resolve<MemApiDuty>().DutyMembersNumber() is 4 or 24 &&
@@ -37,7 +36,8 @@ public class DblEnshPrep : ISlotSequence
         {
             return -98;
         }
-        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
+        if (Core.Me.Distance(Core.Me.GetCurrTarget()!) 
+                > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
         }
@@ -76,7 +76,7 @@ public class DblEnshPrep : ISlotSequence
             slot.Add(SpellsDef.HarvestMoon.GetSpell());
         else
             slot.Add(GCD.BuffMaintain.Solve().GetSpell());
-        if (BattleData.Instance.numBurstPhases == 0)
+        if (BattleData.Instance.NumBurstPhases == 0)
         {
             if (Qt.Instance.GetQt("爆发药") && ItemHelper.CheckCurrJobPotion())
             {
@@ -85,7 +85,9 @@ public class DblEnshPrep : ISlotSequence
             }
             else
             {
-                slot.Add(new SlotAction(SlotAction.WaitType.WaitForSndHalfWindow, 0, SpellsDef.ArcaneCircle.GetSpell()));
+                slot.Add(new SlotAction(SlotAction.WaitType.WaitForSndHalfWindow,
+                    0,
+                    SpellsDef.ArcaneCircle.GetSpell()));
             }
         }
         else
@@ -93,6 +95,6 @@ public class DblEnshPrep : ISlotSequence
             slot.Add(SpellsDef.ArcaneCircle.GetSpell());
             slot.Add(new SlotAction(SlotAction.WaitType.None, 0, Spell.CreatePotion()));
         }
-        BattleData.Instance.numBurstPhases++;
+        BattleData.Instance.NumBurstPhases++;
     }
 }

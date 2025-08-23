@@ -13,10 +13,9 @@ namespace ElliotZ.Rpr.QtUI.Hotkey;
 /// <summary>
 /// 只使用不卡gcd的强插
 /// </summary>
-public class IngressHK(int hktype) : HotKeyResolver(SpellsDef.HellsIngress, SpellTargetType.Self, false, true)
+public class IngressHK(int hkType) :  // 1 - use current direction, 2 - face target, 3 - face camera
+    HotKeyResolver(SpellsDef.HellsIngress, SpellTargetType.Self, false)
 {
-    private readonly int HkType = hktype;  // 1 - use current direction, 2 - face target, 3 - face camera
-
     public const int CurrDir = 1;
     public const int FaceTarget = 2;
     public const int FaceCam = 3;
@@ -29,7 +28,7 @@ public class IngressHK(int hktype) : HotKeyResolver(SpellsDef.HellsIngress, Spel
         }
         else
         {
-            switch (HkType)
+            switch (hkType)
             {
                 case FaceTarget:
                     HotkeyHelper.DrawSpellImage(size, "../../ACR/ElliotZ/HKImages/ingress_t.png");
@@ -66,7 +65,7 @@ public class IngressHK(int hktype) : HotKeyResolver(SpellsDef.HellsIngress, Spel
         }
         else
         {
-            switch (HkType)
+            switch (hkType)
             {
                 case 2:
                     if (Core.Me.GetCurrTarget() is not null)
@@ -79,8 +78,6 @@ public class IngressHK(int hktype) : HotKeyResolver(SpellsDef.HellsIngress, Spel
                 case 3:
                     Core.Resolve<MemApiMoveControl>().Stop();
                     Core.Resolve<MemApiMove>().SetRot(CameraHelper.GetCameraRotation());
-                    break;
-                default:
                     break;
             }
             AI.Instance.BattleData.AddSpell2NextSlot(SpellsDef.HellsIngress.GetSpell());

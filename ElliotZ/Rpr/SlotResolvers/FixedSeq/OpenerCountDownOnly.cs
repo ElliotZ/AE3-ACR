@@ -35,7 +35,7 @@ public class OpenerCountDownOnly : IOpener
         }
         if (RprSettings.Instance.PrepullSprint && Spell.CreateSprint().IsReadyWithCanCast())
         {
-            cdh.AddAction(startTime, () => Spell.CreateSprint());
+            cdh.AddAction(startTime, Spell.CreateSprint);
         }
         cdh.AddAction(RprSettings.Instance.PrepullCastTimeHarpe,
                       () => SpellsDef.Harpe.GetSpell(SpellTargetType.Target));
@@ -53,16 +53,12 @@ public class OpenerCountDownOnly : IOpener
         var targetRing = Core.Me.GetCurrTarget()!.HitboxRadius * 2;
         var atkRange = Helper.GlblSettings.AttackRange;
 
-        if (SpellsDef.HellsIngress.GetSpell().IsReadyWithCanCast() &&
-                //Core.Me.GetCurrTarget().Distance(Core.Me) < 15 + targetRing + atkRange &&
-                Core.Me.GetCurrTarget()!.Distance(Core.Me) > 15 - targetRing - atkRange)
-        {
-            return true;
-        }
-        return false;
+        return SpellsDef.HellsIngress.GetSpell().IsReadyWithCanCast() &&
+               //Core.Me.GetCurrTarget().Distance(Core.Me) < 15 + targetRing + atkRange &&
+               Core.Me.GetCurrTarget()!.Distance(Core.Me) > 15 - targetRing - atkRange;
     }
 
-    private Spell PrepullIngress()
+    private static Spell PrepullIngress()
     {
         Core.Resolve<MemApiMoveControl>().Stop();
         Core.Resolve<MemApiMove>().SetRot(Helper.GetRotationToTarget(Core.Me.Position,
@@ -73,7 +69,5 @@ public class OpenerCountDownOnly : IOpener
     public List<Action<Slot>> Sequence { get; } = [];
 
     public uint Level { get; } = 1;
-
-    public Action? CompletedAction { get; set; }
 }
 
