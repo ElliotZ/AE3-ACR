@@ -8,5 +8,9 @@ public class HotkeyControl
     internal IHotkeyResolver Slot;
     internal string ToolTip = "";
 
-    internal HotkeyControl(string name) => Name = name;
+    internal HotkeyControl(string name, IHotkeyResolver slot)
+    {
+        Name = name;
+        Slot = slot;
+    }
 }

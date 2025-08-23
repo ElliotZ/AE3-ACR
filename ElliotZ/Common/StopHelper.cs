@@ -4,7 +4,10 @@ using AEAssist.CombatRoutine.Module.Target;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
-using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
+// ReSharper disable ConvertToConstant.Global
 
 namespace ElliotZ.Common;
 
@@ -44,15 +47,32 @@ public static class StopHelper
     public const uint NoPos = 3808u;
     #endregion
 
-    private static bool _manualOverride = false;
-    private static bool _untargeted = false;
-    private static bool _lastStopVal = false;
+    private static bool _manualOverride;
+    private static bool _untargeted;
+    private static bool _lastStopVal;
 
     public static List<uint> 加速度炸弹 => AccelBomb;
-    public static readonly List<uint> AccelBomb = [4144, 3802, 3793, 1384, 2657, 1072];
+    public static readonly List<uint> AccelBomb = 
+        [
+            4144, 
+            3802, 
+            3793, 
+            1384, 
+            2657, 
+            1072,
+        ];
 
     public static List<uint> 热病 => Pyretic;
-    public static readonly List<uint> Pyretic = [960, 639, 3522, 1599, 1133, 1049];
+    public static readonly List<uint> Pyretic = 
+        [
+            960, 
+            639, 
+            3522, 
+            1599, 
+            1133, 
+            1049, 
+            514,  // 因果，每次发动技能都会收到伤害
+        ];
 
     public static List<uint> 无敌 => Invulns;
     public static readonly List<uint> Invulns =
@@ -124,7 +144,6 @@ public static class StopHelper
         3948, // 好脑袋,被换上了好脑袋，移动速度降低，无法发动技能
         3983, // 击倒,被击倒在地，无法移动或发动技能
         4132, // 击倒,被击倒在地，无法移动或发动技能
-        514,  // 因果，每次发动技能都会收到伤害
         3085, // 自然的奇迹,陷入变身状态，无法发动技能
         2961, // 击倒,被击倒在地，无法移动或发动技能
         2910, // 击倒,被击倒在地，无法移动或发动技能
@@ -312,6 +331,7 @@ public static class StopHelper
     /// <summary>
     /// 可以用按位OR "|" 操作符组合不同条件。
     /// </summary>
+    [Flags]
     public enum StopMode : byte
     {
         /// <summary>
@@ -336,7 +356,7 @@ public static class StopHelper
         Both = 全属性,
     }
 
-    public static StopMode mode = 0;
+    public static StopMode Mode = 0;
 
     public static bool Debug = false;
 
@@ -393,14 +413,14 @@ public static class StopHelper
             return 2;
         }
         if (Core.Me.GetCurrTarget() is not null && 
-               (mode & StopMode.PhysRangedCond) != 0 &&
+               (Mode & StopMode.PhysRangedCond) != 0 &&
                (Core.Me.GetCurrTarget()!.HasAnyAura(PhysImmune) || 
                 Core.Me.GetCurrTarget()!.HasAnyAura(PhysReflect)))
         {
             return 3;
         }
         if (Core.Me.GetCurrTarget() is not null && 
-               (mode & StopMode.MagicCond) != 0 &&
+               (Mode & StopMode.MagicCond) != 0 &&
                (Core.Me.GetCurrTarget()!.HasAnyAura(MagicImmune) || 
                 Core.Me.GetCurrTarget()!.HasAnyAura(MagicReflect)))
         {

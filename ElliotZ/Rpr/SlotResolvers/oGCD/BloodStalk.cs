@@ -19,15 +19,19 @@ public class BloodStalk : ISlotResolver
         Target = SpellsDef.GrimSwathe.OptimalAOETarget(4, 180, Qt.Instance.GetQt("智能AOE"));
 
         if (Target is null &&
-                Helper.GetActionChange(SpellsDef.BloodStalk).GetSpell().IsReadyWithCanCast() == false)
+                Helper.GetActionChange(SpellsDef.BloodStalk)
+                    .GetSpell()
+                    .IsReadyWithCanCast() is false)
         {
             return -99;
         }
-        if (Target is not null && SpellsDef.GrimSwathe.GetSpell(Target!).IsReadyWithCanCast() == false)
+        if (Target is not null && SpellsDef.GrimSwathe
+                .GetSpell(Target!)
+                .IsReadyWithCanCast() is false)
         {
             return -99;
         }
-        if (Qt.Instance.GetQt("挥割/爪") == false) { return -98; }
+        if (Qt.Instance.GetQt("挥割/爪") is false) { return -98; }
         if (Core.Me.HasAura(AurasDef.Enshrouded)) { return -1; }  // not this slot resolver
 
         if (RprHelper.Shroud == 100 ||
@@ -53,7 +57,8 @@ public class BloodStalk : ISlotResolver
         {
             return -15;  // delay for burst window
         }
-        if (Helper.AuraTimerLessThan(AurasDef.ArcaneCircle, 5000) && Core.Me.HasAura(AurasDef.PerfectioParata))
+        if (Helper.AuraTimerLessThan(AurasDef.ArcaneCircle, 5000)
+            && Core.Me.HasAura(AurasDef.PerfectioParata))
         {
             return -16;
         }

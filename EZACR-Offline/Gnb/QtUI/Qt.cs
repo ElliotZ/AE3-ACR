@@ -4,19 +4,19 @@ using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
 using AEAssist.Helper;
 using ElliotZ.Common;
 using ElliotZ.Common.Hotkey;
-using ElliotZ.Common.ModernJobViewFramework;
 using EZACR_Offline.Gnb.QtUI.Hotkey;
 using JobViewWindow = ElliotZ.Common.ModernJobViewFramework.JobViewWindow;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 namespace EZACR_Offline.Gnb.QtUI;
 
 public static class Qt
 {
-    public static JobViewWindow Instance { get; set; }
-    public static MacroManager macroMan;
-    public static MobPullManager mobMan;
+    public static JobViewWindow Instance { get; private set; }
+    public static MacroManager MacroMan;
+    public static MobPullManager MobMan;
 
-    public static readonly List<(string name, string ENname, bool defval, string tooltip)> QtKeys =
+    private static readonly List<(string name, string ENname, bool defval, string tooltip)> QtKeys =
     [
         ("使用基础Gcd", "BaseGCD", true, ""),
         ("AOE", "AOE", true, ""),
@@ -49,7 +49,7 @@ public static class Qt
         ("优先音速破", "SonicBreakPrio", false, "优先打音速破，对1G2.5起手生效"),
     ];
 
-    public static readonly List<(string name, string ENname, IHotkeyResolver hkr)> HKResolvers =
+    private static readonly List<(string name, string ENname, IHotkeyResolver hkr)> HKResolvers =
     [
         ("超火", "Bolide", new HotKeyResolver(SpellsDef.Superbolide, SpellTargetType.Self, false)),
         ("亲疏", "Armslength", new HotKeyResolver(SpellsDef.ArmsLength, SpellTargetType.Self)),
@@ -63,7 +63,7 @@ public static class Qt
         ("退避<2>", "Shirk<2>", new HotKeyResolver(SpellsDef.Shirk, SpellTargetType.Pm2, false)),
         ("LB", "LB", new HotKeyResolver_LB()),
         ("插言", "Interject", new HotKeyResolver(SpellsDef.Interject, SpellTargetType.Target, false)),
-        ("下踢", "LowBlow", new HotKeyResolver(SpellsDef.LowBlow, SpellTargetType.Target)),
+        ("下踢", "LowBlow", new HotKeyResolver(SpellsDef.LowBlow)),
         ("选自己", "TargetSelf", new SelectSelf()),
         ("清理HPQ", "ClearHPQ", new ToiletFlusher()),
         ("刚玉血量最低", "HoCLowest", new HoCLowest()),
@@ -74,10 +74,10 @@ public static class Qt
 
     public static void SaveQtStates()
     {
-        string[] qtArray = Instance.GetQtArray();
-        foreach (string name in qtArray)
+        var qtArray = Instance.GetQtArray();
+        foreach (var name in qtArray)
         {
-            bool state = Instance.GetQt(name);
+            var state = Instance.GetQt(name);
             GnbSettings.Instance.QtStates[name] = state;
         }
 
@@ -87,7 +87,7 @@ public static class Qt
 
     public static void LoadQtStates()
     {
-        foreach (KeyValuePair<string, bool> qtState in GnbSettings.Instance.QtStates)
+        foreach (var qtState in GnbSettings.Instance.QtStates)
         {
             Instance.SetQt(qtState.Key, qtState.Value);
         }
@@ -97,12 +97,11 @@ public static class Qt
 
     public static void LoadQtStatesNoPot()
     {
-        foreach (KeyValuePair<string, bool> qtState in GnbSettings.Instance.QtStates)
+        foreach (var qtState 
+                 in GnbSettings.Instance.QtStates.Where(qtState 
+                     => qtState.Key is not "爆发药"))
         {
-            if (qtState.Key is not "爆发药")
-            {
-                Instance.SetQt(qtState.Key, qtState.Value);
-            }
+            Instance.SetQt(qtState.Key, qtState.Value);
         }
 
         if (GnbSettings.Instance.Debug) LogHelper.Print("除爆发药以外QT设置已重载");
@@ -112,9 +111,9 @@ public static class Qt
     {
         Instance = new JobViewWindow(GnbSettings.Instance.JobViewSave, GnbSettings.Instance.Save, "EZGnb");
         Instance.SetUpdateAction(OnUIUpdate);
-        macroMan = new MacroManager(Instance, "/EZGnb", QtKeys, HKResolvers, true);
-        mobMan = new MobPullManager(Instance);
-        mobMan.BurstQTs.Add("爆发");
+        MacroMan = new MacroManager(Instance, "/EZGnb", QtKeys, HKResolvers, true);
+        MobMan = new MobPullManager(Instance);
+        MobMan.BurstQTs.Add("爆发");
 
         //其余tab窗口
         ReadmeTab.Build(Instance);
@@ -123,12 +122,12 @@ public static class Qt
 
     }
 
-    public static void OnUIUpdate()
+    private static void OnUIUpdate()
     {
         //macroMan.UseToast2 = false;
         if (GnbSettings.Instance.CommandWindowOpen)
         {
-            macroMan.DrawCommandWindow(ref GnbSettings.Instance.CommandWindowOpen);
+            MacroMan.DrawCommandWindow(ref GnbSettings.Instance.CommandWindowOpen);
         }
     }
 }

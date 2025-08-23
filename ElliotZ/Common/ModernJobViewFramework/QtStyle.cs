@@ -1,7 +1,5 @@
 using System.Numerics;
 using AEAssist.CombatRoutine;
-using AEAssist.Helper;
-using Dalamud.Interface.Style;
 using ImGuiNET;
 // ReSharper disable MemberCanBeMadeStatic.Global
 // ReSharper disable FieldCanBeMadeReadOnly.Global
@@ -16,14 +14,13 @@ public class QtStyle
     public JobViewSave Save { get; }
 
     // 现代主题实例 - 从保存的设置中读取，而不是硬编码
-    private ModernTheme modernTheme;
-    public ModernTheme ModernTheme => modernTheme;
+    public ModernTheme ModernTheme { get; }
 
     // 标记现代主题是否已应用
-    private bool isModernThemeApplied;
+    private bool _isModernThemeApplied;
 
     // 主题预设
-    private ModernTheme.ThemePreset lastTheme;
+    private ModernTheme.ThemePreset _lastTheme;
 
     /// <summary>
     /// 检测主题是否发生变化
@@ -32,7 +29,7 @@ public class QtStyle
     {
         get
         {
-            var changed = lastTheme != Save.CurrentTheme;
+            var changed = _lastTheme != Save.CurrentTheme;
             return changed;
         }
     }
@@ -42,7 +39,7 @@ public class QtStyle
     /// </summary>
     public void UpdateLastTheme()
     {
-        lastTheme = Save.CurrentTheme;
+        _lastTheme = Save.CurrentTheme;
     }
 
     public ModernTheme.ThemePreset CurrentTheme
@@ -50,12 +47,10 @@ public class QtStyle
         get => Save.CurrentTheme;
         set
         {
-            if (Save.CurrentTheme != value)
-            {
-                Save.CurrentTheme = value;
-                lastTheme = value;
-                modernTheme.ApplyPreset(value);
-            }
+            if (Save.CurrentTheme == value) return;
+            Save.CurrentTheme = value;
+            _lastTheme = value;
+            ModernTheme.ApplyPreset(value);
         }
     }
 
@@ -65,8 +60,8 @@ public class QtStyle
         this.Save = save;
         // 从保存的设置中读取主题，如果没有保存过则使用默认值
         var savedTheme = save.CurrentTheme;
-        modernTheme = new ModernTheme(savedTheme);
-        lastTheme = savedTheme; // 初始化lastTheme
+        ModernTheme = new ModernTheme(savedTheme);
+        _lastTheme = savedTheme; // 初始化lastTheme
     }
 
     public static float OverlayScale => SettingMgr.GetSetting<GeneralSettings>().OverlayScale;
@@ -107,11 +102,9 @@ public class QtStyle
     /// </summary>
     public void SetMainStyle()
     {
-        if (!isModernThemeApplied)
-        {
-            modernTheme.Apply();
-            isModernThemeApplied = true;
-        }
+        if (_isModernThemeApplied) return;
+        ModernTheme.Apply();
+        _isModernThemeApplied = true;
     }
 
     /// <summary>
@@ -119,11 +112,9 @@ public class QtStyle
     /// </summary>
     public void EndMainStyle()
     {
-        if (isModernThemeApplied)
-        {
-            modernTheme.Restore();
-            isModernThemeApplied = false;
-        }
+        if (!_isModernThemeApplied) return;
+        ModernTheme.Restore();
+        _isModernThemeApplied = false;
     }
 
     public void SetStyle()
@@ -144,8 +135,8 @@ public class QtStyle
     public void Reset()
     {
         Save.CurrentTheme = ModernTheme.ThemePreset.RPR;
-        lastTheme = ModernTheme.ThemePreset.RPR;
-        modernTheme.ApplyPreset(ModernTheme.ThemePreset.RPR);
-        GlobalSetting.Instance.Save();
+        _lastTheme = ModernTheme.ThemePreset.RPR;
+        ModernTheme.ApplyPreset(ModernTheme.ThemePreset.RPR);
+        GlobalSetting.Instance?.Save();
     }
 }

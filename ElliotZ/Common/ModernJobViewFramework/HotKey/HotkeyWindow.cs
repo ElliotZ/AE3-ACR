@@ -5,7 +5,6 @@ using AEAssist.Define.HotKey;
 using AEAssist.GUI;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
-using ElliotZ.Common.ModernJobViewFramework;
 using ImGuiNET;
 using Keys = AEAssist.Define.HotKey.Keys;
 // ReSharper disable FieldCanBeMadeReadOnly.Local
@@ -17,39 +16,36 @@ namespace ElliotZ.Common.ModernJobViewFramework.HotKey;
 /// 快捷键窗口类
 public class HotkeyWindow(
     JobViewSave save,
-    string name,
-    //ref Dictionary<string, HotKeySpell> config,
-    //Dictionary<string, uint> spell,
-    Action saveAction)
+    string name)
 {
-    public JobViewSave save = save;
+    public JobViewSave Save = save;
     /// 用于储存所有hotkey控件的字典
-    private Dictionary<string, HotkeyControl> HotkeyDict = new();
+    private Dictionary<string, HotkeyControl> _hotkeyDict = new();
 
     /// 处于激活状态的hotkey列表
     public List<string> ActiveList = [];
 
     /// 动态按顺序储存hotkey名称的list，用于排序显示hotkey
-    public List<string> HotkeyNameList => save.HotkeyNameList;
+    public List<string> HotkeyNameList => Save.HotkeyNameList;
     // 记录控件名称和对应快捷键的字典
-    public Dictionary<string, HotkeyConfig> HotkeyConfig => save.HotkeyConfig;
+    public Dictionary<string, HotkeyConfig> HotkeyConfig => Save.HotkeyConfig;
     
     ///窗口拖动
-    public bool LockWindow { get => save.LockHotkeyWindow; set => save.LockHotkeyWindow = value; }
+    public bool LockWindow { get => Save.LockHotkeyWindow; set => Save.LockHotkeyWindow = value; }
 
-private Dictionary<string, long> lastActiveTime = new();
+    private Dictionary<string, long> _lastActiveTime = new();
 
     //public Dictionary<string, HotKeySpell> HotKeyConfigs = config;
 
 
     /// 隐藏的hotkey列表
-    public List<string> HotkeyUnVisibleList => save.HotkeyUnVisibleList;
+    public List<string> HotkeyUnVisibleList => Save.HotkeyUnVisibleList;
 
     ///hotkey按钮一行有几个
     public int HotkeyLineCount
     {
-        get => save.HotkeyLineCount;
-        set => save.HotkeyLineCount = value;
+        get => Save.HotkeyLineCount;
+        set => Save.HotkeyLineCount = value;
     }
 
     //public void CreateHotkey()
@@ -72,11 +68,11 @@ private Dictionary<string, long> lastActiveTime = new();
     /// </summary>
     public void AddHotkey(string hotkeyName, IHotkeyResolver slot)
     {
-        if (HotkeyDict.ContainsKey(hotkeyName))
+        if (_hotkeyDict.ContainsKey(hotkeyName))
             return;
-        var hotkey = new HotkeyControl(hotkeyName);
-        HotkeyDict.Add(hotkeyName, hotkey);
-        HotkeyDict[hotkeyName].Slot = slot;
+        var hotkey = new HotkeyControl(hotkeyName, slot);
+        _hotkeyDict.Add(hotkeyName, hotkey);
+        _hotkeyDict[hotkeyName].Slot = slot;
         if (!HotkeyNameList.Contains(hotkeyName))
         {
             HotkeyNameList.Add(hotkeyName);
@@ -85,7 +81,7 @@ private Dictionary<string, long> lastActiveTime = new();
     
     public void RemoveHotKey(string hotkeyName)
     {
-        HotkeyDict.Remove(hotkeyName);
+        _hotkeyDict.Remove(hotkeyName);
         HotkeyNameList.Remove(hotkeyName);
         HotkeyConfig.Remove(hotkeyName);
     }
@@ -94,25 +90,25 @@ private Dictionary<string, long> lastActiveTime = new();
     /// 设置上一次add添加的hotkey的toolTip
     public void SetHotkeyToolTip(string toolTip)
     {
-        HotkeyDict[HotkeyDict.Keys.ToArray()[^1]].ToolTip = toolTip;
+        _hotkeyDict[_hotkeyDict.Keys.ToArray()[^1]].ToolTip = toolTip;
     }
 
     /// 返回包含当前所有hotkey名字的数组
     public string[] GetHotkeyArray()
     {
-        return HotkeyDict.Keys.ToArray();
+        return _hotkeyDict.Keys.ToArray();
     }
     
     /// 获取Hotkey控件
-    public HotkeyControl? GetHotkey(string name)
+    public HotkeyControl? GetHotkey(string hkName)
     {
-        return HotkeyDict.TryGetValue(name, out var control) ? control : null;
+        return _hotkeyDict.GetValueOrDefault(hkName);
     }
 
     /// 激活单个快捷键,mo无效
     public void SetHotkey(string hotkeyName)
     {
-        if (!ActiveList.Contains(hotkeyName) && HotkeyDict.TryGetValue(hotkeyName, out var value))
+        if (!ActiveList.Contains(hotkeyName) && _hotkeyDict.TryGetValue(hotkeyName, out var value))
         {
             //激活按钮
             RunSlot(value);
@@ -125,7 +121,7 @@ private Dictionary<string, long> lastActiveTime = new();
         
         //HotKeyConfig.DrawHotKeyConfigView(this, ref HotKeyConfigs, spell,saveAction);
         
-        if (!save.ShowHotkey)
+        if (!Save.ShowHotkey)
             return;
         var num = HotkeyNameList.Count - HotkeyUnVisibleList.Count;
         if (num <= 0)
@@ -137,9 +133,9 @@ private Dictionary<string, long> lastActiveTime = new();
         for (int i = ActiveList.Count - 1; i >= 0; i--)
         {
             var hotkeyName = ActiveList[i];
-            if (!HotkeyDict.ContainsKey(hotkeyName))
+            if (!_hotkeyDict.ContainsKey(hotkeyName))
                 continue;
-            if (!lastActiveTime.TryGetValue(hotkeyName, out var lastActive))
+            if (!_lastActiveTime.TryGetValue(hotkeyName, out var lastActive))
             {
                 continue;
             }
@@ -158,7 +154,7 @@ private Dictionary<string, long> lastActiveTime = new();
             line++;
         var row = num < HotkeyLineCount ? num : HotkeyLineCount;
 
-        var hotKeySize = QtStyle.OverlayScale * save.QtHotkeySize;
+        var hotKeySize = QtStyle.OverlayScale * Save.QtHotkeySize;
 
 
         var width = (row - 1) * 6 + 16 + hotKeySize.X * row;
@@ -179,7 +175,7 @@ private Dictionary<string, long> lastActiveTime = new();
 
             var hotkeyName = HotkeyNameList[i];
 
-            if (!HotkeyDict.ContainsKey(hotkeyName))
+            if (!_hotkeyDict.ContainsKey(hotkeyName))
             {
 
                 continue;
@@ -191,7 +187,7 @@ private Dictionary<string, long> lastActiveTime = new();
             }
 
 
-            var hotkey = HotkeyDict[hotkeyName];
+            var hotkey = _hotkeyDict[hotkeyName];
 
 
 
@@ -239,7 +235,7 @@ private Dictionary<string, long> lastActiveTime = new();
     /// 用于draw一个更改qt排序显示等设置的视图
     public void HotkeySettingView()
     {
-        ImGui.Checkbox("显示热键栏", ref save.ShowHotkey);
+        ImGui.Checkbox("显示热键栏", ref Save.ShowHotkey);
         ImGui.TextDisabled("   *左键拖动改变hotkey顺序，右键点击显示更多");
         for (var i = 0; i < HotkeyNameList.Count; i++)
         {
@@ -258,11 +254,11 @@ private Dictionary<string, long> lastActiveTime = new();
             //排序        
             if (ImGui.IsItemActive() && !ImGui.IsItemHovered())
             {
-                var n_next = i + (ImGui.GetMouseDragDelta(0).Y < 0f ? -1 : 1);
-                if (n_next < 0 || n_next >= HotkeyNameList.Count)
+                var nNext = i + (ImGui.GetMouseDragDelta(0).Y < 0f ? -1 : 1);
+                if (nNext < 0 || nNext >= HotkeyNameList.Count)
                     continue;
-                HotkeyNameList[i] = HotkeyNameList[n_next];
-                HotkeyNameList[n_next] = item;
+                HotkeyNameList[i] = HotkeyNameList[nNext];
+                HotkeyNameList[nNext] = item;
                 ImGui.ResetMouseDragDelta();
             }
 
@@ -365,7 +361,7 @@ private Dictionary<string, long> lastActiveTime = new();
         if (!ActiveList.Contains(hotkey.Name))
         {
             ActiveList.Add(hotkey.Name);
-            lastActiveTime[hotkey.Name] = TimeHelper.Now();
+            _lastActiveTime[hotkey.Name] = TimeHelper.Now();
             hotkey.Slot.Run();
         }
     }
@@ -381,7 +377,7 @@ private Dictionary<string, long> lastActiveTime = new();
             if (Core.Resolve<MemApiHotkey>().CheckState(hotkey.Value.ModifierKey, hotkey.Value.Keys))
             {
                 //激活按钮
-                RunSlot(HotkeyDict[hotkey.Key]);
+                RunSlot(_hotkeyDict[hotkey.Key]);
             }
         }
     }

@@ -4,7 +4,6 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Module.Target;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using AEAssist.JobApi;
 using Dalamud.Game.ClientState.Objects.Types;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
@@ -26,17 +25,21 @@ public class EnshroudSk : ISlotResolver
                                                             Qt.Instance.GetQt("智能AOE"));
         CommunioTarget = SpellsDef.Communio.OptimalAOETarget(1, Qt.Instance.GetQt("智能AOE"), 5);
 
-        if (Core.Me.HasAura(AurasDef.Enshrouded) == false)
+        if (Core.Me.HasAura(AurasDef.Enshrouded) is false)
         {
             return -3;  // -3 for Unmet Prereq Conditions
         }
         if ((!SpellsDef.Communio.IsUnlock() || RprHelper.BlueOrb > 1) &&
-                Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
+                Core.Me.Distance(Core.Me.GetCurrTarget()!) 
+                > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
         }
 
-        if (Qt.Instance.GetQt("单魂衣") && Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 10000, false))
+        if (Qt.Instance.GetQt("单魂衣") && 
+                Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign,
+                                           10000,
+                                           false))
         {
             return -6;
         }

@@ -22,11 +22,11 @@ public class HotKeyResolver(uint spellId,
                                 bool waitCoolDown = true) : IHotkeyResolver
 {
     protected uint SpellId = spellId;
-    protected SpellTargetType TargetType = targetType;
+    protected readonly SpellTargetType TargetType = targetType;
     protected readonly bool UseHighPrioritySlot = useHighPrioritySlot;
     protected readonly bool WaitCoolDown = waitCoolDown;
 
-    public HotKeyResolver(Spell spell, HotKeyTarget target) : this(spell.Id, target.SpellTargetType!)
+    public HotKeyResolver(Spell spell, HotKeyTarget target) : this(spell.Id, target.SpellTargetType)
     {
     }
 
@@ -71,7 +71,7 @@ public class HotKeyResolver(uint spellId,
     {
         var s = Helper.GetActionChange(SpellId).GetSpell(TargetType);
         if (WaitCoolDown && !s.IsUnlockWithRoleSkills()) return -1;
-        if (UseHighPrioritySlot && Helper.CheckInHPQueueTop(s)) return -3;
+        if (UseHighPrioritySlot && s.CheckInHPQueueTop()) return -3;
         var isReady = WaitCoolDown ? s.Cooldown.TotalMilliseconds <= 5000 : s.IsReadyWithCanCast();
         return isReady ? 0 : -2;
     }

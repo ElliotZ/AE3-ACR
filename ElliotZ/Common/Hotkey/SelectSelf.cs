@@ -1,11 +1,6 @@
 ﻿using AEAssist;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ElliotZ.Common.Hotkey;
 

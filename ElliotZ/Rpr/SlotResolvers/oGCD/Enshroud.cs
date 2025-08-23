@@ -21,8 +21,10 @@ public class Enshroud : ISlotResolver
         var soulSliceCharge = SpellsDef.SoulSlice.GetSpell().Charges;
         var gluttonyPossible = SpellsDef.Gluttony.GetSpell().Cooldown.TotalMilliseconds <
                                (accd - DblEnshPrep.PreAcEnshTimer - GCDHelper.GetGCDDuration() * 3);
-        var deathsDesgnTime = Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me.GetCurrTarget(),
-                                                                         AurasDef.DeathsDesign, true);
+        var ddTime = Core.Resolve<MemApiBuff>()
+            .GetAuraTimeleft(Core.Me.GetCurrTarget() 
+                             ?? throw new NullReferenceException(),
+                             AurasDef.DeathsDesign, true);
         var totalTimeBeforeAC = accd -
                                 GCDHelper.GetGCDDuration() * 2 -
                                 6000 -
@@ -30,23 +32,24 @@ public class Enshroud : ISlotResolver
                                 DblEnshPrep.PreAcEnshTimer;
         var totalNumGCDsBeforeAC = (int)Math.Ceiling(totalTimeBeforeAC / GCDHelper.GetGCDDuration() + 0.5);
         if (gluttonyPossible) neededSoul -= 50;
-        var NumGCDForShroud = neededShroud / 10;
-        var NumGCDForSoul = neededSoul / 10;
-        var NumGCDForDD = (int)Math.Ceiling((accd - DblEnshPrep.PreAcEnshTimer - deathsDesgnTime) / 30000);
+        var numGcdForShroud = neededShroud / 10;
+        var numGcdForSoul = neededSoul / 10;
+        var numGcdForDd = (int)Math.Ceiling((accd - DblEnshPrep.PreAcEnshTimer - ddTime) / 30000);
         var maxPossibleSoulSliceUses = Math.Floor((accd - DblEnshPrep.PreAcEnshTimer) / 30000 + soulSliceCharge);
-        NumGCDForSoul -= (int)maxPossibleSoulSliceUses * 4;
-        return totalNumGCDsBeforeAC >= NumGCDForSoul + NumGCDForShroud + NumGCDForDD;
+        numGcdForSoul -= (int)maxPossibleSoulSliceUses * 4;
+        return totalNumGCDsBeforeAC >= numGcdForSoul + numGcdForShroud + numGcdForDd;
     }
     public int Check()
     {
-        if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() == false) { return -99; }
-        if (Qt.Instance.GetQt("ªÍ“¬") == false) { return -98; }
-        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange + 2)
+        if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() is false) { return -99; }
+        if (Qt.Instance.GetQt("È≠ÇË°£") is false) { return -98; }
+        if (Core.Me.Distance(Core.Me.GetCurrTarget()!) 
+            > Helper.GlblSettings.AttackRange + 2)
         {
             return -2;  // -2 for not in range
         }
 
-        if (Qt.mobMan.Holding) return -3;
+        if (Qt.MobMan.Holding) return -3;
 
         // delay for ideal host when entering combat with gauge, perfectio can be fit into opener burst this way
         if (Core.Me.HasAura(AurasDef.BloodsownCircle)
@@ -55,15 +58,15 @@ public class Enshroud : ISlotResolver
         {
             return -8;
         }
-        if (!Qt.Instance.GetQt("«„–∫◊ ‘¥") && !Core.Me.HasAura(AurasDef.IdealHost))  // ignore all if dump qt is set
+        if (!Qt.Instance.GetQt("ÂÄæÊ≥ªËµÑÊ∫ê") && !Core.Me.HasAura(AurasDef.IdealHost))  // ignore all if dump qt is set
         {
-            if (!Qt.Instance.GetQt("µ•ªÍ“¬") && RprHelper.Shroud < 100)
+            if (!Qt.Instance.GetQt("ÂçïÈ≠ÇË°£") && RprHelper.Shroud < 100)
             {
                 if (!DeadZoneCheck())
                 {
                     return -6;
                 }
-                if (Qt.Instance.GetQt("±© ≥") &&
+                if (Qt.Instance.GetQt("Êö¥È£ü") &&
                         !Core.Me.HasAura(AurasDef.ArcaneCircle) &&
                         SpellsDef.Gluttony.GetSpell().Cooldown.TotalMilliseconds <= 20000 &&
                         SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds >= 55000)
