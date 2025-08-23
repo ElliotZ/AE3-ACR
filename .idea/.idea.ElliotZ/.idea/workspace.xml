@@ -6,6 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="75cabfee-c401-49b3-935b-0458bf4f1bb0" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ElliotZ/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ElliotZ/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EZACR-Offline/EZACR-Offline.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/EZACR-Offline/EZACR-Offline.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EZACR-Offline/packages.lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/EZACR-Offline/packages.lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ElliotZ.sln" beforeDir="false" afterPath="$PROJECT_DIR$/ElliotZ.sln" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +79,7 @@
       <workItem from="1755858727594" duration="4735000" />
       <workItem from="1755864865684" duration="7941000" />
       <workItem from="1755872860650" duration="20337000" />
-      <workItem from="1755924506056" duration="8844000" />
+      <workItem from="1755924506056" duration="9283000" />
     </task>
     <task id="LOCAL-00001" summary="migrated to Jetbrains Rider and refactored">
       <option name="closed" value="true" />
@@ -102,7 +105,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755931102379</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="clean for subtree">
+      <option name="closed" value="true" />
+      <created>1755944193201</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1755944193201</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -126,7 +137,8 @@
     <MESSAGE value="migrated to Jetbrains Rider and refactored" />
     <MESSAGE value="ideaIDE files" />
     <MESSAGE value="sync new workflow update" />
-    <option name="LAST_COMMIT_MESSAGE" value="sync new workflow update" />
+    <MESSAGE value="clean for subtree" />
+    <option name="LAST_COMMIT_MESSAGE" value="clean for subtree" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
