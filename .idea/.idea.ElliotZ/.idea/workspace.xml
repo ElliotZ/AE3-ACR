@@ -6,9 +6,48 @@
   <component name="ChangeListManager">
     <list default="true" id="75cabfee-c401-49b3-935b-0458bf4f1bb0" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ElliotZ/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ElliotZ/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EZACR-Offline/EZACR-Offline.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/EZACR-Offline/EZACR-Offline.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EZACR-Offline/packages.lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/EZACR-Offline/packages.lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ElliotZ.sln" beforeDir="false" afterPath="$PROJECT_DIR$/ElliotZ.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Common/GlobalSetting.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Common/GlobalSetting.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Common/Helper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Common/Helper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Common/HotKeyResolver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Common/HotKeyResolver.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Common/MobPullManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Common/MobPullManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Common/ModernJobViewFramework/HotKey/HotKeyConfig.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Common/ModernJobViewFramework/HotKey/HotKeyConfig.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Common/ModernJobViewFramework/MainWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Common/ModernJobViewFramework/MainWindow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Common/ModernJobViewFramework/ModernQtWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Common/ModernJobViewFramework/ModernQtWindow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Common/StopHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Common/StopHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/BattleData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/BattleData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/EventHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/EventHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/QtUI/DevTab.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/QtUI/DevTab.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/QtUI/Hotkey/EgressHK.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/QtUI/Hotkey/EgressHK.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/QtUI/Hotkey/IngressHK.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/QtUI/Hotkey/IngressHK.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/QtUI/Qt.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/QtUI/Qt.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/QtUI/ReadmeTab.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/QtUI/ReadmeTab.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/QtUI/SettingTab.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/QtUI/SettingTab.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/RotationPrioSys.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/RotationPrioSys.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/RprRotationEntry.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/RprRotationEntry.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/FixedSeq/DblEnshPrep.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/FixedSeq/DblEnshPrep.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/FixedSeq/Opener100.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/FixedSeq/Opener100.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/FixedSeq/OpenerCountDownOnly.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/FixedSeq/OpenerCountDownOnly.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/Base.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/Base.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/BuffMaintain.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/BuffMaintain.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/EnshroudSk.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/EnshroudSk.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/GaugeGainCD.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/GaugeGainCD.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/GibGall.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/GibGall.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/HarvestMoon.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/HarvestMoon.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/HarvestMoonHighPrio.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/HarvestMoonHighPrio.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/Perfectio.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/Perfectio.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/PerfectioHighPrio.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/PerfectioHighPrio.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/PlentifulHarvest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/GCD/PlentifulHarvest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/ArcaneCircle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/ArcaneCircle.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/AutoCrest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/AutoCrest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/AutoFeint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/AutoFeint.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/BloodStalk.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/BloodStalk.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/Enshroud.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/Enshroud.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/EnshroudAb.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/EnshroudAb.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/Gluttony.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/Gluttony.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/Ingress.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/Ingress.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/Sacrificium.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/Sacrificium.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/TrueNorth.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/SlotResolvers/oGCD/TrueNorth.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/Triggers/TriggerActionQt.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/Triggers/TriggerActionQt.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +118,7 @@
       <workItem from="1755858727594" duration="4735000" />
       <workItem from="1755864865684" duration="7941000" />
       <workItem from="1755872860650" duration="20337000" />
-      <workItem from="1755924506056" duration="9283000" />
+      <workItem from="1755924506056" duration="12265000" />
     </task>
     <task id="LOCAL-00001" summary="migrated to Jetbrains Rider and refactored">
       <option name="closed" value="true" />
@@ -113,7 +152,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755944193201</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="add subtree">
+      <option name="closed" value="true" />
+      <created>1755944414920</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1755944414920</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -138,7 +185,8 @@
     <MESSAGE value="ideaIDE files" />
     <MESSAGE value="sync new workflow update" />
     <MESSAGE value="clean for subtree" />
-    <option name="LAST_COMMIT_MESSAGE" value="clean for subtree" />
+    <MESSAGE value="add subtree" />
+    <option name="LAST_COMMIT_MESSAGE" value="add subtree" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
