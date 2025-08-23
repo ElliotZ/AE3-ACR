@@ -11,9 +11,9 @@ public class Harpe : ISlotResolver
 {
     public int Check()
     {
-        if (SpellsDef.Harpe.GetSpell().IsReadyWithCanCast() == false) { return -99; }
+        if (SpellsDef.Harpe.GetSpell().IsReadyWithCanCast() is false) { return -99; }
         if (Helper.IsMoving && !RprSettings.Instance.ForceCast) { return -2; }
-        if (Qt.Instance.GetQt("勾刃") == false) { return -98; }// Add QT
+        if (Qt.Instance.GetQt("勾刃") is false) { return -98; }// Add QT
 
         if (Core.Me.HasAura(AurasDef.SoulReaver) || Core.Me.HasAura(AurasDef.Executioner))
         {

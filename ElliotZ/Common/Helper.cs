@@ -8,6 +8,7 @@ using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
 using System.Numerics;
+// ReSharper disable UnusedMember.Local
 
 namespace ElliotZ.Common;
 
@@ -24,11 +25,11 @@ public static class Helper
     /// </summary>
     /// <param name="buffId"></param>
     /// <returns></returns>
-    public static int GetAuraTimeLeft(uint buffID) =>
-            Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me, buffID, true);
+    public static int GetAuraTimeLeft(uint buffId) =>
+            Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me, buffId, true);
 
-    public static int GetAuraTimeLeft(IBattleChara c, uint buffID) =>
-            Core.Resolve<MemApiBuff>().GetAuraTimeleft(c, buffID, true);
+    public static int GetAuraTimeLeft(IBattleChara c, uint buffId) =>
+            Core.Resolve<MemApiBuff>().GetAuraTimeleft(c, buffId, true);
 
     /// <summary>显示一个文本提示，用于在游戏中显示简短的消息。</summary>
     /// <param name="msg">要显示的消息文本。</param>
@@ -47,7 +48,7 @@ public static class Helper
     /// <summary>
     /// 当前地图id
     /// </summary>
-    public static uint GetTerritoyId => Core.Resolve<MemApiMap>().GetCurrTerrId();
+    public static uint GetTerritoryId => Core.Resolve<MemApiMap>().GetCurrTerrId();
 
     /// <summary>
     /// 返回可变技能的当前id
@@ -89,7 +90,7 @@ public static class Helper
         foreach (var aura in Core.Me.StatusList)
         {
             if (aura.StatusId != 0 &&
-                    (double)Math.Abs(aura.RemainingTime) * 1000.0 <= timeLeft &&
+                    Math.Abs(aura.RemainingTime) * 1000.0 <= timeLeft &&
                     auras.Contains(aura.StatusId)) return true;
         }
         return false;
@@ -114,12 +115,12 @@ public static class Helper
     /// 目标有buff且时间小于等于，有buff参数如果为false，则当目标没有玩家的buff是也返回true
     /// 以毫秒计算
     /// </summary>
-    public static bool TgtAuraTimerLessThan(uint buffId, int timeLeft, bool 有buff = true)
+    public static bool TgtAuraTimerLessThan(uint buffId, int timeLeft, bool hasBuff = true)
     {
         var target = Core.Me.GetCurrTarget();
         if (target == null) return false;
 
-        if (有buff)
+        if (hasBuff)
         {
             if (!target.HasLocalPlayerAura(buffId)) return false;
         }
@@ -136,12 +137,12 @@ public static class Helper
     /// 目标有buff且时间大于，有buff参数如果为false，则当目标没有玩家的buff且timeLeft为0也返回true
     /// 以毫秒计算
     /// </summary>
-    public static bool TgtAuraTimerMoreThan(uint buffId, int timeLeft, bool 有buff = true)
+    public static bool TgtAuraTimerMoreThan(uint buffId, int timeLeft, bool hasBuff = true)
     {
         var target = Core.Me.GetCurrTarget();
         if (target == null) return false;
 
-        if (有buff)
+        if (hasBuff)
         {
             if (!target.HasLocalPlayerAura(buffId)) return false;
         }
@@ -158,28 +159,28 @@ public static class Helper
     /// 周围8米内目标如果有超过三分之二会在设定TTK内死亡，则返回True
     /// </summary>
     /// <returns></returns>
-    public static bool AoeTtkCheck()
+    public static bool AoeTTKCheck()
     {
         var enemyCount = TargetHelper.GetNearbyEnemyCount(8);
         var enemyList = TargetMgr.Instance.EnemysIn12;
-        var lowHPCount = enemyList.Count(v =>
+        var lowHpCount = enemyList.Count(v =>
                                            Core.Me.Distance(v.Value, 
                                                             DistanceMode.IgnoreTargetHitbox | 
                                                             DistanceMode.IgnoreHeight) <= 8 &&
                                            TTKHelper.IsTargetTTK(v.Value));
-        return (lowHPCount / (double)enemyCount > 0.667);
+        return (lowHpCount / (double)enemyCount > 0.667);
     }
 
-    public static bool AoeTtkCheck(int time)
+    public static bool AoeTTKCheck(int time)
     {
         var enemyCount = TargetHelper.GetNearbyEnemyCount(8);
         var enemyList = TargetMgr.Instance.EnemysIn12;
-        var lowHPCount = enemyList.Count(v =>
+        var lowHpCount = enemyList.Count(v =>
                                            Core.Me.Distance(v.Value,
                                                             DistanceMode.IgnoreTargetHitbox |
                                                             DistanceMode.IgnoreHeight) <= 8 &&
                                            TTKHelper.IsTargetTTK(v.Value, time, false));
-        return (lowHPCount / (double)enemyCount > 0.667);
+        return (lowHpCount / (double)enemyCount > 0.667);
     }
 
     /// <summary>
@@ -192,45 +193,12 @@ public static class Helper
         return true;
     }
 
-    public static IBattleChara 获取距离最远成员()
-    {
-        IBattleChara RescueTarget = PartyHelper.CastableAlliesWithin30
-            .Where(r => r.CurrentHp > 0)
-            .MaxBy(r => r.Distance(PartyHelper.CastableAlliesWithin30.FirstOrDefault()!))!;
-
-        return RescueTarget;
-    }
-
-    public static IBattleChara 获取血量最低成员()
-    {
-        if (PartyHelper.CastableAlliesWithin30.Count == 0)
-            return Core.Me;
-        return PartyHelper.CastableAlliesWithin30
-            .Where(r => r.CurrentHp > 0)
-            .MinBy(r => r.CurrentHpPercent())!;
-    }
-
-    public static IBattleChara 获取最低血量T()
-    {
-        if (PartyHelper.CastableTanks.Count == 0)
-            return Core.Me;
-        if (PartyHelper.CastableTanks.Count == 2 && PartyHelper.CastableTanks[1].CurrentHpPercent() <
-            PartyHelper.CastableTanks[0].CurrentHpPercent())
-            return PartyHelper.CastableTanks[1];
-        return PartyHelper.CastableTanks[0];
-    }
-
-    public static IBattleChara? 没有复活状态的死亡队友()
-    {
-        return PartyHelper.DeadAllies.FirstOrDefault(r => !r.HasAura(148u) && r.IsTargetable);
-    }
-
-    public static bool RdyInGCDs(this uint spellID, int numOfGcds)
+    public static bool RdyInGCDs(this uint spellId, int numOfGCDs)
     {
         double gcd = GCDHelper.GetGCDDuration() > 0 ? GCDHelper.GetGCDDuration() : 2500;
-        int cdInMilliSecs = (int)Core.Resolve<MemApiSpell>().GetCooldown(spellID).TotalMilliseconds;
-        if (spellID.GetSpell().MaxCharges > 1 && spellID.GetSpell().Charges >= 1.0f) cdInMilliSecs = 0;
-        return numOfGcds >= (int)Math.Ceiling(cdInMilliSecs / gcd);
+        var cdInMilliSecs = (int)Core.Resolve<MemApiSpell>().GetCooldown(spellId).TotalMilliseconds;
+        if (spellId.GetSpell().MaxCharges > 1 && spellId.GetSpell().Charges >= 1.0f) cdInMilliSecs = 0;
+        return numOfGCDs >= (int)Math.Ceiling(cdInMilliSecs / gcd);
     }
 
     public static bool TgtHasAuraFromMe(List<uint> buffs) =>
@@ -253,13 +221,11 @@ public static class Helper
         {
             return TargetHelper.GetMostCanTargetObjects(spellId, count);
         }
-        else
-        {
-            //var spellDmgRange = Core.Resolve<MemApiSpell>().
-            var enemyCount = TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(),
-                                                              (int)spellId.GetSpell().ActionRange, dmgRange);
-            return (count <= enemyCount ? Core.Me.GetCurrTarget() : null);
-        }
+        //var spellDmgRange = Core.Resolve<MemApiSpell>().
+        var enemyCount = TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget() 
+                                                          ?? throw new NullReferenceException(),
+                                                          (int)spellId.GetSpell().ActionRange, dmgRange);
+        return (count <= enemyCount ? Core.Me.GetCurrTarget() : null);
     }
 
     /// <summary>
@@ -279,14 +245,12 @@ public static class Helper
         {
             return TargetHelper.GetMostCanTargetObjects(spellId, count, angle);
         }
-        else
-        {
-            var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me,
-                                                                    Core.Me.GetCurrTarget(),
-                                                                    (int)spellId.GetSpell().ActionRange,
-                                                                    angle);
-            return (count <= enemyCount ? Core.Me.GetCurrTarget() : null);
-        }
+        var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me,
+                                                                Core.Me.GetCurrTarget() 
+                                                                ?? throw new NullReferenceException(),
+                                                     (int)spellId.GetSpell().ActionRange,
+                                                                angle);
+        return (count <= enemyCount ? Core.Me.GetCurrTarget() : null);
     }
 
     /// <summary>
@@ -306,43 +270,36 @@ public static class Helper
         {
             return TargetHelper.GetMostCanTargetObjects(spellId, count);
         }
-        else
-        {
-            var enemyCount = TargetHelper.GetEnemyCountInsideRect(Core.Me,
-                                                                    Core.Me.GetCurrTarget(),
-                                                                    (int)spellId.GetSpell().ActionRange,
-                                                                    width);
-            return (count <= enemyCount ? Core.Me.GetCurrTarget() : null);
-        }
+        var enemyCount = TargetHelper.GetEnemyCountInsideRect(Core.Me,
+                                                              Core.Me.GetCurrTarget() 
+                                                              ?? throw new NullReferenceException(),
+                                                        (int)spellId.GetSpell().ActionRange,
+                                                              width);
+        return (count <= enemyCount ? Core.Me.GetCurrTarget() : null);
     }
 
     public static float GetRotationToTarget(Vector3 from, Vector3 to)
     {
-        float y = to.X - from.X;
-        float x = to.Z - from.Z;
+        var y = to.X - from.X;
+        var x = to.Z - from.Z;
         return MathF.Atan2(y, x);
     }
 
     public static bool InAnyRaidBuff()
     {
         //检测目标团辅
-        List<uint> TgtDebuff = [背刺, 连环计];
+        List<uint> tgtDebuff = [背刺, 连环计];
         //检测自身团辅
-        List<uint> SelfBuff = [灼热之光, 星空, 占卜, 义结金兰, 战斗连祷, 大舞, 战斗之声, 鼓励, 神秘环];
-        return TgtDebuff.Any(buff => AuraTimerLessThan(buff, 15000)) ||
-               SelfBuff.Any(buff => TgtAuraTimerLessThan(buff, 15000));
+        List<uint> selfBuff = [灼热之光, 星空, 占卜, 义结金兰, 战斗连祷, 大舞, 战斗之声, 鼓励, 神秘环];
+        return tgtDebuff.Any(buff => AuraTimerLessThan(buff, 15000)) ||
+               selfBuff.Any(buff => TgtAuraTimerLessThan(buff, 15000));
     }
 
     public static bool IsUnlockWithRoleSkills(this Spell spell)
     {
-        if (SpellsDef.RoleSkills.Contains(spell.Id))
-        {
-            return true;  // dirty fix for now; need better ways to detect if a role skill is unlocked
-        }
-        else
-        {
-            return spell.IsUnlock();
-        }
+        return SpellsDef.RoleSkills.Contains(spell.Id) ||
+               // dirty fix for now; need better ways to detect if a role skill is unlocked
+               spell.IsUnlock();
     }
 
     /// <summary>

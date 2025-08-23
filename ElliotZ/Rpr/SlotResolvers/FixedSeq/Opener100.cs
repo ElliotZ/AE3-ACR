@@ -7,6 +7,7 @@ using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
+// ReSharper disable RedundantBoolCompare
 
 namespace ElliotZ.Rpr.SlotResolvers.FixedSeq;
 
@@ -14,12 +15,13 @@ public class Opener100 : IOpener
 {
     public int StartCheck()
     {
-        if (Qt.Instance.GetQt("起手") == false) { return -98; }
-        if (Qt.Instance.GetQt("神秘环") == false || Qt.Instance.GetQt("魂衣") == false) { return -98; }
+        if (Qt.Instance.GetQt("起手") is false) { return -98; }
+        if (!Qt.Instance.GetQt("神秘环") || !Qt.Instance.GetQt("魂衣")) { return -98; }
         if (Core.Me.Level < 88) { return -99; }  // might not need this
-        if (SpellsDef.SoulSlice.IsMaxChargeReady(0.0f) == false) { return -99; }
-        if (SpellsDef.ArcaneCircle.GetSpell().IsReadyWithCanCast() == false) { return -99; }
-        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
+        if (SpellsDef.SoulSlice.IsMaxChargeReady(0.0f) is false) { return -99; }
+        if (SpellsDef.ArcaneCircle.GetSpell().IsReadyWithCanCast() is false) { return -99; }
+        if (Core.Me.Distance(Core.Me.GetCurrTarget()!) 
+                > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
         }
@@ -48,7 +50,7 @@ public class Opener100 : IOpener
         }
         if (RprSettings.Instance.PrepullSprint && Spell.CreateSprint().IsReadyWithCanCast())
         {
-            cdh.AddAction(startTime, () => Spell.CreateSprint());
+            cdh.AddAction(startTime, Spell.CreateSprint);
         }
         cdh.AddAction(RprSettings.Instance.PrepullCastTimeHarpe,
                       () => SpellsDef.Harpe.GetSpell(SpellTargetType.Target));
@@ -66,16 +68,12 @@ public class Opener100 : IOpener
         var targetRing = Core.Me.GetCurrTarget()!.HitboxRadius * 2;
         var atkRange = Helper.GlblSettings.AttackRange;
 
-        if (SpellsDef.HellsIngress.GetSpell().IsReadyWithCanCast() &&
-                //Core.Me.GetCurrTarget().Distance(Core.Me) < 15 + targetRing + atkRange &&
-                Core.Me.GetCurrTarget()!.Distance(Core.Me) > 15 - targetRing - atkRange)
-        {
-            return true;
-        }
-        return false;
+        return SpellsDef.HellsIngress.GetSpell().IsReadyWithCanCast() &&
+               //Core.Me.GetCurrTarget().Distance(Core.Me) < 15 + targetRing + atkRange &&
+               Core.Me.GetCurrTarget()!.Distance(Core.Me) > 15 - targetRing - atkRange;
     }
 
-    private Spell PrepullIngress()
+    private static Spell PrepullIngress()
     {
         Core.Resolve<MemApiMoveControl>().Stop();
         Core.Resolve<MemApiMove>().SetRot(Helper.GetRotationToTarget(Core.Me.Position,
@@ -118,6 +116,4 @@ public class Opener100 : IOpener
     }
 
     public uint Level { get; } = 88;
-
-    public Action? CompletedAction { get; set; }
 }

@@ -19,13 +19,16 @@ public class EnshroudAb : ISlotResolver
     {
         Target = SpellsDef.LemuresScythe.OptimalAOETarget(3, 180, Qt.Instance.GetQt("智能AOE"));
 
-        if (Core.Me.HasAura(AurasDef.Enshrouded) == false) { return -3; }  // -3 for Unmet Prereq Conditions
+        if (Core.Me.HasAura(AurasDef.Enshrouded) is false) { return -3; }  // -3 for Unmet Prereq Conditions
         if (Target is null &&
-                Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
+                Core.Me.Distance(Core.Me.GetCurrTarget()!) 
+                > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
         }
-        if (Target is not null && SpellsDef.LemuresScythe.GetSpell(Target!).IsReadyWithCanCast() == false)
+        if (Target is not null && SpellsDef.LemuresScythe
+                .GetSpell(Target!)
+                .IsReadyWithCanCast() is false)
         {
             return -4;
         }

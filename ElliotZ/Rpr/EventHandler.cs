@@ -23,7 +23,7 @@ public class EventHandler : IRotationEventHandler
         {
             if (RprSettings.Instance.PullingNoBurst)
             {
-                Qt.mobMan.Reset();
+                Qt.MobMan.Reset();
             }
             //MeleePosHelper.Clear();
             if (RprSettings.Instance.RestoreQtSet)
@@ -55,7 +55,7 @@ public class EventHandler : IRotationEventHandler
     {
         if (RprSettings.Instance.PullingNoBurst)
         {
-            Qt.mobMan.Reset();
+            Qt.MobMan.Reset();
         }
         StopHelper.StopActions(1000);
 
@@ -76,7 +76,7 @@ public class EventHandler : IRotationEventHandler
         AI.Instance.BattleData.CurrGcdAbilityCount = (spell.Id is SpellsDef.VoidReaping
                                                                or SpellsDef.CrossReaping) ? 1 : 2;
 
-        BattleData.Instance.justCastAC = (spell.Id is SpellsDef.ArcaneCircle);
+        BattleData.Instance.JustCastAC = (spell.Id is SpellsDef.ArcaneCircle);
     }
 
     public void OnBattleUpdate(int currTime)
@@ -89,14 +89,14 @@ public class EventHandler : IRotationEventHandler
 
         if (RprSettings.Instance.PullingNoBurst)
         {
-            Qt.mobMan.HoldBurstIfPulling(currTime, RprSettings.Instance.ConcentrationThreshold);
+            Qt.MobMan.HoldBurstIfPulling(currTime, RprSettings.Instance.ConcentrationThreshold);
         }
 
         if (RprSettings.Instance.NoBurst)
         {
-            Qt.mobMan.HoldBurstIfMobsDying(currTime, 
+            Qt.MobMan.HoldBurstIfMobsDying(currTime, 
                                            RprSettings.Instance.MinMobHpPercent, 
-                                           RprSettings.Instance.minTTK * 1000);
+                                           RprSettings.Instance.MinTTK * 1000);
         }
 
         // stop action during accel bombs, pyretics and/or when boss is invuln
@@ -106,12 +106,12 @@ public class EventHandler : IRotationEventHandler
         var gcdProgPctg = (int)((GCDHelper.GetGCDCooldown() / (double)BattleData.Instance.GcdDuration) * 100);
         var inTN = Core.Me.HasAura(AurasDef.TrueNorth) &&
                    !RprSettings.Instance.NoPosDrawInTN;
-        var GibGallowsReady = Core.Me.HasAura(AurasDef.SoulReaver) ||
+        var gibGallowsReady = Core.Me.HasAura(AurasDef.SoulReaver) ||
                               Core.Me.HasAura(AurasDef.Executioner);
-        var GibGallowsJustUsed =
+        var gibGallowsJustUsed =
                 Helper.GetActionChange(SpellsDef.Gibbet).RecentlyUsed(500) ||
                 Helper.GetActionChange(SpellsDef.Gallows).RecentlyUsed(500);
-        var StaticPosProg = RprSettings.Instance.PosDrawStyle switch
+        var staticPosProg = RprSettings.Instance.PosDrawStyle switch
         {
             0 => 1,
             1 => 70,
@@ -125,7 +125,7 @@ public class EventHandler : IRotationEventHandler
                 (Core.Me.GetCurrTarget() is not null &&
                  Core.Me.GetCurrTarget()!.HasPositional()))
         {
-            if (GibGallowsReady && !GibGallowsJustUsed)
+            if (gibGallowsReady && !gibGallowsJustUsed)
             {
                 if (Core.Me.HasAura(AurasDef.EnhancedGallows))
                 {
@@ -142,11 +142,11 @@ public class EventHandler : IRotationEventHandler
             {
                 if (Core.Me.HasAura(AurasDef.EnhancedGallows))
                 {
-                    MeleePosHelper.Draw(MeleePosHelper.Pos.Behind, StaticPosProg);
+                    MeleePosHelper.Draw(MeleePosHelper.Pos.Behind, staticPosProg);
                 }
                 else if (Core.Me.HasAura(AurasDef.EnhancedGibbet))
                 {
-                    MeleePosHelper.Draw(MeleePosHelper.Pos.Flank, StaticPosProg);
+                    MeleePosHelper.Draw(MeleePosHelper.Pos.Flank, staticPosProg);
                 }
                 else { MeleePosHelper.Clear(); }
             }
@@ -164,12 +164,12 @@ public class EventHandler : IRotationEventHandler
         if (Helper.GlblSettings.NoClipGCD3)
             LogHelper.PrintError("建议在acr全局设置中取消勾选【全局能力技不卡GCD】选项");
 
-        Qt.macroMan.Init();
+        Qt.MacroMan.Init();
     }
 
     public void OnExitRotation() //退出ACR
     {
-        Qt.macroMan.Exit();
+        Qt.MacroMan.Exit();
     }
 
     public void OnTerritoryChanged()

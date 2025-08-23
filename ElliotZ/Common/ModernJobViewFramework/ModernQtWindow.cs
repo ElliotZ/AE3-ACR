@@ -9,59 +9,50 @@ namespace ElliotZ.Common.ModernJobViewFramework;
 /// </summary>
 public static class ModernQtWindow
 {
-    private static ModernTheme? theme;
-    private static Dictionary<string, float> buttonAnimations = new();
-    private static Dictionary<string, long> buttonAnimationTimes = new();
+    private static ModernTheme? _theme;
+    private static readonly Dictionary<string, float> ButtonAnimations = new();
+    private static readonly Dictionary<string, long> ButtonAnimationTimes = new();
 
     /// <summary>
     /// 确保theme不为null，如果为null则使用默认主题
     /// </summary>
     private static void EnsureThemeInitialized()
     {
-        if (theme == null)
-        {
-            LogHelper.Debug("ModernQtWindow: theme为null，使用默认主题");
-            theme = new ModernTheme();
-        }
+        if (_theme != null) return;
+        LogHelper.Debug("ModernQtWindow: theme为null，使用默认主题");
+        _theme = new ModernTheme();
     }
 
     /// <summary>
     /// 绘制现代化Qt按钮
     /// </summary>
-    public static bool DrawModernQtButton(string label, ref bool value, Vector2 size, Vector4? customColor = null)
+    private static void DrawModernQtButton(string label, QtWindow.QtControl qt, Vector2 size, Vector4? customColor = null)
     {
         EnsureThemeInitialized();
 
-        switch (label)
+        label = label switch
         {
-            case "GCD单体治疗":
-                label = "GCD单奶";
-                break;
-            case "GCD群体治疗":
-                label = "GCD群奶";
-                break;
-            case "能力技治疗":
-                label = "能力技奶";
-                break;
-        }
-
+            "GCD单体治疗" => "GCD单奶",
+            "GCD群体治疗" => "GCD群奶",
+            "能力技治疗" => "能力技奶",
+            _ => label
+        };
 
         var buttonId = label + ImGui.GetID(label);
 
         // 初始化动画状态
-        if (!buttonAnimations.ContainsKey(buttonId))
+        if (!ButtonAnimations.TryGetValue(buttonId, out var animProgress))
         {
-            buttonAnimations[buttonId] = value ? 1f : 0f;
-            buttonAnimationTimes[buttonId] = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            animProgress = qt.QtValue ? 1f : 0f;
+            ButtonAnimations[buttonId] = animProgress;
+            ButtonAnimationTimes[buttonId] = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 
         // 更新动画
-        UpdateButtonAnimation(buttonId, value);
-
-        var animProgress = buttonAnimations[buttonId];
-        var baseColor = customColor ?? theme.Colors.Primary;
+        UpdateButtonAnimation(buttonId, qt.QtValue);
+        var baseColor = customColor ?? _theme!.Colors.Primary;
         var currentColor = ModernTheme.BlendColor(
-            theme.Colors.Surface,
+            _theme!.Colors.Surface,
             baseColor,
             animProgress
         );
@@ -76,31 +67,29 @@ public static class ModernQtWindow
         var pos = ImGui.GetCursorScreenPos();
 
         // 绘制背景阴影
-        if (value)
+        if (qt.QtValue)
         {
             DrawButtonShadow(pos, size, animProgress);
         }
 
         // 按钮
-        var clicked = ImGui.Button(label, size);
-        if (clicked)
+        if (ImGui.Button(label, size))
         {
-            value = !value;
+            qt.QtValue = !qt.QtValue;
+            qt.OnClick(qt.QtValue);
         }
 
         // 绘制状态指示器
         //DrawStateIndicator(pos, size, value, animProgress);
 
         // 绘制发光边框
-        if (value)
+        if (qt.QtValue)
         {
             DrawGlowBorder(pos, size, baseColor, animProgress);
         }
 
         ImGui.PopStyleColor(3);
         ImGui.PopStyleVar(2);
-
-        return clicked;
     }
 
     /// <summary>
@@ -108,7 +97,7 @@ public static class ModernQtWindow
     /// </summary>
     public static void DrawModernQtWindow(QtWindow qtWindow, QtStyle style, JobViewSave save)
     {
-        if (!save.ShowQT)
+        if (!save.ShowQt)
             return;
 
         // 确保theme不为null
@@ -117,7 +106,7 @@ public static class ModernQtWindow
         // 动态获取主题，与主界面联动
         if (style.CurrentThemeChanged)
         {
-            theme = new ModernTheme(style.CurrentTheme);
+            _theme = new ModernTheme(style.CurrentTheme);
             if (style.CurrentThemeChanged)
             {
                 style.UpdateLastTheme();
@@ -126,7 +115,7 @@ public static class ModernQtWindow
 
         if (!IsThemeMatching(style.CurrentTheme))
         {
-            theme = new ModernTheme(style.CurrentTheme);
+            _theme = new ModernTheme(style.CurrentTheme);
         }
 
         var qtNameList = qtWindow.QtNameList;
@@ -154,36 +143,34 @@ public static class ModernQtWindow
         ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 12f);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, padding);
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, spacing);
-        ImGui.PushStyleColor(ImGuiCol.WindowBg, theme.Colors.Background with { W = style.QtWindowBgAlpha });
-        ImGui.PushStyleColor(ImGuiCol.Border, theme.Colors.Border);
+        ImGui.PushStyleColor(ImGuiCol.WindowBg, _theme!.Colors.Background with { W = style.QtWindowBgAlpha });
+        ImGui.PushStyleColor(ImGuiCol.Border, _theme.Colors.Border);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 1f);
 
         var flag = qtWindow.LockWindow ? QtStyle.QtWindowFlag | ImGuiWindowFlags.NoMove : QtStyle.QtWindowFlag;
-        ImGui.Begin($"###Qt_Window{qtWindow.name}", flag);
+        ImGui.Begin($"###Qt_Window{qtWindow.Name}", flag);
 
 
         // 绘制窗口背景效果
         DrawWindowBackground();
 
         // 绘制Qt按钮
-        int index = 0;
+        var index = 0;
         foreach (var qtName in qtNameList)
         {
             if (qtUnVisibleList.Contains(qtName))
                 continue;
 
-            var qtValue = qtWindow.GetQt(qtName);
-            var customColor = GetQtCustomColor(qtName);
+            var qtCtrl = qtWindow.GetQt(qtName);
+            var customColor = GetQtCustomColor(qtWindow, qtName);
 
-            if (DrawModernQtButton(qtName, ref qtValue, buttonSize, customColor))
-            {
-                qtWindow.SetQt(qtName, qtValue);
-            }
-
+            DrawModernQtButton(qtName, qtCtrl, buttonSize, customColor);
+            // qtWindow.SetQt(qtName, qtCtrl.QtValue);
+            
             // 显示工具提示
             if (ImGui.IsItemHovered())
             {
-                DrawModernTooltip(qtName, GetQtTooltip(qtName));
+                DrawModernTooltip(qtName, GetQtTooltip(qtWindow, qtName));
             }
 
             if (index % qtLineCount != qtLineCount - 1)
@@ -204,22 +191,22 @@ public static class ModernQtWindow
     private static void UpdateButtonAnimation(string buttonId, bool targetState)
     {
         var currentTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-        var lastTime = buttonAnimationTimes[buttonId];
+        var lastTime = ButtonAnimationTimes[buttonId];
         var deltaTime = (currentTime - lastTime) / 1000f;
 
-        buttonAnimationTimes[buttonId] = currentTime;
+        ButtonAnimationTimes[buttonId] = currentTime;
 
-        var current = buttonAnimations[buttonId];
+        var current = ButtonAnimations[buttonId];
         var target = targetState ? 1f : 0f;
-        var animSpeed = 5f; // 动画速度
+        const float animSpeed = 5f; // 动画速度
 
         if (Math.Abs(current - target) > 0.01f)
         {
-            buttonAnimations[buttonId] = current + (target - current) * Math.Min(1f, deltaTime * animSpeed);
+            ButtonAnimations[buttonId] = current + (target - current) * Math.Min(1f, deltaTime * animSpeed);
         }
         else
         {
-            buttonAnimations[buttonId] = target;
+            ButtonAnimations[buttonId] = target;
         }
     }
 
@@ -231,9 +218,9 @@ public static class ModernQtWindow
         var drawList = ImGui.GetWindowDrawList();
         var shadowColor = new Vector4(0, 0, 0, 0.3f * intensity);
         var shadowOffset = new Vector2(0, 2);
-        var shadowBlur = 4f;
+        const float shadowBlur = 4f;
 
-        for (int i = 0; i < 3; i++)
+        for (var i = 0; i < 3; i++)
         {
             var alpha = shadowColor.W * (1f - i / 3f);
             var offset = shadowOffset + new Vector2(0, i * shadowBlur);
@@ -257,7 +244,7 @@ public static class ModernQtWindow
         var time = DateTimeOffset.Now.ToUnixTimeMilliseconds() / 1000.0f;
         var pulse = (float)(Math.Sin(time * 2) * 0.2 + 0.8);
 
-        for (int i = 0; i < 2; i++)
+        for (var i = 0; i < 2; i++)
         {
             var alpha = intensity * pulse * (0.3f - i * 0.1f);
             var offset = i * 2f;
@@ -288,12 +275,12 @@ public static class ModernQtWindow
         ModernTheme.DrawGradient(
             windowPos,
             windowSize,
-            theme.Colors.Background with { W = 0f },
-            theme.Colors.Background with { W = 0.05f }
+            _theme!.Colors.Background with { W = 0f },
+            _theme.Colors.Background with { W = 0.05f }
         );
 
         // 绘制装饰性图案
-        var patternColor = theme.Colors.Primary with { W = 0.02f };
+        var patternColor = _theme.Colors.Primary with { W = 0.02f };
         for (int i = 0; i < 3; i++)
         {
             var offset = i * 50f;
@@ -319,14 +306,14 @@ public static class ModernQtWindow
 
         ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 8f);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(12, 8));
-        ImGui.PushStyleColor(ImGuiCol.PopupBg, theme.Colors.Surface);
-        ImGui.PushStyleColor(ImGuiCol.Border, theme.Colors.Border);
+        ImGui.PushStyleColor(ImGuiCol.PopupBg, _theme!.Colors.Surface);
+        ImGui.PushStyleColor(ImGuiCol.Border, _theme.Colors.Border);
         ImGui.PushStyleVar(ImGuiStyleVar.PopupBorderSize, 1f);
 
         ImGui.BeginTooltip();
 
-        ImGui.TextColored(theme.Colors.Primary, title);
-        ImGui.TextColored(theme.Colors.TextSecondary, content);
+        ImGui.TextColored(_theme.Colors.Primary, title);
+        ImGui.TextColored(_theme.Colors.TextSecondary, content);
 
         ImGui.EndTooltip();
 
@@ -337,36 +324,18 @@ public static class ModernQtWindow
     /// <summary>
     /// 获取Qt按钮的自定义颜色
     /// </summary>
-    private static Vector4? GetQtCustomColor(string qtName)
+    private static Vector4? GetQtCustomColor(QtWindow window, string qtName)
     {
-        EnsureThemeInitialized();
-
-        if (qtName.Contains("治疗") || qtName.Contains("医"))
-            return theme.Colors.Success;
-        if (qtName.Contains("攻击") || qtName.Contains("输出"))
-            return theme.Colors.Error;
-        if (qtName.Contains("防御") || qtName.Contains("减伤"))
-            return theme.Colors.Secondary;
-
-        return null;
+        var qt = window.GetQt(qtName);
+        return qt.UseColor ? qt.Color : null;
     }
 
     /// <summary>
     /// 获取Qt按钮的工具提示
     /// </summary>
-    private static string GetQtTooltip(string qtName)
+    private static string GetQtTooltip(QtWindow window, string qtName)
     {
-        switch (qtName)
-        {
-            case "GCD单体治疗":
-                return "实际QT名:GCD单体治疗";
-            case "GCD群体治疗":
-                return "实际QT名:GCD群体治疗";
-            case "能力技治疗":
-                return "实际QT名:能力技治疗";
-        }
-
-        return "";
+        return window.GetQt(qtName).ToolTip;
     }
 
     /// <summary>
@@ -390,6 +359,6 @@ public static class ModernQtWindow
         EnsureThemeInitialized();
         // 创建一个临时主题来比较颜色
         var tempTheme = new ModernTheme(targetTheme);
-        return theme.Colors.Primary.Equals(tempTheme.Colors.Primary);
+        return _theme!.Colors.Primary.Equals(tempTheme.Colors.Primary);
     }
 }

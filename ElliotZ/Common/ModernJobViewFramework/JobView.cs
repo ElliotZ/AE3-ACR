@@ -1,9 +1,9 @@
+using System.Diagnostics;
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View;
 using AEAssist.Helper;
-using Dalamud.Interface.Style;
 using Dalamud.Interface.Utility.Raii;
 using ElliotZ.Common.ModernJobViewFramework.HotKey;
 using ImGuiNET;
@@ -19,14 +19,14 @@ namespace ElliotZ.Common.ModernJobViewFramework;
 
 public class JobViewWindow : IRotationUI
 {
-    private Action saveSetting;
-    private QtWindow qtWindow;
-    private HotkeyWindow hotkeyWindow;
-    private MainWindow mainWindow;
-    private QtStyle style;
-    private float userFontGlobalScale = 1.17f;
+    private Action _saveSetting;
+    private QtWindow _qtWindow;
+    private HotkeyWindow _hotkeyWindow;
+    private MainWindow _mainWindow;
+    private QtStyle _style;
+    //private float userFontGlobalScale = 1.17f;
     // 运行状态动画相关
-    private float statusAnimationTime = 0f;
+    //private float statusAnimationTime = 0f;
     
     public Dictionary<string, Action<JobViewWindow>> ExternalTab = new();
 
@@ -42,11 +42,11 @@ public class JobViewWindow : IRotationUI
         //Dictionary<string, uint> Spell
         )
     {
-        style = new QtStyle(jobViewSave);
-        saveSetting = save;
-        qtWindow = new QtWindow(jobViewSave, name);
-        hotkeyWindow = new HotkeyWindow(jobViewSave, name + " hotkey", /*ref Config, Spell,*/ save);
-        mainWindow = new MainWindow(ref style);
+        _style = new QtStyle(jobViewSave);
+        _saveSetting = save;
+        _qtWindow = new QtWindow(jobViewSave, name);
+        _hotkeyWindow = new HotkeyWindow(jobViewSave, name + " hotkey");
+        _mainWindow = new MainWindow(ref _style);
     }
 
     //public void CreateHotKey()
@@ -59,7 +59,7 @@ public class JobViewWindow : IRotationUI
     /// </summary>
     public void SetMainStyle()
     {
-        style.SetMainStyle();
+        _style.SetMainStyle();
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public class JobViewWindow : IRotationUI
     /// </summary>
     public void EndMainStyle()
     {
-        style.EndMainStyle();
+        _style.EndMainStyle();
     }
 
     /// <summary>
@@ -96,7 +96,7 @@ public class JobViewWindow : IRotationUI
     /// <param name="qtValueDefault">qt的bool默认值</param>
     public void AddQt(string name, bool qtValueDefault)
     {
-        qtWindow.AddQt(name, qtValueDefault);
+        _qtWindow.AddQt(name, qtValueDefault);
     }
 
 
@@ -108,22 +108,22 @@ public class JobViewWindow : IRotationUI
     /// <param name="action">按下时触发的方法</param>
     public void AddQt(string name, bool qtValueDefault, Action<bool> action)
     {
-        qtWindow.AddQt(name, qtValueDefault, action);
+        _qtWindow.AddQt(name, qtValueDefault, action);
     }
 
     public void AddQt(string name, bool qtValueDefault, string toolTip)
     {
-        qtWindow.AddQt(name, qtValueDefault, toolTip);
+        _qtWindow.AddQt(name, qtValueDefault, toolTip);
     }
 
     public void AddQt(string name, bool qtValueDefault, Action<bool> action, Vector4 color)
     {
-        qtWindow.AddQt(name, qtValueDefault, action, color);
+        _qtWindow.AddQt(name, qtValueDefault, action, color);
     }
 
     public void RemoveAllQt()
     {
-        qtWindow.RemoveAllQt();
+        _qtWindow.RemoveAllQt();
     }
 
     // 设置每行按钮个数
@@ -131,14 +131,14 @@ public class JobViewWindow : IRotationUI
     {
         if (count < 1)
             count = 1;
-        qtWindow.QtLineCount = count;
+        _qtWindow.QtLineCount = count;
     }
 
 
     /// 设置上一次add添加的hotkey的toolTip
     public void SetQtToolTip(string toolTip)
     {
-        qtWindow.SetQtToolTip(toolTip);
+        _qtWindow.SetQtToolTip(toolTip);
     }
 
     /// 画一个新的Qt窗口
@@ -146,7 +146,7 @@ public class JobViewWindow : IRotationUI
     {
         try
         {
-            ModernQtWindow.DrawModernQtWindow(qtWindow, style, qtWindow.save);
+            ModernQtWindow.DrawModernQtWindow(_qtWindow, _style, _qtWindow.Save);
         }
         catch (Exception e)
         {
@@ -158,57 +158,57 @@ public class JobViewWindow : IRotationUI
     /// 创建一个更改qt排序显示等设置的视图
     public void QtSettingView()
     {
-        qtWindow.QtSettingView();
+        _qtWindow.QtSettingView();
     }
 
     /// 获取指定名称qt的bool值
     public bool GetQt(string qtName)
     {
-        return qtWindow.GetQt(qtName);
+        return _qtWindow.GetQt(qtName).QtValue;
     }
 
     /// 设置指定qt的值
     public void SetQt(string qtName, bool qtValue)
     {
-        qtWindow.SetQt(qtName, qtValue);
+        _qtWindow.SetQt(qtName, qtValue);
     }
 
     /// 反转指定qt的值
     /// <returns>成功返回true，否则返回false</returns>
     public bool ReverseQt(string qtName)
     {
-        return qtWindow.ReverseQt(qtName);
+        return _qtWindow.ReverseQt(qtName);
     }
 
     /// 重置所有qt为默认值
     public void Reset()
     {
-        qtWindow.Reset();
+        _qtWindow.Reset();
     }
 
     /// 给指定qt设置新的默认值
     public void NewDefault(string qtName, bool newDefault)
     {
-        qtWindow.NewDefault(qtName, newDefault);
+        _qtWindow.NewDefault(qtName, newDefault);
     }
 
     /// 将当前所有Qt状态记录为新的默认值
     public void SetDefaultFromNow()
     {
-        qtWindow.SetDefaultFromNow();
+        _qtWindow.SetDefaultFromNow();
     }
 
     /// 返回包含当前所有qt名字的数组 不要在update里调用
     public string[] GetQtArray()
     {
-        return qtWindow.GetQtArray();
+        return _qtWindow.GetQtArray();
     }
 
     /// 画一个新的hotkey窗口
     public void DrawHotkeyWindow()
     {
         // 使用现代化Hotkey窗口
-        hotkeyWindow.DrawHotkeyWindow(style);
+        _hotkeyWindow.DrawHotkeyWindow(_style);
     }
 
     /// <summary>
@@ -216,25 +216,25 @@ public class JobViewWindow : IRotationUI
     /// </summary>
     public void AddHotkey(string name, AEAssist.CombatRoutine.View.JobView.IHotkeyResolver slot)
     {
-        hotkeyWindow.AddHotkey(name, slot);
+        _hotkeyWindow.AddHotkey(name, slot);
     }
 
     /// <summary>
     /// 获取当前激活的hotkey列表
     /// </summary>
     /// <returns></returns>
-    public List<string> GetActiveList() => hotkeyWindow.ActiveList;
+    public List<string> GetActiveList() => _hotkeyWindow.ActiveList;
 
     /// 设置上一次add添加的hotkey的toolTip
     public void SetHotkeyToolTip(string toolTip)
     {
-        hotkeyWindow.SetHotkeyToolTip(toolTip);
+        _hotkeyWindow.SetHotkeyToolTip(toolTip);
     }
 
     /// 激活单个快捷键,mo无效
     public void SetHotkey(string name)
     {
-        hotkeyWindow.SetHotkey(name);
+        _hotkeyWindow.SetHotkey(name);
     }
 
     /// 取消激活单个快捷键
@@ -246,13 +246,13 @@ public class JobViewWindow : IRotationUI
     /// 返回包含当前所有hotkey名字的数组
     public string[] GetHotkeyArray()
     {
-        return hotkeyWindow.GetHotkeyArray();
+        return _hotkeyWindow.GetHotkeyArray();
     }
 
     /// 用于draw一个更改hotkey排序显示等设置的视图
     public void HotkeySettingView()
     {
-        hotkeyWindow.HotkeySettingView();
+        _hotkeyWindow.HotkeySettingView();
     }
 
     /// <summary>
@@ -260,8 +260,8 @@ public class JobViewWindow : IRotationUI
     /// </summary>
     public void RunHotkey()
     {
-        hotkeyWindow.RunHotkey();
-        qtWindow.RunHotkey();
+        _hotkeyWindow.RunHotkey();
+        _qtWindow.RunHotkey();
     }
 
     public void Update()
@@ -275,7 +275,7 @@ public class JobViewWindow : IRotationUI
     /// </summary>
     public void MainControlView(ref bool buttonValue, ref bool stopButton)
     {
-        mainWindow.MainControlView(ref buttonValue, ref stopButton, saveSetting);
+        _mainWindow.MainControlView(ref buttonValue, ref stopButton, _saveSetting);
     }
 
     ///风格设置控件
@@ -288,16 +288,16 @@ public class JobViewWindow : IRotationUI
         var themes = Enum.GetValues<ModernTheme.ThemePreset>();
         foreach (var theme in themes)
         {
-            bool isSelected = style.CurrentTheme == theme;
+            var isSelected = _style.CurrentTheme == theme;
             if (isSelected)
             {
-                ImGui.PushStyleColor(ImGuiCol.Button, style.ModernTheme.Colors.Primary);
+                ImGui.PushStyleColor(ImGuiCol.Button, _style.ModernTheme.Colors.Primary);
             }
             
             if (ImGui.Button(theme.ToString(), new Vector2(120, 30)))
             {
-                style.CurrentTheme = theme;
-                saveSetting();
+                _style.CurrentTheme = theme;
+                _saveSetting();
             }
             
             if (isSelected)
@@ -313,7 +313,8 @@ public class JobViewWindow : IRotationUI
         ImGui.Separator();
         ImGui.Spacing();
 
-        if (ImGui.Checkbox("QT和快捷栏随主界面隐藏", ref GlobalSetting.QT快捷栏随主界面隐藏))
+        Debug.Assert(GlobalSetting.Instance != null);
+        if (ImGui.Checkbox("QT和快捷栏随主界面隐藏", ref GlobalSetting.Instance.Qt快捷栏随主界面隐藏))
         {
             GlobalSetting.Instance.Save();
         }
@@ -340,30 +341,24 @@ public class JobViewWindow : IRotationUI
         ImGui.Dummy(new Vector2(1, 3));
 
         //QT按钮一行个数
-        var input = qtWindow.QtLineCount;
+        var input = _qtWindow.QtLineCount;
         if (ImGui.InputInt("Qt按钮每行个数", ref input))
         {
-            if (input < 1)
-                qtWindow.QtLineCount = 1;
-            else
-                qtWindow.QtLineCount = input;
+            _qtWindow.QtLineCount = input < 1 ? 1 : input;
         }
 
         //hotkey按钮一行个数
-        input = hotkeyWindow.HotkeyLineCount;
+        input = _hotkeyWindow.HotkeyLineCount;
         if (ImGui.InputInt("快捷键每行个数", ref input))
         {
-            if (input < 1)
-                hotkeyWindow.HotkeyLineCount = 1;
-            else
-                hotkeyWindow.HotkeyLineCount = input;
+            _hotkeyWindow.HotkeyLineCount = input < 1 ? 1 : input;
         }
 
         //QT透明度
-        var qtBackGroundAlpha = style.QtWindowBgAlpha;
+        var qtBackGroundAlpha = _style.QtWindowBgAlpha;
         if (ImGui.SliderFloat("背景透明度", ref qtBackGroundAlpha, 0f, 1f, "%.1f"))
         {
-            style.QtWindowBgAlpha = qtBackGroundAlpha;
+            _style.QtWindowBgAlpha = qtBackGroundAlpha;
         }
 
         var smallWindowSize = GlobalSetting.Instance.缩放后窗口大小;
@@ -374,40 +369,40 @@ public class JobViewWindow : IRotationUI
         }
 
         // 按钮大小
-        var buttonSize = style.QtButtonSizeOrigin;
+        var buttonSize = _style.QtButtonSizeOrigin;
         if (ImGui.InputFloat2("按钮大小", ref buttonSize))
         {
-            style.QtButtonSizeOrigin = buttonSize;
+            _style.QtButtonSizeOrigin = buttonSize;
         }
 
         // 热键大小
         // 按钮大小
-        var hotKeySize = style.HotkeySizeOrigin;
+        var hotKeySize = _style.HotkeySizeOrigin;
         if (ImGui.InputFloat2("热键大小", ref hotKeySize))
         {
-            style.HotkeySizeOrigin = hotKeySize;
+            _style.HotkeySizeOrigin = hotKeySize;
         }
 
 
         ImGui.Dummy(new Vector2(1, 3));
 
-        var lockWindow = hotkeyWindow.LockWindow;
+        var lockWindow = _hotkeyWindow.LockWindow;
         if (ImGui.Checkbox("Hotkey窗口不可拖动", ref lockWindow))
         {
-            hotkeyWindow.LockWindow = lockWindow;
+            _hotkeyWindow.LockWindow = lockWindow;
         }
 
-        var lockQtWindow = qtWindow.LockWindow;
+        var lockQtWindow = _qtWindow.LockWindow;
         if (ImGui.Checkbox("Qt窗口不可拖动", ref lockQtWindow))
         {
-            qtWindow.LockWindow = lockQtWindow;
+            _qtWindow.LockWindow = lockQtWindow;
         }
 
 
         //重置按钮
         if (ImGui.Button("重置风格 ###重置"))
         {
-            style.Reset();
+            _style.Reset();
         }
     }
 
@@ -431,20 +426,19 @@ public class JobViewWindow : IRotationUI
             }
 
             var title =
-                string.Format("{0} | {1} {2} ###aeassist",
-                    GlobalSetting.title, // 作者名
-                    AI.Instance.BattleData.CurrBattleTimeInSec, // 战斗时间（秒）
-                    triggerlineName // {时间轴名字}
-                );
+                $"{GlobalSetting.Title} | {AI.Instance.BattleData.CurrBattleTimeInSec} {triggerlineName} ###aeassist";
 
             if (OverlayManager.Instance.Visible)
             {
                 // 根据小窗口状态设置窗口大小约束
-                if (style.Save.SmallWindow)
+                if (_style.Save.SmallWindow)
                 {
                     // 小窗口模式：锁定窗口大小
-                    var smallSize = GlobalSetting.Instance.缩放后窗口大小 * QtStyle.OverlayScale;
-                    ImGui.SetNextWindowSizeConstraints(smallSize, smallSize);
+                    if (GlobalSetting.Instance != null)
+                    {
+                        var smallSize = GlobalSetting.Instance.缩放后窗口大小 * QtStyle.OverlayScale;
+                        ImGui.SetNextWindowSizeConstraints(smallSize, smallSize);
+                    }
                 }
                 else
                 {
@@ -469,20 +463,15 @@ public class JobViewWindow : IRotationUI
                     {
                         if (bar.Success)
                         {
-                            foreach (var v in ExternalTab)
+                            foreach (var v 
+                                     in ExternalTab.Where(v 
+                                         => v.Key != "Dev"))
                             {
-                                if (v.Key == "Dev")
-                                {
-                                    continue;
-                                }
-
                                 using var item = ImRaii.TabItem(v.Key);
-                                if (item.Success)
-                                {
-                                    using var child = ImRaii.Child($"###tab{v.Key}");
-                                    if (child.Success)
-                                        v.Value.Invoke(this);
-                                }
+                                if (!item.Success) continue;
+                                using var child = ImRaii.Child($"###tab{v.Key}");
+                                if (child.Success)
+                                    v.Value.Invoke(this);
                             }
 
                             using (var item = ImRaii.TabItem("Qt"))
@@ -517,14 +506,12 @@ public class JobViewWindow : IRotationUI
 
                             if (ExternalTab.ContainsKey("Dev"))
                             {
-                                using (var item = ImRaii.TabItem("Dev"))
+                                using var item = ImRaii.TabItem("Dev");
+                                if (item.Success)
                                 {
-                                    if (item.Success)
-                                    {
-                                        using var child = ImRaii.Child($"###tabDev");
-                                        if (child.Success)
-                                            ExternalTab["Dev"].Invoke(this);
-                                    }
+                                    using var child = ImRaii.Child($"###tabDev");
+                                    if (child.Success)
+                                        ExternalTab["Dev"].Invoke(this);
                                 }
                             }
                         }
@@ -533,11 +520,11 @@ public class JobViewWindow : IRotationUI
                 }
             }
 
-            if (GlobalSetting.Instance.QtShow && GlobalSetting.Instance.TempQtShow)
+            if (GlobalSetting.Instance != null && GlobalSetting.Instance.QtShow && GlobalSetting.Instance.TempQtShow)
             {
                 if (!OverlayManager.Instance.Visible)
                 {
-                    if (!GlobalSetting.QT快捷栏随主界面隐藏)
+                    if (!GlobalSetting.Instance.Qt快捷栏随主界面隐藏)
                     {
                         DrawQtWindow();
                     }
@@ -548,19 +535,18 @@ public class JobViewWindow : IRotationUI
                 }
             }
 
-            if (GlobalSetting.Instance.HotKeyShow && GlobalSetting.Instance.TempHotShow)
+            if (GlobalSetting.Instance == null || !GlobalSetting.Instance.HotKeyShow ||
+                !GlobalSetting.Instance.TempHotShow) return;
+            if (!OverlayManager.Instance.Visible)
             {
-                if (!OverlayManager.Instance.Visible)
-                {
-                    if (!GlobalSetting.QT快捷栏随主界面隐藏)
-                    {
-                        DrawHotkeyWindow();
-                    }
-                }
-                else
+                if (!GlobalSetting.Instance.Qt快捷栏随主界面隐藏)
                 {
                     DrawHotkeyWindow();
                 }
+            }
+            else
+            {
+                DrawHotkeyWindow();
             }
 
             #endregion
