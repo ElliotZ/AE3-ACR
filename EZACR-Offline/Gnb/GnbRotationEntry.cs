@@ -11,7 +11,7 @@ using EZACR_Offline.Gnb.Triggers;
 
 namespace EZACR_Offline.Gnb;
 
-public class GnbRotationEntry : IRotationEntry, IDisposable
+public class GnbRotationEntry : IRotationEntry
 {
     public List<SlotResolverData> SlotResolvers =
     [
@@ -45,16 +45,6 @@ public class GnbRotationEntry : IRotationEntry, IDisposable
         new SlotResolverData(new Reprisal(), SlotMode.OffGcd)
     ];
 
-    //private IOpener Opener_GNB_2gcd_100 = new Opener_GNB_2gcd_100();
-    //private IOpener Opener_GNB_2gcd_100_Change = new Opener_GNB_2gcd_100_Change();
-    //private IOpener Opener_GNB_1gcd_100_Change = new Opener_GNB_1gcd_100_Change();
-    //private IOpener Opener_GNB_3gcd_100_Change = new Opener_GNB_3gcd_100_Change();
-    //private IOpener Opener_GNB_2gcd_80绝亚 = new Opener_GNB_2gcd_80绝亚();
-    //private IOpener Opener_GNB_1gcd_90绝欧 = new Opener_GNB_1gcd_90绝欧();
-    //private IOpener Opener_GNB_5gcd_70神兵 = new Opener_GNB_5gcd_70神兵();
-    //private IOpener Opener_GNB_1gcd_100_25 = new Opener_GNB_1gcd_100_25();
-    //private IOpener Opener_GNB_2gcd_70巴哈 = new Opener_GNB_2gcd_70巴哈();
-
     //public string OverlayTitle { get; } = "EZGnb";
     public string AuthorName { get; set; } = Helper.AuthorName;
 
@@ -85,7 +75,7 @@ public class GnbRotationEntry : IRotationEntry, IDisposable
     public IRotationUI GetRotationUI() { return Qt.Instance; }
     public void OnDrawSetting() { }
 
-    private IOpener? GetOpener(uint level)
+    private static IOpener? GetOpener(uint level)
     {
         return GnbSettings.Instance.opener switch
         {

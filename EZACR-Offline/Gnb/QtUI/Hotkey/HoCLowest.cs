@@ -23,7 +23,7 @@ public class HoCLowest() : HotKeyResolver(SpellsDef.HeartOfCorundum, useHighPrio
     public override void Run()
     {
         var targetSpellId = Helper.GetActionChange(SpellId);
-        var spell = targetSpellId.GetSpell(LowestHpPartyMemberWithoutBuffs(AurasDef.Holmgang));
+        var spell = targetSpellId.GetSpell(LowestHpPartyMemberWithoutBuffs(AurasDef.Holmgang)!);
         var cooldown = spell.Cooldown.TotalMilliseconds;
 
         if (WaitCoolDown && cooldown > 0)

@@ -8,19 +8,14 @@ namespace ElliotZ.Rpr.Triggers;
 public class TriggerActionQt : ITriggerAction
 {
     public string DisplayName { get; } = "Reaper/QT";
-    public string? Remark { get; set; }
+    public string Remark { get; set; } = "";
 
     public string Key = "";
     public bool Value;
 
     // 辅助数据 因为是private 所以不存档
     private int _selectIndex;
-    private readonly string[] _qtArray;
-
-    public TriggerActionQt()
-    {
-        _qtArray = Qt.Instance.GetQtArray();
-    }
+    private readonly string[] _qtArray = Qt.Instance.GetQtArray();
 
     public bool Draw()
     {

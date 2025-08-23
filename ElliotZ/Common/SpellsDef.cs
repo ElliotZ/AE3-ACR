@@ -1,9 +1,8 @@
 ﻿using AEAssist.CombatRoutine;
-using FFXIVClientStructs.FFXIV.Client.Game.Character;
 
 namespace ElliotZ.Common
 {
-    public class SpellsDef
+    public static class SpellsDef
     {
         public const uint Sprint = 3;
 
@@ -1197,23 +1196,23 @@ namespace ElliotZ.Common
         public const uint FluidAuraPvp = 8900;
 
         //NIN_PVP
-        public const uint basecombo1 = 29500;
-        public const uint basecombo2 = 29501;
-        public const uint basecombo3 = 29502;
+        public const uint Basecombo1 = 29500;
+        public const uint Basecombo2 = 29501;
+        public const uint Basecombo3 = 29502;
         public const uint LB = 29515;
         public const uint Shuriken = 29505;
         public const uint Hyosho = 29506;
         public const uint Goka = 29504;
-        public const uint doton = 29514;
-        public const uint hoton = 29512;
-        public const uint meisui = 29508;
+        public const uint DotonPvP = 29514;
+        public const uint Hoton = 29512;
+        public const uint MeisuiPvP = 29508;
 
-        public const uint heal = 29711;
-        public const uint sprint = 29057;
+        public const uint Heal = 29711;
+        public const uint SprintPvP = 29057;
         public const uint Guard = 29054;
-        public const uint bunnsinn = 29511;
-        public const uint purify = 29056;
-        public const uint mug = 29509;
+        public const uint Bunnsinn = 29511;
+        public const uint PurifyPvP = 29056;
+        public const uint MugPvP = 29509;
         public const uint ThreeMudrag = 29507;
         #endregion
 

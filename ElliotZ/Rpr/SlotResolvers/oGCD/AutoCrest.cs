@@ -10,11 +10,11 @@ public class AutoCrest : ISlotResolver
 {
     public int Check()
     {
-        var CrestThreshold = Core.Me.MaxHp * RprSettings.Instance.CrestPercent;
+        var crestThreshold = Core.Me.MaxHp * RprSettings.Instance.CrestPercent;
 
-        if (RprSettings.Instance.AutoCrest == false) { return -1; }
-        if (SpellsDef.ArcaneCrest.GetSpell().IsReadyWithCanCast() == false) { return -99; }
-        if (Core.Me.CurrentHp > CrestThreshold) { return -4; }
+        if (RprSettings.Instance.AutoCrest is false) { return -1; }
+        if (SpellsDef.ArcaneCrest.GetSpell().IsReadyWithCanCast() is false) { return -99; }
+        if (Core.Me.CurrentHp > crestThreshold) { return -4; }
         if (Core.Me.GetCurrTarget() is null ||
                 !TargetHelper.targetCastingIsBossAOE(Core.Me.GetCurrTarget()!, 2000))
         {

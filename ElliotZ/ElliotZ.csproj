@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <BaseOutputPath>C:\etc\FFXIV_CN\Launcher\devplugins\ACR</BaseOutputPath>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
@@ -22,18 +23,19 @@
 	<DalamudLibPath>$(AppData)\XIVLauncherCN\addon\Hooks\dev\</DalamudLibPath>
 	<AEAssistLibPath>C:\etc\FFXIV_CN\Launcher\devplugins\AEAssistCNVersion\AEAssist\</AEAssistLibPath>
   </PropertyGroup>
-
+    
+<!--
   <ItemGroup>
     <Reference Include="AEAssist">
       <HintPath>$(AEAssistLibPath)AEAssist.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Dalamud">
-      <HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="ECommons">
       <HintPath>..\..\..\Launcher\devplugins\AEAssistCNVersion\AEAssist\ECommons.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Dalamud">
+      <HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="FFXIVClientStructs">
@@ -43,15 +45,20 @@
     <Reference Include="ImGui.NET">
       <HintPath>$(DalamudLibPath)ImGui.NET.dll</HintPath>
       <Private>False</Private>
-    </Reference>
+    </Reference>  
   </ItemGroup>
-
+-->
+    
   <ItemGroup>
     <PackageReference Remove="DalamudPackager" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AEAssist.NET" Version="1.0.14" />
+    <PackageReference Include="AEAssist.NET" Version="1.1.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Common\TimeLineUpdater.cs" />
   </ItemGroup>
 
 </Project>

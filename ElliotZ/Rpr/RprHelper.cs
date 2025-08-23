@@ -7,7 +7,6 @@ namespace ElliotZ.Rpr;
 
 public static class RprHelper
 {
-    public static readonly string TxtCmdHandle = "/EZRpr";
     public static int GetGcdDuration => BattleData.Instance.GcdDuration;
     public static uint PrevCombo => Core.Resolve<MemApiSpell>().GetLastComboSpellId();
     //public static int ComboTimer => (int)Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds;
@@ -33,7 +32,7 @@ public static class RprHelper
 
     public static int GcdsToSoulOvercap()
     {
-        int res = (100 - Core.Resolve<JobApi_Reaper>().SoulGauge) / 10;
+        var res = (100 - Core.Resolve<JobApi_Reaper>().SoulGauge) / 10;
         if (Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign,
                                             BattleData.Instance.GcdDuration * (res + 3),
                                             false) ||

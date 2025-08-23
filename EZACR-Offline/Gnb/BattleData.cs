@@ -2,7 +2,7 @@
 
 public class BattleData
 {
-    public DateTime lastFalseTime = default(DateTime);
+    public DateTime LastFalseTime = default(DateTime);
     public float TotalHpPercentage = 0f;
     public float AverageTTK = 0f;
 

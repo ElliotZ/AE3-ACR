@@ -1,7 +1,7 @@
+using System.Diagnostics;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Trigger;
 using AEAssist.GUI;
-using ElliotZ.Common.ModernJobViewFramework.HotKey;
 using ImGuiNET;
 using System.Numerics;
 
@@ -12,18 +12,18 @@ namespace ElliotZ.Common.ModernJobViewFramework;
 
 public class MainWindow
 {
-    private bool smallWindow;
-    private QtStyle style;
-    private Vector2 originalSize;
-    private ModernTheme? theme;
-    private float animationProgress;
-    private bool showSaveSuccess;
-    private long saveAnimationTime;
+    private bool _smallWindow;
+    private QtStyle _style;
+    private Vector2 _originalSize;
+    private ModernTheme? _theme;
+    private float _animationProgress;
+    private bool _showSaveSuccess;
+    private long _saveAnimationTime;
 
     // 初始化主题
     public MainWindow(ref QtStyle style)
     {
-        this.style = style;
+        this._style = style;
         // 根据当前设置初始化主题
         UpdateTheme();
 
@@ -34,12 +34,12 @@ public class MainWindow
     /// <summary>
     /// 保存窗口状态到JobViewSave
     /// </summary>
-    public void SaveWindowState()
+    private void SaveWindowState()
     {
         // 保存小窗口状态
-        style.Save.SmallWindow = smallWindow;
+        _style.Save.SmallWindow = _smallWindow;
         // 保存原始窗口大小
-        style.Save.OriginalWindowSize = originalSize;
+        _style.Save.OriginalWindowSize = _originalSize;
     }
 
     /// <summary>
@@ -48,9 +48,9 @@ public class MainWindow
     private void RestoreWindowState()
     {
         // 恢复小窗口状态
-        smallWindow = style.Save.SmallWindow;
+        _smallWindow = _style.Save.SmallWindow;
         // 恢复原始窗口大小
-        originalSize = style.Save.OriginalWindowSize;
+        _originalSize = _style.Save.OriginalWindowSize;
     }
 
 
@@ -60,13 +60,10 @@ public class MainWindow
     private void UpdateTheme()
     {
         // 从QtStyle获取当前主题
-        theme = new ModernTheme(style.CurrentTheme);
+        _theme = new ModernTheme(_style.CurrentTheme);
 
         // 确保主题设置被保存
-        if (style.Save != null)
-        {
-            style.Save.CurrentTheme = style.CurrentTheme;
-        }
+        _style.Save.CurrentTheme = _style.CurrentTheme;
     }
 
     /// <summary>
@@ -75,25 +72,25 @@ public class MainWindow
     private ModernTheme GetCurrentTheme()
     {
         // 确保主题是最新的
-        if (theme == null || theme.Colors.Primary.X == 0)
+        if (_theme == null || _theme.Colors.Primary.X == 0)
         {
             UpdateTheme();
         }
 
         // 检查主题是否发生了变化
-        if (style.CurrentTheme !=
-            theme.GetType().GetField("CurrentPreset")?.GetValue(theme) as ModernTheme.ThemePreset?)
+        if (_style.CurrentTheme !=
+            _theme!.GetType().GetField("CurrentPreset")?.GetValue(_theme) as ModernTheme.ThemePreset?)
         {
             UpdateTheme();
         }
 
-        return theme;
+        return _theme;
     }
 
     /// <summary>
     /// 强制刷新主题
     /// </summary>
-    public void ForceRefreshTheme()
+    private void ForceRefreshTheme()
     {
         UpdateTheme();
     }
@@ -114,7 +111,7 @@ public class MainWindow
         DrawTopControlBar(ref buttonValue, ref stopButton, save);
 
         // 小窗口模式只显示基本控件
-        if (smallWindow)
+        if (_smallWindow)
         {
             ImGui.PopStyleVar(2);
             return;
@@ -149,7 +146,7 @@ public class MainWindow
         DrawControlButtons(save);
 
         // 分隔线
-        if (!smallWindow)
+        if (!_smallWindow)
         {
             ImGui.Spacing();
             DrawSeparatorLine();
@@ -163,7 +160,7 @@ public class MainWindow
     private void DrawMainControlButton(ref bool buttonValue, ref bool stopButton)
     {
         // 更新动画时间
-        animationProgress += ImGui.GetIO().DeltaTime;
+        _animationProgress += ImGui.GetIO().DeltaTime;
 
         var label = GetStatusLabel(buttonValue, stopButton);
         var buttonSize = new Vector2(100, 36) * QtStyle.OverlayScale;
@@ -208,7 +205,7 @@ public class MainWindow
             else
             {
                 buttonValue = !buttonValue;
-                if (!GlobalSetting.Instance.关闭动效)
+                if (GlobalSetting.Instance != null && !GlobalSetting.Instance.关闭动效)
                 {
                     TriggerAnimation();
                 }
@@ -228,23 +225,14 @@ public class MainWindow
         ImGui.PopStyleColor(4);
 
         // 显示提示
-        if (ImGui.IsItemHovered())
+        if (!ImGui.IsItemHovered()) return;
+        if (buttonValue)
         {
-            if (buttonValue)
-            {
-                if (stopButton)
-                {
-                    ImGui.SetTooltip("左键:恢复正常 | 右键:退出停手");
-                }
-                else
-                {
-                    ImGui.SetTooltip("左键:暂停 | 右键:切换停手");
-                }
-            }
-            else
-            {
-                ImGui.SetTooltip("左键:启动");
-            }
+            ImGui.SetTooltip(stopButton ? "左键:恢复正常 | 右键:退出停手" : "左键:暂停 | 右键:切换停手");
+        }
+        else
+        {
+            ImGui.SetTooltip("左键:启动");
         }
     }
 
@@ -254,7 +242,7 @@ public class MainWindow
     private void DrawRunningButtonEffects(ImDrawListPtr drawList, Vector2 pos, Vector2 size)
     {
         // 检查是否关闭动效
-        if (GlobalSetting.Instance.关闭动效)
+        if (GlobalSetting.Instance != null && GlobalSetting.Instance.关闭动效)
         {
             // 关闭动效时只渲染基本的按钮框架和纯色
             // 1. 纯色背景
@@ -301,7 +289,7 @@ public class MainWindow
         else
         {
             // 原有的动画效果代码
-            var time = animationProgress;
+            var time = _animationProgress;
             var centerX = pos.X + size.X / 2;
             var centerY = pos.Y + size.Y / 2;
 
@@ -384,7 +372,7 @@ public class MainWindow
     private void DrawStopModeButtonEffects(ImDrawListPtr drawList, Vector2 pos, Vector2 size)
     {
         // 检查是否关闭动效
-        if (GlobalSetting.Instance.关闭动效)
+        if (GlobalSetting.Instance != null && GlobalSetting.Instance.关闭动效)
         {
             // 关闭动效时只渲染基本的按钮框架和纯色
             // 1. 纯色警告背景
@@ -419,7 +407,7 @@ public class MainWindow
         else
         {
             // 原有的动画效果代码
-            var time = animationProgress;
+            var time = _animationProgress;
             var centerX = pos.X + size.X / 2;
             var centerY = pos.Y + size.Y / 2;
 
@@ -486,6 +474,7 @@ public class MainWindow
     private void DrawPausedButtonEffects(ImDrawListPtr drawList, Vector2 pos, Vector2 size)
     {
         // 检查是否关闭动效
+        Debug.Assert(GlobalSetting.Instance != null);
         if (GlobalSetting.Instance.关闭动效)
         {
             // 关闭动效时只渲染基本的按钮框架和纯色
@@ -533,7 +522,7 @@ public class MainWindow
         else
         {
             // 原有的动画效果代码
-            var time = animationProgress;
+            var time = _animationProgress;
             var centerX = pos.X + size.X / 2;
             var centerY = pos.Y + size.Y / 2;
 
@@ -669,6 +658,7 @@ public class MainWindow
     /// </summary>
     private void DrawControlButtons(Action save)
     {
+        Debug.Assert(GlobalSetting.Instance != null);
         // 强制刷新主题，确保获取到最新设置
         ForceRefreshTheme();
 
@@ -692,8 +682,8 @@ public class MainWindow
             SaveWindowState();
 
             save();
-            showSaveSuccess = true;
-            saveAnimationTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            _showSaveSuccess = true;
+            _saveAnimationTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 
         // 为亮色主题添加微妙的阴影效果
@@ -708,19 +698,19 @@ public class MainWindow
         ImGui.SameLine();
 
         // 缩放按钮
-        var icon = smallWindow ? "▼" : "▲";
+        var icon = _smallWindow ? "▼" : "▲";
         var scaleButtonPos = ImGui.GetCursorScreenPos();
         if (ImGui.Button(icon, buttonSize))
         {
-            if (!smallWindow)
+            if (!_smallWindow)
             {
-                originalSize = ImGui.GetWindowSize();
+                _originalSize = ImGui.GetWindowSize();
             }
 
-            smallWindow = !smallWindow;
-            if (!smallWindow)
+            _smallWindow = !_smallWindow;
+            if (!_smallWindow)
             {
-                ImGui.SetWindowSize(originalSize);
+                ImGui.SetWindowSize(_originalSize);
                 GlobalSetting.Instance.TempQtShow = true;
                 GlobalSetting.Instance.TempHotShow = true;
             }
@@ -728,7 +718,7 @@ public class MainWindow
             {
                 var smallSize = GlobalSetting.Instance.缩放后窗口大小;
                 ImGui.SetWindowSize(smallSize * QtStyle.OverlayScale);
-                if (GlobalSetting.Instance.缩放同时隐藏QT)
+                if (GlobalSetting.Instance.缩放同时隐藏qt)
                 {
                     GlobalSetting.Instance.TempQtShow = false;
                     GlobalSetting.Instance.Save();
@@ -757,10 +747,10 @@ public class MainWindow
         if (ImGui.BeginPopup($"###iconPopup{icon}"))
         {
             // 第一个选项：缩放同时隐藏QT
-            bool hideQt = GlobalSetting.Instance.缩放同时隐藏QT;
+            bool hideQt = GlobalSetting.Instance.缩放同时隐藏qt;
             if (ImGui.Checkbox("缩放同时隐藏QT", ref hideQt))
             {
-                GlobalSetting.Instance.缩放同时隐藏QT = hideQt;
+                GlobalSetting.Instance.缩放同时隐藏qt = hideQt;
                 GlobalSetting.Instance.Save();
             }
 
@@ -776,12 +766,12 @@ public class MainWindow
         }
 
         if (ImGui.IsItemHovered())
-            ImGui.SetTooltip(smallWindow ? "展开窗口(右键设置)" : "收起窗口(右键设置)");
+            ImGui.SetTooltip(_smallWindow ? "展开窗口(右键设置)" : "收起窗口(右键设置)");
         ImGui.PopStyleColor(4);
         ImGui.PopStyleVar(2);
 
         // 显示保存成功动画
-        if (showSaveSuccess)
+        if (_showSaveSuccess)
         {
             DrawSaveSuccessAnimation();
         }
@@ -871,11 +861,11 @@ public class MainWindow
     private void DrawSaveSuccessAnimation()
     {
         var currentTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-        var elapsed = currentTime - saveAnimationTime;
+        var elapsed = currentTime - _saveAnimationTime;
 
         if (elapsed > 2000)
         {
-            showSaveSuccess = false;
+            _showSaveSuccess = false;
             return;
         }
 
@@ -915,7 +905,7 @@ public class MainWindow
     /// </summary>
     private void TriggerAnimation()
     {
-        animationProgress = 0f;
+        _animationProgress = 0f;
     }
 
     /// <summary>
@@ -956,7 +946,7 @@ public class MainWindow
             var textColor = new Vector4(0.3f, 0.3f, 0.3f, 1f); // 深灰色文字
 
             // 为不同的亮色主题提供精确的颜色匹配
-            if (currentTheme.Colors.Primary.X > 0.8f && currentTheme.Colors.Primary.Y > 0.5f)
+            if (currentTheme.Colors.Primary is { X: > 0.8f, Y: > 0.5f })
             {
                 // 樱花粉等暖色调主题
                 var tint = currentTheme.Colors.Primary with { W = 0.15f };
@@ -975,7 +965,7 @@ public class MainWindow
                 hoverColor = Vector4.Lerp(hoverColor, tint, 0.35f);
                 activeColor = Vector4.Lerp(activeColor, tint, 0.45f);
             }
-            else if (currentTheme.Colors.Primary.Y > 0.6f && currentTheme.Colors.Primary.X < 0.4f)
+            else if (currentTheme.Colors.Primary is { Y: > 0.6f, X: < 0.4f })
             {
                 // 绿色系亮色主题
                 var tint = currentTheme.Colors.Primary with { W = 0.1f };
@@ -1006,7 +996,7 @@ public class MainWindow
         var currentTheme = GetCurrentTheme();
 
         // 直接检查主题预设类型
-        var themeType = style.CurrentTheme;
+        var themeType = _style.CurrentTheme;
         if (themeType == ModernTheme.ThemePreset.浅色模式 ||
             themeType == ModernTheme.ThemePreset.樱花粉)
         {
