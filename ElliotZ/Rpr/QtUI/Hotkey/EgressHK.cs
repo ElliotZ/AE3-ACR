@@ -28,10 +28,12 @@ public class EgressHK(
             switch (hkType)
             {
                 case IngressHK.FaceTarget:
-                    HotkeyHelper.DrawSpellImage(size, "../../ACR/ElliotZ/HKImages/egress_t.png");
+                    HotkeyHelper.DrawSpellImage(size, 
+                        Path.Combine(Share.CurrentDirectory, @"Resources/ElliotZ/egress_t.png"));
                     break;
                 case IngressHK.FaceCam:
-                    HotkeyHelper.DrawSpellImage(size, "../../ACR/ElliotZ/HKImages/egress_cam.png");
+                    HotkeyHelper.DrawSpellImage(size, 
+                        Path.Combine(Share.CurrentDirectory, @"Resources/ElliotZ/egress_cam.png"));
                     break;
                 default:
                     HotkeyHelper.DrawSpellImage(size, SpellId);

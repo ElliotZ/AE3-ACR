@@ -31,10 +31,12 @@ public class IngressHK(int hkType) :  // 1 - use current direction, 2 - face tar
             switch (hkType)
             {
                 case FaceTarget:
-                    HotkeyHelper.DrawSpellImage(size, "../../ACR/ElliotZ/HKImages/ingress_t.png");
+                    HotkeyHelper.DrawSpellImage(size, 
+                        Path.Combine(Share.CurrentDirectory, @"Resources/ElliotZ/ingress_t.png"));
                     break;
                 case FaceCam:
-                    HotkeyHelper.DrawSpellImage(size, "../../ACR/ElliotZ/HKImages/ingress_cam.png");
+                    HotkeyHelper.DrawSpellImage(size, 
+                        Path.Combine(Share.CurrentDirectory, @"Resources/ElliotZ/ingress_cam.png"));
                     break;
                 default:
                     HotkeyHelper.DrawSpellImage(size, SpellId);
