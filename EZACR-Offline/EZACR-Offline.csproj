@@ -58,4 +58,8 @@
 		<PackageReference Remove="DalamudPackager" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\RprSub\ElliotZ.csproj" />
+	</ItemGroup>
+
 </Project>
