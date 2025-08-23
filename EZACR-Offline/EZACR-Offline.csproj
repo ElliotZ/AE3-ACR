@@ -58,8 +58,4 @@
 		<PackageReference Remove="DalamudPackager" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\ElliotZ\ElliotZ.csproj" />
-	</ItemGroup>
-
 </Project>
