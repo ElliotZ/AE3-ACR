@@ -10,13 +10,13 @@
       },
       "AEAssist.NET": {
         "type": "Transitive",
-        "resolved": "1.1.6",
-        "contentHash": "67HCN+QbOot6ejOUwuJTFbPHN9kFn7xOxhU0Ea/49R6OEk/HhIqh2yShndkqUWaG1Wbz4mcRIX6I2flTtJc3zQ=="
+        "resolved": "1.1.8",
+        "contentHash": "oGDsPwnXtH2DNWlZSVIMVIG1c9IrRADUf2EQ3eg/wSkMgt5SffMDMD7X4+njQmLTN/BuKfW3N6SvNwd/rVOiwg=="
       },
       "elliotz": {
         "type": "Project",
         "dependencies": {
-          "AEAssist.NET": "[1.1.6, )"
+          "AEAssist.NET": "[1.1.8, )"
         }
       }
     }

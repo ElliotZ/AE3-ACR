@@ -4,9 +4,9 @@
     "net9.0-windows7.0": {
       "AEAssist.NET": {
         "type": "Direct",
-        "requested": "[1.1.6, )",
-        "resolved": "1.1.6",
-        "contentHash": "67HCN+QbOot6ejOUwuJTFbPHN9kFn7xOxhU0Ea/49R6OEk/HhIqh2yShndkqUWaG1Wbz4mcRIX6I2flTtJc3zQ=="
+        "requested": "[1.1.8, )",
+        "resolved": "1.1.8",
+        "contentHash": "oGDsPwnXtH2DNWlZSVIMVIG1c9IrRADUf2EQ3eg/wSkMgt5SffMDMD7X4+njQmLTN/BuKfW3N6SvNwd/rVOiwg=="
       },
       "DotNet.ReproducibleBuilds": {
         "type": "Direct",
