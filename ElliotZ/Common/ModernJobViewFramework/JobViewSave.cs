@@ -54,10 +54,10 @@ public class JobViewSave
 
     public bool AutoReset = false;
 
-    public bool LockQTWindow = false;
+    public bool LockQtWindow = false;
     public bool LockHotkeyWindow = false;
 
-    public bool ShowQT = true;
+    public bool ShowQt = true;
     public bool ShowHotkey = true;
 
     /// 主窗口小窗口状态

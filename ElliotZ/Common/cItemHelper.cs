@@ -2,12 +2,12 @@
 
 namespace ElliotZ.Common;
 
-public class CItemHelper
+public static class CItemHelper
 {
     /// <summary>
     /// 获取背包内指定物品的数量
     /// </summary>
-    public static unsafe int FindItem(uint itemId, ItemFlag flag = ItemFlag.NQHQ)
+    public static unsafe int FindItem(uint itemId, ItemFlag flag = ItemFlag.NqHq)
     {
         var count = 0;
 
@@ -26,15 +26,15 @@ public class CItemHelper
                 var f = item->Flags;
                 switch (flag)
                 {
-                    case ItemFlag.NQ:
+                    case ItemFlag.Nq:
                         if (f != InventoryItem.ItemFlags.None)
                             continue;
                         break;
-                    case ItemFlag.HQ:
+                    case ItemFlag.Hq:
                         if (f != InventoryItem.ItemFlags.HighQuality)
                             continue;
                         break;
-                    case ItemFlag.NQHQ:
+                    case ItemFlag.NqHq:
                         if (f != InventoryItem.ItemFlags.HighQuality && f != InventoryItem.ItemFlags.None)
                             continue;
                         break;
@@ -42,9 +42,11 @@ public class CItemHelper
                         if (f != InventoryItem.ItemFlags.Collectable)
                             continue;
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(flag), flag, null);
                 }
 
-                count += (int)item->Quantity;
+                count += item->Quantity;
             }
         }
 
@@ -54,9 +56,9 @@ public class CItemHelper
 
 public enum ItemFlag
 {
-    NQ,
-    HQ,
-    NQHQ,
+    Nq,
+    Hq,
+    NqHq,
     Collectable,  //typo consistent with ffxiv client api, kekW
 }
 

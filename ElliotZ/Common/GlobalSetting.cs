@@ -7,18 +7,18 @@ namespace ElliotZ.Common;
 
 public class GlobalSetting
 {
-    public static GlobalSetting? Instance = null;
+    public static GlobalSetting? Instance;
 
-    private static string path;
+    private static string _path = "";
     public bool HotKey配置窗口 = false;
-    public static string title = "EZRpr";
-    public static string desc = "";
+    public static string Title = "EZRpr";
+    public static string Desc = "";
     public bool QtShow = true;
     public bool HotKeyShow = true;
     public bool TempQtShow = true;
     public bool TempHotShow = true;
-    public static bool QT快捷栏随主界面隐藏 = true;
-    public bool 缩放同时隐藏QT = false;
+    public bool Qt快捷栏随主界面隐藏 = true;
+    public bool 缩放同时隐藏qt = false;
     public bool 缩放同时隐藏Hotkey = false;
     public Vector2 缩放后窗口大小 = new(225f, 100f);
     public bool 关闭动效 = false;
@@ -40,9 +40,9 @@ public class GlobalSetting
 
     private static void Init(string settingPath, string t)
     {
-        title = t;
-        path = Path.Combine(settingPath, "GlobalSettings.json");
-        if (!File.Exists(path))
+        Title = t;
+        _path = Path.Combine(settingPath, "GlobalSettings.json");
+        if (!File.Exists(_path))
         {
             Instance = new GlobalSetting();
             Instance.Save();
@@ -51,7 +51,7 @@ public class GlobalSetting
 
         try
         {
-            Instance = JsonHelper.FromJson<GlobalSetting>(File.ReadAllText(path));
+            Instance = JsonHelper.FromJson<GlobalSetting>(File.ReadAllText(_path));
         }
         catch (Exception ex)
         {
@@ -60,7 +60,7 @@ public class GlobalSetting
         }
         finally
         {
-            Instance.TempQtShow = true;
+            Instance!.TempQtShow = true;
             Instance.TempHotShow = true;
         }
     }
@@ -70,8 +70,8 @@ public class GlobalSetting
     {
         try
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(path) ?? throw new InvalidOperationException());
-            File.WriteAllText(path, JsonHelper.ToJson(this));
+            Directory.CreateDirectory(Path.GetDirectoryName(_path) ?? throw new InvalidOperationException());
+            File.WriteAllText(_path, JsonHelper.ToJson(this));
         }
         catch (Exception ex)
         {

@@ -4,6 +4,6 @@ namespace ElliotZ.Common.ModernJobViewFramework.HotKey;
 public struct HotKeySpell(string n, uint s, int t)
 {
     public string Name = n;
-    public uint spell = s;
-    public int target = t;
+    public uint Spell = s;
+    public int Target = t;
 }

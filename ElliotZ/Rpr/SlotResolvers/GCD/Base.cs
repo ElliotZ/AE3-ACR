@@ -10,16 +10,17 @@ namespace ElliotZ.Rpr.SlotResolvers.GCD;
 public class Base : ISlotResolver
 {
     //private static uint PrevCombo => Core.Resolve<MemApiSpell>().GetLastComboSpellId();
-    private static readonly uint
-        st_1 = SpellsDef.Slice,
-        st_2 = SpellsDef.WaxingSlice,
-        st_3 = SpellsDef.InfernalSlice,
-        aoe_1 = SpellsDef.SpinningScythe,
-        aoe_2 = SpellsDef.NightmareScythe;
+    private const uint 
+        St1 = SpellsDef.Slice,
+        St2 = SpellsDef.WaxingSlice,
+        St3 = SpellsDef.InfernalSlice,
+        AOE1 = SpellsDef.SpinningScythe,
+        AOE2 = SpellsDef.NightmareScythe;
 
     public int Check()
     {
-        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
+        if (Core.Me.Distance(Core.Me.GetCurrTarget()!) 
+            > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
         }
@@ -31,23 +32,23 @@ public class Base : ISlotResolver
         return 0;
     }
 
-    public static uint Solve()
+    private static uint Solve()
     {
         var enemyCount = TargetHelper.GetNearbyEnemyCount(5);
 
         if (Qt.Instance.GetQt("AOE") &&
             enemyCount >= 3 &&
-            aoe_1.GetSpell().IsReadyWithCanCast() &&
-            RprHelper.PrevCombo != st_2 &&
-            RprHelper.PrevCombo != st_1)
+            AOE1.GetSpell().IsReadyWithCanCast() &&
+            RprHelper.PrevCombo != St2 &&
+            RprHelper.PrevCombo != St1)
         {
-            if (aoe_2.GetSpell().IsReadyWithCanCast() && RprHelper.PrevCombo == aoe_1) { return aoe_2; }
-            return aoe_1;
+            if (AOE2.GetSpell().IsReadyWithCanCast() && RprHelper.PrevCombo == AOE1) { return AOE2; }
+            return AOE1;
         }
 
-        if (st_3.GetSpell().IsReadyWithCanCast() && RprHelper.PrevCombo == st_2) { return st_3; }
-        if (st_2.GetSpell().IsReadyWithCanCast() && RprHelper.PrevCombo == st_1) { return st_2; }
-        return st_1;
+        if (St3.GetSpell().IsReadyWithCanCast() && RprHelper.PrevCombo == St2) { return St3; }
+        if (St2.GetSpell().IsReadyWithCanCast() && RprHelper.PrevCombo == St1) { return St2; }
+        return St1;
     }
 
     public void Build(Slot slot)

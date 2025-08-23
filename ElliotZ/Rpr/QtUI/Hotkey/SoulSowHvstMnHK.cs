@@ -15,7 +15,7 @@ public class SoulSowHvstMnHK() :
         var s = targetSpellId == SpellsDef.HarvestMoon ?
                         targetSpellId.GetSpell(TargetType) :
                         targetSpellId.GetSpell();
-        if (UseHighPrioritySlot && Helper.CheckInHPQueueTop(s)) return -3;
+        if (UseHighPrioritySlot && s.CheckInHPQueueTop()) return -3;
         if (Core.Me.CastActionId == SpellsDef.Soulsow) return -4;  // what the fuck are you doing LMAO
         var isReady = !Core.Me.HasAura(AurasDef.Soulsow) || s.IsReadyWithCanCast();
         return isReady ? 0 : -2;

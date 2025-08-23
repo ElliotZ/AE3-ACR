@@ -2,7 +2,7 @@
 
 namespace EZACR_Offline.Gnb;
 
-public class GnbHelper
+public static class GnbHelper
 {
     public static readonly string TxtCmdHandle = "/EZGnb";
 

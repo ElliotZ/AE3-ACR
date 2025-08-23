@@ -1,5 +1,4 @@
 ﻿using AEAssist;
-using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
@@ -9,11 +8,11 @@ using JobViewWindow = ElliotZ.Common.ModernJobViewFramework.JobViewWindow;
 
 namespace EZACR_Offline.Gnb.QtUI;
 
-public class DevTab
+public static class DevTab
 {
     public static void Build(JobViewWindow instance)
     {
-        instance.AddTab("Dev", window =>
+        instance.AddTab("Dev", _ =>
         {
             ImGui.Text($"爆发药：{Qt.Instance.GetQt("爆发药")}");
             ImGui.Text($"gcd是否可用：{GCDHelper.CanUseGCD()}");
@@ -28,10 +27,10 @@ public class DevTab
                                   GetOpenerName(GnbSettings.Instance.opener));
             try
             {
-                MemApiCountdown memApiCountdown = Core.Resolve<MemApiCountdown>();
+                var memApiCountdown = Core.Resolve<MemApiCountdown>();
                 if (memApiCountdown != null)
                 {
-                    float num = memApiCountdown.TimeRemaining();
+                    var num = memApiCountdown.TimeRemaining();
                     if (num > 0f)
                     {
                         ImGui.TextColored(new Vector4(0.8f, 0.8f, 0.2f, 1f), $"倒计时剩余: {num:F1} 秒");
@@ -53,7 +52,7 @@ public class DevTab
 
             try
             {
-                bool flag = Core.Me.HasAura(1833u);
+                var flag = Core.Me.HasAura(1833u);
                 ImGui.TextColored(flag ? new Vector4(0f, 1f, 0f, 1f) : new Vector4(1f, 0f, 0f, 1f),
                                   "盾姿状态: " + (flag ? "已开启" : "未开启"));
             }
@@ -81,7 +80,7 @@ public class DevTab
 
     private static string GetOpenerName(int opener)
     {
-        string result = opener switch
+        var result = opener switch
         {
             0 => "日随（无固定起手）",
             1 => "100级2.46 2G循环",

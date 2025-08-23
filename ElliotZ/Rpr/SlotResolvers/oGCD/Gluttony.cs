@@ -15,18 +15,21 @@ public class Gluttony : ISlotResolver
 
     public int Check()
     {
-        Target = SpellsDef.Gluttony.OptimalAOETarget(1, Qt.Instance.GetQt("智能AOE"), 5);
+        Target = SpellsDef.Gluttony.OptimalAOETarget(1,
+            Qt.Instance.GetQt("智能AOE"),
+            5);
 
-        if (Target is null || SpellsDef.Gluttony.GetSpell(Target).IsReadyWithCanCast() == false)
+        if (Target is null || SpellsDef.Gluttony.GetSpell(Target).IsReadyWithCanCast() is false)
         {
             return -99;
         }
-        if (Qt.Instance.GetQt("暴食") == false) { return -98; }
-        if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)
+        if (Qt.Instance.GetQt("暴食") is false) { return -98; }
+        if (Core.Me.Distance(Core.Me.GetCurrTarget()!) 
+            > Helper.GlblSettings.AttackRange)
         {
             return -2;  // -2 for not in range
         }
-        if (Qt.mobMan.Holding) return -3;
+        if (Qt.MobMan.Holding) return -3;
 
         if (Core.Me.HasAura(AurasDef.Executioner) ||
                 Core.Me.HasAura(AurasDef.SoulReaver) ||
