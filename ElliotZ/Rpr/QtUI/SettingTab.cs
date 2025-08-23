@@ -11,12 +11,12 @@ namespace ElliotZ.Rpr.QtUI;
 public static class SettingTab
 {
     private static int _8幻药;
-    private static int 宝药;
+    private static int _宝药;
     private static int _2宝药;
 
     public static void Build(JobViewWindow instance)
     {
-        instance.AddTab("设置", window =>
+        instance.AddTab("设置", _ =>
         {
             // one huge ass TODO here
 
@@ -26,7 +26,7 @@ public static class SettingTab
             //    ImGui.SameLine();
             //    ImGui.BeginGroup();
             //    ImGui.Checkbox("启用时间轴debug", ref RprSettings.Instance.TimeLinesDebug);
-            //    ImGui.Checkbox("启用自动更新", ref RprSettings.Instance.AutoUpdataTimeLines);
+            //    ImGui.Checkbox("启用自动更新", ref RprSettings.Instance.AutoUpdateTimeLines);
             //    if (ImGui.Button("手动更新")) TimeLineUpdater.UpdateFiles(Helper.RprTimeLineUrl);
             //    ImGui.SameLine();
             //    if (ImGui.Button("源码"))
@@ -42,17 +42,22 @@ public static class SettingTab
                 ImGui.BeginGroup();
                 ImGui.Text("动画锁长度(ms)");
                 ImGui.SetNextItemWidth(200f);
-                ImGui.SliderInt("(10-1000)", ref RprSettings.Instance.AnimLock, 10, 1000);
-                ImGui.PushStyleColor(ImGuiCol.Text, ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 0f, 1f)));
-                ImGui.Text("↑没装FuckAnimationLock或者类似插件的建议装一个，设置同样的数字。如果要三插的话这里也记得改。");
+                ImGui.SliderInt("(10-1000)", 
+                    ref RprSettings.Instance.AnimLock, 10, 1000);
+                ImGui.PushStyleColor(ImGuiCol.Text, 
+                    ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 0f, 1f)));
+                ImGui.Text("↑没装FuckAnimationLock或者类似插件的建议装一个，设置同样的数字。" +
+                           "如果要三插的话这里也记得改。");
                 ImGui.Text("除了起手的爆发药三插以外本ACR无特定支持三插的技能逻辑，不回答相关问题");
                 ImGui.PopStyleColor();
-                ImGui.Checkbox("读条技能施放忽略移动状态（移动中也会使用）", ref RprSettings.Instance.ForceCast);
-                ImGui.Checkbox("Hotkeys使用强制队列（可能会造成卡GCD）", ref RprSettings.Instance.ForceNextSlotsOnHKs);
+                ImGui.Checkbox("读条技能施放忽略移动状态（移动中也会使用）", 
+                    ref RprSettings.Instance.ForceCast);
+                ImGui.Checkbox("Hotkeys使用强制队列（可能会造成卡GCD）", 
+                    ref RprSettings.Instance.ForceNextSlotsOnHKs);
                 ImGui.Text("设置之后需要保存设置并重新加载ACR生效");
                 ImGui.Separator();
                 ImGui.Checkbox("真北期间不绘制身位", ref RprSettings.Instance.NoPosDrawInTN);
-                string PosStyle = RprSettings.Instance.PosDrawStyle switch
+                var posStyle = RprSettings.Instance.PosDrawStyle switch
                 {
                     0 => "不填充",
                     1 => "填充70%",
@@ -60,7 +65,7 @@ public static class SettingTab
                 };
                 ImGui.Text("身位风格设置");
                 ImGui.SetNextItemWidth(120f);
-                if (ImGui.BeginCombo("选择身位绘制风格", PosStyle))
+                if (ImGui.BeginCombo("选择身位绘制风格", posStyle))
                 {
                     if (ImGui.Selectable("不填充", RprSettings.Instance.PosDrawStyle == 0))
                     {
@@ -89,7 +94,8 @@ public static class SettingTab
                 {
                     Qt.SaveQtStates();
                 }
-                ImGui.Text("会从当前记录过的QT设置重置，爆发药、爆发药2分、智能AOE以及自动突进这几个QT不会被重置。");
+                ImGui.Text("会从当前记录过的QT设置重置，爆发药、爆发药2分、智能AOE以及" +
+                           "自动突进这几个QT不会被重置。");
                 ImGui.Separator();
                 ImGui.Text("高级设置");
                 ImGui.Checkbox("Debug", ref RprSettings.Instance.Debug);
@@ -108,9 +114,15 @@ public static class SettingTab
                 {
                     ImGui.Text("小于设定数会关闭夜游魂衣和神秘环QT，如果设置了QT重载，脱战会自动开启");
                     ImGui.SetNextItemWidth(200f);
-                    ImGui.SliderFloat("平均血量阈值(0-0.2)", ref RprSettings.Instance.MinMobHpPercent, 0f, 0.2f);
+                    ImGui.SliderFloat("平均血量阈值(0-0.2)",
+                        ref RprSettings.Instance.MinMobHpPercent,
+                        0f,
+                        0.2f);
                     ImGui.SetNextItemWidth(200f);
-                    ImGui.SliderInt("平均死亡时间（秒）(0-20)", ref RprSettings.Instance.minTTK, 0, 20);
+                    ImGui.SliderInt("平均死亡时间（秒）(0-20)",
+                        ref RprSettings.Instance.MinTTK,
+                        0,
+                        20);
                     ImGui.Separator();
                 }
                 ImGui.Checkbox("坦克拉怪中留CD技能", ref RprSettings.Instance.PullingNoBurst);
@@ -118,8 +130,12 @@ public static class SettingTab
                 {
                     ImGui.Text("小怪集中度");
                     ImGui.SetNextItemWidth(200f);
-                    ImGui.SliderFloat("(0-1.0)", ref RprSettings.Instance.ConcentrationThreshold, 0, 1f);
-                    ImGui.PushStyleColor(ImGuiCol.Text, ImGui.ColorConvertFloat4ToU32(ImGuiColors.ParsedGold));
+                    ImGui.SliderFloat("(0-1.0)",
+                        ref RprSettings.Instance.ConcentrationThreshold,
+                        0,
+                        1f);
+                    ImGui.PushStyleColor(ImGuiCol.Text,
+                        ImGui.ColorConvertFloat4ToU32(ImGuiColors.ParsedGold));
                     ImGui.Text("原理解析：");
                     ImGui.PushTextWrapPos(ImGui.GetCursorPosX() + 410f);
                     ImGui.Text("每秒检测T移动的距离，如果小于设定好的阈值(1.5m)，");
@@ -130,7 +146,8 @@ public static class SettingTab
                     ImGui.PopStyleColor();
                     ImGui.PopTextWrapPos();
                 }
-                ImGui.Checkbox("加速度炸弹/热病/目标无敌/自身无法行动期间自动停手", ref RprSettings.Instance.HandleStopMechs);
+                ImGui.Checkbox("加速度炸弹/热病/目标无敌/自身无法行动期间自动停手",
+                    ref RprSettings.Instance.HandleStopMechs);
                 if (ImGui.CollapsingHeader("自动回复/减伤设置"))
                 {
                     ImGui.Text("血量阈值是最大血量的比例。");
@@ -159,7 +176,8 @@ public static class SettingTab
                         ImGui.SetNextItemWidth(200f);
                         ImGui.SliderFloat("自动内丹血量阈值 (0.10-0.99)",
                                               ref RprSettings.Instance.SecondWindPercent,
-                                              0.1f, 0.99f);
+                                              0.1f, 
+                                              0.99f);
                         ImGui.Separator();
                         if (!RprSettings.Instance.JobViewSave.HotkeyUnVisibleList.Contains("内丹"))
                         {
@@ -177,7 +195,8 @@ public static class SettingTab
                         ImGui.SetNextItemWidth(200f);
                         ImGui.SliderFloat("自动浴血血量阈值 (0.10-0.99)",
                                               ref RprSettings.Instance.BloodBathPercent,
-                                              0.1f, 0.99f);
+                                              0.1f, 
+                                              0.99f);
                         ImGui.Separator();
                         if (!RprSettings.Instance.JobViewSave.HotkeyUnVisibleList.Contains("浴血"))
                         {
@@ -217,12 +236,15 @@ public static class SettingTab
                 ImGui.EndGroup();
                 ImGui.Text("倒数勾刃读条时间(ms)");
                 ImGui.SetNextItemWidth(200f);
-                ImGui.SliderInt("(100-2000)", ref RprSettings.Instance.PrepullCastTimeHarpe, 100, 2000);
+                ImGui.SliderInt("(100-2000)",
+                    ref RprSettings.Instance.PrepullCastTimeHarpe,
+                    100,
+                    2000);
                 ImGui.Separator();
                 if (ImGui.Button("获取爆发药情况"))
                 {
                     _8幻药 = CItemHelper.FindItem((uint)Potion._8级刚力之幻药);
-                    宝药 = CItemHelper.FindItem((uint)Potion.刚力之宝药);
+                    _宝药 = CItemHelper.FindItem((uint)Potion.刚力之宝药);
                     _2宝药 = CItemHelper.FindItem((uint)Potion._2级刚力之宝药);
                 }
 
@@ -232,9 +254,9 @@ public static class SettingTab
                     DrawPotion(Potion._8级刚力之幻药);
                 }
 
-                if (宝药 > 0)
+                if (_宝药 > 0)
                 {
-                    ImGui.Text($"刚力之宝药：{宝药} 瓶");
+                    ImGui.Text($"刚力之宝药：{_宝药} 瓶");
                     DrawPotion(Potion.刚力之宝药);
                 }
 
@@ -257,7 +279,7 @@ public static class SettingTab
 
             ImGuiHelper.Separator();
             ImGui.Text("高难模式会把自回设置全部关闭，如果你有需求就自己开。默认也会关闭AOE。");
-            if (ImGui.Button("日随推荐配置", new System.Numerics.Vector2(100f, 30f)))
+            if (ImGui.Button("日随推荐配置", new Vector2(100f, 30f)))
             {
                 RprSettings.Instance.ForceCast = false;
                 RprSettings.Instance.NoBurst = true;
@@ -307,7 +329,7 @@ public static class SettingTab
                 Qt.Instance.SetQt("自动突进", true);
             }
             ImGui.SameLine();
-            if (ImGui.Button("高难推荐配置", new System.Numerics.Vector2(100f, 30f)))
+            if (ImGui.Button("高难推荐配置", new Vector2(100f, 30f)))
             {
                 RprSettings.Instance.ForceCast = true;
                 RprSettings.Instance.NoBurst = false;

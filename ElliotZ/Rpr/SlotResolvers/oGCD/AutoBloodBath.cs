@@ -9,11 +9,11 @@ public class AutoBloodBath : ISlotResolver
 {
     public int Check()
     {
-        var BloodBathThreshold = Core.Me.MaxHp * RprSettings.Instance.BloodBathPercent;
+        var bloodBathThreshold = Core.Me.MaxHp * RprSettings.Instance.BloodBathPercent;
 
-        if (RprSettings.Instance.AutoBloodBath == false) { return -1; }
-        if (SpellsDef.Bloodbath.GetSpell().IsReadyWithCanCast() == false) { return -99; }
-        if (Core.Me.CurrentHp > BloodBathThreshold) { return -4; }
+        if (RprSettings.Instance.AutoBloodBath is false) { return -1; }
+        if (SpellsDef.Bloodbath.GetSpell().IsReadyWithCanCast() is false) { return -99; }
+        if (Core.Me.CurrentHp > bloodBathThreshold) { return -4; }
         if (GCDHelper.GetGCDCooldown() < RprSettings.Instance.AnimLock) { return -89; }
         return 0;
     }

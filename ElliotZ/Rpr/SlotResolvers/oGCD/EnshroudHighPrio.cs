@@ -9,8 +9,8 @@ public class EnshroudHighPrio : ISlotResolver
 {
     public int Check()
     {
-        if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() == false) { return -99; }
-        if (Qt.Instance.GetQt("魂衣") == false) { return -98; }
+        if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() is false) { return -99; }
+        if (Qt.Instance.GetQt("魂衣") is false) { return -98; }
         //if (Core.Resolve<JobApi_Reaper>().ShroudGauge < 50 && !Core.Me.HasAura(AurasDef.IdealHost)) return -1;
         if (Helper.AuraTimerLessThan(AurasDef.IdealHost, 1500) &&
                 GCDHelper.GetGCDCooldown() >= RprSettings.Instance.AnimLock)

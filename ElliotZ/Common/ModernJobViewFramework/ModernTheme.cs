@@ -17,6 +17,7 @@ public class ModernTheme
         樱花粉,
         森林绿,
         科技紫,
+        // ReSharper disable once InconsistentNaming
         RPR,
     }
 
@@ -38,15 +39,15 @@ public class ModernTheme
     }
 
     // 当前配色方案
-    public ColorScheme Colors { get; set; }
+    public ColorScheme Colors { get; private set; }
 
     // 保存原始ImGui样式
-    private ImGuiStylePtr? savedStyle = null;
-    private readonly Dictionary<ImGuiCol, Vector4> savedColors = new();
-    private bool isApplied;
+    //private ImGuiStylePtr? _savedStyle = null;
+    private readonly Dictionary<ImGuiCol, Vector4> _savedColors = new();
+    private bool _isApplied;
 
     // 圆角半径
-    public float BorderRadius { get; set; } = 8f;
+    private float BorderRadius { get; set; } = 8f;
 
 
     // 预设主题
@@ -175,7 +176,7 @@ public class ModernTheme
     public void Apply()
     {
         // 如果已经应用，先恢复再重新应用
-        if (isApplied)
+        if (_isApplied)
         {
             Restore();
         }
@@ -184,7 +185,7 @@ public class ModernTheme
 
         // 保存原始样式值
         SaveOriginalStyle(style);
-        isApplied = true;
+        _isApplied = true;
 
         // 窗口圆角
         style.WindowRounding = BorderRadius;
@@ -278,10 +279,10 @@ public class ModernTheme
     private void SaveOriginalStyle(ImGuiStylePtr style)
     {
         // 保存颜色
-        savedColors.Clear();
-        for (int i = 0; i < (int)ImGuiCol.COUNT; i++)
+        _savedColors.Clear();
+        for (var i = 0; i < (int)ImGuiCol.COUNT; i++)
         {
-            savedColors[(ImGuiCol)i] = style.Colors[i];
+            _savedColors[(ImGuiCol)i] = style.Colors[i];
         }
     }
 
@@ -290,19 +291,19 @@ public class ModernTheme
     /// </summary>
     public void Restore()
     {
-        if (!isApplied)
+        if (!_isApplied)
             return;
 
         var style = ImGui.GetStyle();
 
         // 恢复颜色
-        foreach (var kvp in savedColors)
+        foreach (var kvp in _savedColors)
         {
             style.Colors[(int)kvp.Key] = kvp.Value;
         }
 
-        savedColors.Clear();
-        isApplied = false;
+        _savedColors.Clear();
+        _isApplied = false;
     }
 
 

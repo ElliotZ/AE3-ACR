@@ -10,19 +10,19 @@ namespace ElliotZ.Common.ModernJobViewFramework.HotKey;
 public static class HotKeyConfig
 {
     //public static Dictionary<string, uint> SpellList = HotKeySpellConfig.List;
-    public static Dictionary<int, HotKeyTarget> targetList = HotKeyTargetConfig.List;
+    public static Dictionary<int, HotKeyTarget> TargetList = HotKeyTargetConfig.List;
 
-    private static string selectSpellName = "闪灼";
-    private static uint selectSpell = 25859u;
-    private static string? selectTargetName = "自己";
-    private static int targetKey = 1;
-    private static HotKeyTarget selectTarget = new("自己", SpellTargetType.Self);
-    public static void DrawHotKeyConfigView(HotkeyWindow HotkeyWindow, 
-                                            ref Dictionary<string, HotKeySpell> HotkeyConfig,
-                                            Dictionary<string, uint> Spell,
+    private static string _selectSpellName = "闪灼";
+    private static uint _selectSpell = 25859u;
+    private static string? _selectTargetName = "自己";
+    private static int _targetKey = 1;
+    private static HotKeyTarget _selectTarget = new("自己", SpellTargetType.Self);
+    public static void DrawHotKeyConfigView(HotkeyWindow hotkeyWindow, 
+                                            ref Dictionary<string, HotKeySpell> hotkeyConfig,
+                                            Dictionary<string, uint> spell,
                                             Action save)
     {
-        if (!GlobalSetting.Instance.HotKey配置窗口)
+        if (!GlobalSetting.Instance!.HotKey配置窗口)
         {
             return;
         }
@@ -31,18 +31,18 @@ public static class HotKeyConfig
         ImGui.Begin("HotkeyConfig", ref GlobalSetting.Instance.HotKey配置窗口);
         ImGui.Indent();
 
-        if (HotkeyConfig.Count > 0)
+        if (hotkeyConfig.Count > 0)
         {
-            foreach (var (key, value) in HotkeyConfig)
+            foreach (var (key, value) in hotkeyConfig)
             {
-                ImGui.Text($"使用技能:[{value.spell.GetSpell().Name}]");
+                ImGui.Text($"使用技能:[{value.Spell.GetSpell().Name}]");
                 ImGui.SameLine();
-                ImGui.Text($"对[{targetList[value.target].Name}]释放。");
+                ImGui.Text($"对[{TargetList[value.Target].Name}]释放。");
                     
                 if (ImGui.Button($"删除-{key}"))
                 {
-                    HotkeyWindow.RemoveHotKey(key);
-                    HotkeyConfig.Remove(key);
+                    hotkeyWindow.RemoveHotKey(key);
+                    hotkeyConfig.Remove(key);
                     save();
                 }
 
@@ -56,42 +56,40 @@ public static class HotKeyConfig
         ImGui.Text("使用:");
         ImGui.SetNextItemWidth(200f);
         ImGui.SameLine();
-        if (ImGui.BeginCombo("###选择技能", selectSpellName))
+        if (ImGui.BeginCombo("###选择技能", _selectSpellName))
         {
-            foreach (var kvs in Spell)
+            foreach (var kvs 
+                     in spell.Where(kvs 
+                         => ImGui.Selectable(kvs.Key)))
             {
-                if (ImGui.Selectable(kvs.Key))
-                {
-                    selectSpellName = kvs.Key;
-                    selectSpell = kvs.Value;
-                }
-
+                _selectSpellName = kvs.Key;
+                _selectSpell = kvs.Value;
             }
+
             ImGui.EndCombo();
         }
             
         ImGui.Text("对");
         ImGui.SameLine();
         ImGui.SetNextItemWidth(200f);
-        if (ImGui.BeginCombo("###选择目标", selectTargetName))
+        if (ImGui.BeginCombo("###选择目标", _selectTargetName))
         {
-            foreach (var kvs in targetList)
+            foreach (var kvs 
+                     in TargetList.Where(kvs 
+                         => ImGui.Selectable(kvs.Value.Name)))
             {
-                if (ImGui.Selectable(kvs.Value.Name))
-                {
-                    targetKey = kvs.Key;
-                    selectTargetName = kvs.Value.Name;
-                    selectTarget = kvs.Value;
-                }
-
+                _targetKey = kvs.Key;
+                _selectTargetName = kvs.Value.Name;
+                _selectTarget = kvs.Value;
             }
+
             ImGui.EndCombo();
         }
         ImGui.SameLine();
         ImGui.Text("释放。");
 
-        string NewHotkeyName = $"{selectSpellName}{selectTargetName}";
-        if (HotkeyConfig.ContainsKey(NewHotkeyName))
+        var newHotkeyName = $"{_selectSpellName}{_selectTargetName}";
+        if (hotkeyConfig.ContainsKey(newHotkeyName))
         {
             ImGui.Text("该技能组合已存在!");
         }
@@ -99,8 +97,8 @@ public static class HotKeyConfig
         {
             if (ImGui.Button("新增HOTKEY"))
             {
-                HotkeyWindow.AddHotkey(NewHotkeyName, new HotKeyResolver(selectSpell.GetSpell(), selectTarget));
-                HotkeyConfig.Add(NewHotkeyName, new HotKeySpell(NewHotkeyName, selectSpell, targetKey));
+                hotkeyWindow.AddHotkey(newHotkeyName, new HotKeyResolver(_selectSpell.GetSpell(), _selectTarget));
+                hotkeyConfig.Add(newHotkeyName, new HotKeySpell(newHotkeyName, _selectSpell, _targetKey));
                 save();
             }
         }

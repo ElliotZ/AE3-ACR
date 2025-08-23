@@ -3,15 +3,10 @@ using FFXIVClientStructs.FFXIV.Common.Math;
 using CSFramework = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework;
 namespace ElliotZ.Common;
 
-public class CameraHelper
+public static class CameraHelper
 {
-    private static unsafe RaptureAtkModule* RaptureAtkModule
-    {
-        get
-        {
-            return CSFramework.Instance()->GetUIModule()->GetRaptureAtkModule();
-        }
-    }
+    private static unsafe RaptureAtkModule* RaptureAtkModule 
+        => CSFramework.Instance()->GetUIModule()->GetRaptureAtkModule();
 
     internal static float GetCameraRotation()
     {
@@ -26,7 +21,9 @@ public class CameraHelper
 
             return rotation;
         }
-    }
+    } 
+    
+    /*
     /// <summary>
     /// 将世界坐标转换为屏幕坐标。
     /// </summary>
@@ -34,7 +31,7 @@ public class CameraHelper
     /// <param name="screenPos">输出的屏幕坐标位置。</param>
     /// <param name="inView">位置是否在视图内。</param>
     /// <returns>位置是否在摄像机前方。</returns>
-    /*
+
      public bool WorldToScreen(Vector3 worldPos, out Vector2 screenPos, out bool inView)
     {
         // 获取当前视口位置、视图投影矩阵和游戏窗口大小
@@ -76,8 +73,8 @@ public class CameraHelper
     public static Vector3 向量位移(Vector3 position, float facingRadians, float distance)
     {
         // 计算 x-z 平面上移动的距离分量
-        float dx = (float)(Math.Sin(facingRadians) * distance);
-        float dz = (float)(Math.Cos(facingRadians) * distance);
+        var dx = (float)(Math.Sin(facingRadians) * distance);
+        var dz = (float)(Math.Cos(facingRadians) * distance);
 
         return new Vector3(position.X + dx, position.Y, position.Z + dz);
     }

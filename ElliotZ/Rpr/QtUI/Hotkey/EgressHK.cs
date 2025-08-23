@@ -9,10 +9,14 @@ using System.Numerics;
 
 namespace ElliotZ.Rpr.QtUI.Hotkey;
 
-public class EgressHK(int hktype, bool waitForCD = true) : HotKeyResolver(SpellsDef.HellsEgress, SpellTargetType.Self, false, waitForCD)
+public class EgressHK(
+    int hkType,  // 1 - use current direction, 2 - face target, 3 - face camera
+    bool waitForCD = true) : 
+    HotKeyResolver(SpellsDef.HellsEgress,
+        SpellTargetType.Self,
+        false,
+        waitForCD)
 {
-    private readonly int HkType = hktype;  // 1 - use current direction, 2 - face target, 3 - face camera
-
     public override void Draw(Vector2 size)
     {
         if (Core.Me.HasAura(AurasDef.RegressReady))
@@ -21,7 +25,7 @@ public class EgressHK(int hktype, bool waitForCD = true) : HotKeyResolver(Spells
         }
         else
         {
-            switch (HkType)
+            switch (hkType)
             {
                 case IngressHK.FaceTarget:
                     HotkeyHelper.DrawSpellImage(size, "../../ACR/ElliotZ/HKImages/egress_t.png");
@@ -57,7 +61,7 @@ public class EgressHK(int hktype, bool waitForCD = true) : HotKeyResolver(Spells
         }
         else
         {
-            switch (HkType)
+            switch (hkType)
             {
                 case 2:
                     if (Core.Me.GetCurrTarget() is not null)
@@ -70,8 +74,6 @@ public class EgressHK(int hktype, bool waitForCD = true) : HotKeyResolver(Spells
                 case 3:
                     Core.Resolve<MemApiMoveControl>().Stop();
                     Core.Resolve<MemApiMove>().SetRot(CameraHelper.GetCameraRotation());
-                    break;
-                default:
                     break;
             }
             AI.Instance.BattleData.AddSpell2NextSlot(SpellsDef.HellsEgress.GetSpell());

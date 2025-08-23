@@ -6,7 +6,7 @@ using JobViewWindow = ElliotZ.Common.ModernJobViewFramework.JobViewWindow;
 
 namespace EZACR_Offline.Gnb.QtUI;
 
-public class ReadmeTab
+public static class ReadmeTab
 {
     private static readonly InfoBox Box = new()
     {

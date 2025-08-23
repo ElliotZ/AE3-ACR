@@ -4,17 +4,18 @@ using AEAssist.Helper;
 using ElliotZ.Common;
 using ElliotZ.Common.ModernJobViewFramework;
 using ElliotZ.Rpr.QtUI.Hotkey;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 namespace ElliotZ.Rpr.QtUI;
 
 public static class Qt
 {
-    public static JobViewWindow Instance { get; set; }
-    public static MacroManager macroMan;
-    public static MobPullManager mobMan;
+    public static JobViewWindow Instance { get; private set; }
+    public static MacroManager MacroMan;
+    public static MobPullManager MobMan;
     private static readonly bool ForceNextSlots = RprSettings.Instance.ForceNextSlotsOnHKs;
 
-    public static readonly List<(string name, string ENname, bool defval, string tooltip)> QtKeys =
+    private static readonly List<(string name, string ENname, bool defval, string tooltip)> QtKeys =
     [
         ("爆发药", "Pot", false, ""),
         ("爆发药2分", "Pot2min", true, ""),
@@ -40,7 +41,7 @@ public static class Qt
         ("自动突进", "AutoIngress", false, "只会在跳了之后能打到的时候跳，能用勾刃就不会跳"),
     ];
 
-    public static readonly List<(string name, string ENname, AEAssist.CombatRoutine.View.JobView.IHotkeyResolver hkr)> HKResolvers =
+    private static readonly List<(string name, string ENname, AEAssist.CombatRoutine.View.JobView.IHotkeyResolver hkr)> HKResolvers =
     [
         ("入境", "Ingress", new IngressHK(IngressHK.CurrDir)),
         ("出境", "Egress", new EgressHK(IngressHK.CurrDir)),
@@ -62,10 +63,10 @@ public static class Qt
 
     public static void SaveQtStates()
     {
-        string[] qtArray = Instance.GetQtArray();
-        foreach (string name in qtArray)
+        var qtArray = Instance.GetQtArray();
+        foreach (var name in qtArray)
         {
-            bool state = Instance.GetQt(name);
+            var state = Instance.GetQt(name);
             RprSettings.Instance.QtStates[name] = state;
         }
 
@@ -75,7 +76,7 @@ public static class Qt
 
     public static void LoadQtStates()
     {
-        foreach (KeyValuePair<string, bool> qtState in RprSettings.Instance.QtStates)
+        foreach (var qtState in RprSettings.Instance.QtStates)
         {
             Instance.SetQt(qtState.Key, qtState.Value);
         }
@@ -85,15 +86,14 @@ public static class Qt
 
     public static void LoadQtStatesNoPot()
     {
-        foreach (KeyValuePair<string, bool> qtState in RprSettings.Instance.QtStates)
+        foreach (var qtState 
+                 in RprSettings.Instance.QtStates.Where(qtState 
+                     => qtState.Key is not ("爆发药" or
+                     "智能AOE" or
+                     "爆发药2分" or
+                     "自动突进")))
         {
-            if (qtState.Key is not ("爆发药" or
-                                    "智能AOE" or
-                                    "爆发药2分" or
-                                    "自动突进"))
-            {
-                Instance.SetQt(qtState.Key, qtState.Value);
-            }
+            Instance.SetQt(qtState.Key, qtState.Value);
         }
 
         if (RprSettings.Instance.Debug) LogHelper.Print("除爆发药和智能AOE以外QT设置已重载");
@@ -104,18 +104,19 @@ public static class Qt
         Instance = new JobViewWindow(RprSettings.Instance.JobViewSave, RprSettings.Instance.Save, "EZRpr");
         Instance.SetUpdateAction(OnUIUpdate);
 
-        macroMan = new MacroManager(Instance, "/EZRpr", QtKeys, HKResolvers, true);
-        macroMan.BuildCommandList();
-        macroMan.AddQt("爆发", "burst", true, "", delegate (bool isSet)
+        MacroMan = new MacroManager(Instance, "/EZRpr", QtKeys, HKResolvers, true);
+        MacroMan.BuildCommandList();
+        MacroMan.AddQt("爆发", "burst", true, "", delegate (bool isSet)
         {
+            Instance.SetQt("爆发", isSet);
             Instance.SetQt("神秘环", isSet);
             Instance.SetQt("魂衣", isSet);
         });
 
-        mobMan = new MobPullManager(Instance);
-        mobMan.BurstQTs.Add("爆发");
-        mobMan.BurstQTs.Add("神秘环");
-        mobMan.BurstQTs.Add("魂衣");
+        MobMan = new MobPullManager(Instance);
+        MobMan.BurstQTs.Add("爆发");
+        MobMan.BurstQTs.Add("神秘环");
+        MobMan.BurstQTs.Add("魂衣");
 
         //其余tab窗口
         ReadmeTab.Build(Instance);
@@ -124,12 +125,12 @@ public static class Qt
 
     }
 
-    public static void OnUIUpdate()
+    private static void OnUIUpdate()
     {
-        macroMan.UseToast2 = RprSettings.Instance.ShowToast;
+        MacroMan.UseToast2 = RprSettings.Instance.ShowToast;
         if (RprSettings.Instance.CommandWindowOpen)
         {
-            macroMan.DrawCommandWindow(ref RprSettings.Instance.CommandWindowOpen);
+            MacroMan.DrawCommandWindow(ref RprSettings.Instance.CommandWindowOpen);
         }
     }
 }
