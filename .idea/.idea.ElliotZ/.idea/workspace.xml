@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75cabfee-c401-49b3-935b-0458bf4f1bb0" name="更改" comment="更改">
+    <list default="true" id="75cabfee-c401-49b3-935b-0458bf4f1bb0" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ElliotZ/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ElliotZ/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RprSub/Common/Helper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Common/Helper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/EventHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/EventHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/QtUI/DevTab.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/QtUI/DevTab.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/QtUI/ReadmeTab.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/QtUI/ReadmeTab.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/RotationPrioSys.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/RotationPrioSys.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +78,7 @@
       <workItem from="1755872860650" duration="20337000" />
       <workItem from="1755924506056" duration="21498000" />
       <workItem from="1756192014996" duration="6739000" />
-      <workItem from="1756267515347" duration="324000" />
+      <workItem from="1756267515347" duration="963000" />
     </task>
     <task id="LOCAL-00001" summary="migrated to Jetbrains Rider and refactored">
       <option name="closed" value="true" />
@@ -164,7 +160,23 @@
       <option name="project" value="LOCAL" />
       <updated>1755959857147</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="now also resets qt on territory change">
+      <option name="closed" value="true" />
+      <created>1756268095113</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1756268095113</updated>
+    </task>
+    <task id="LOCAL-00012" summary="now also resets qt on territory change">
+      <option name="closed" value="true" />
+      <created>1756268271195</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1756268271195</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -195,7 +207,8 @@
     <MESSAGE value="test" />
     <MESSAGE value="fix UI" />
     <MESSAGE value="UI leak fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="UI leak fix" />
+    <MESSAGE value="now also resets qt on territory change" />
+    <option name="LAST_COMMIT_MESSAGE" value="now also resets qt on territory change" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
