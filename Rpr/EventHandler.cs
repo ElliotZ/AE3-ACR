@@ -73,10 +73,11 @@ public class EventHandler : IRotationEventHandler
         if (d > 0) BattleData.Instance.GcdDuration = d;
 
         //Single Weave Skills
-        AI.Instance.BattleData.CurrGcdAbilityCount = (spell.Id is SpellsDef.VoidReaping
-                                                               or SpellsDef.CrossReaping) ? 1 : 2;
+        AI.Instance.BattleData.CurrGcdAbilityCount = spell.Id is SpellsDef.VoidReaping
+                                                              or SpellsDef.CrossReaping ?
+                                                              1 : 2;
 
-        BattleData.Instance.JustCastAC = (spell.Id is SpellsDef.ArcaneCircle);
+        BattleData.Instance.JustCastAC = spell.Id is SpellsDef.ArcaneCircle;
     }
 
     public void OnBattleUpdate(int currTime)
@@ -123,7 +124,7 @@ public class EventHandler : IRotationEventHandler
                     TargetHelper.GetNearbyEnemyCount(8) < 3) &&
                 !Core.Me.HasAura(AurasDef.Enshrouded) &&
                 (Core.Me.GetCurrTarget() is not null &&
-                 Core.Me.GetCurrTarget()!.HasPositional()))
+                 Core.Me.GetCurrTarget().HasPositional()))
         {
             if (gibGallowsReady && !gibGallowsJustUsed)
             {
@@ -174,5 +175,9 @@ public class EventHandler : IRotationEventHandler
 
     public void OnTerritoryChanged()
     {
+        if (RprSettings.Instance.RestoreQtSet)
+        {
+            Qt.LoadQtStatesNoPot();
+        }
     }
 }

@@ -63,7 +63,7 @@ public class MainWindow
         _theme = new ModernTheme(_style.CurrentTheme);
 
         // 确保主题设置被保存
-        _style.Save.CurrentTheme = _style.CurrentTheme;
+        if (_style.Save is not null) _style.Save.CurrentTheme = _style.CurrentTheme;
     }
 
     /// <summary>
@@ -79,7 +79,7 @@ public class MainWindow
 
         // 检查主题是否发生了变化
         if (_style.CurrentTheme !=
-            _theme!.GetType().GetField("CurrentPreset")?.GetValue(_theme) as ModernTheme.ThemePreset?)
+            _theme.GetType().GetField("CurrentPreset")?.GetValue(_theme) as ModernTheme.ThemePreset?)
         {
             UpdateTheme();
         }
