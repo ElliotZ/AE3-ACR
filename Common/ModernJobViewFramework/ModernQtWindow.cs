@@ -30,29 +30,31 @@ public static class ModernQtWindow
     {
         EnsureThemeInitialized();
 
-        label = label switch
-        {
-            "GCD单体治疗" => "GCD单奶",
-            "GCD群体治疗" => "GCD群奶",
-            "能力技治疗" => "能力技奶",
-            _ => label
-        };
+        // label = label switch
+        // {
+        //     "GCD单体治疗" => "GCD单奶",
+        //     "GCD群体治疗" => "GCD群奶",
+        //     "能力技治疗" => "能力技奶",
+        //     _ => label
+        // };
 
         var buttonId = label + ImGui.GetID(label);
 
         // 初始化动画状态
-        if (!ButtonAnimations.TryGetValue(buttonId, out var animProgress))
+        if (!ButtonAnimations.ContainsKey(buttonId))
         {
-            animProgress = qt.QtValue ? 1f : 0f;
-            ButtonAnimations[buttonId] = animProgress;
+            ButtonAnimations[buttonId] = qt.QtValue ? 1f : 0f;
             ButtonAnimationTimes[buttonId] = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 
         // 更新动画
+
         UpdateButtonAnimation(buttonId, qt.QtValue);
-        var baseColor = customColor ?? _theme!.Colors.Primary;
+
+        var animProgress = ButtonAnimations[buttonId];
+        var baseColor = customColor ?? _theme.Colors.Primary;
         var currentColor = ModernTheme.BlendColor(
-            _theme!.Colors.Surface,
+            _theme.Colors.Surface,
             baseColor,
             animProgress
         );
@@ -143,7 +145,7 @@ public static class ModernQtWindow
         ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 12f);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, padding);
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, spacing);
-        ImGui.PushStyleColor(ImGuiCol.WindowBg, _theme!.Colors.Background with { W = style.QtWindowBgAlpha });
+        ImGui.PushStyleColor(ImGuiCol.WindowBg, _theme.Colors.Background with { W = style.QtWindowBgAlpha });
         ImGui.PushStyleColor(ImGuiCol.Border, _theme.Colors.Border);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 1f);
 
@@ -275,7 +277,7 @@ public static class ModernQtWindow
         ModernTheme.DrawGradient(
             windowPos,
             windowSize,
-            _theme!.Colors.Background with { W = 0f },
+            _theme.Colors.Background with { W = 0f },
             _theme.Colors.Background with { W = 0.05f }
         );
 
@@ -306,7 +308,7 @@ public static class ModernQtWindow
 
         ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 8f);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(12, 8));
-        ImGui.PushStyleColor(ImGuiCol.PopupBg, _theme!.Colors.Surface);
+        ImGui.PushStyleColor(ImGuiCol.PopupBg, _theme.Colors.Surface);
         ImGui.PushStyleColor(ImGuiCol.Border, _theme.Colors.Border);
         ImGui.PushStyleVar(ImGuiStyleVar.PopupBorderSize, 1f);
 
@@ -359,6 +361,6 @@ public static class ModernQtWindow
         EnsureThemeInitialized();
         // 创建一个临时主题来比较颜色
         var tempTheme = new ModernTheme(targetTheme);
-        return _theme!.Colors.Primary.Equals(tempTheme.Colors.Primary);
+        return _theme.Colors.Primary.Equals(tempTheme.Colors.Primary);
     }
 }
