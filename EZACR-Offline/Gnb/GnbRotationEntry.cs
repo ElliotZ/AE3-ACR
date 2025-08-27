@@ -16,33 +16,33 @@ public class GnbRotationEntry : IRotationEntry
     public List<SlotResolverData> SlotResolvers =
     [
         // GCD
-        new SlotResolverData(new DoubleDown(), SlotMode.Gcd),
-        new SlotResolverData(new SonicBreak(), SlotMode.Gcd),
-        new SlotResolverData(new GnashingFang(), SlotMode.Gcd),
-        new SlotResolverData(new LightningShot(), SlotMode.Gcd),
-        new SlotResolverData(new LionHeart(), SlotMode.Gcd),
-        new SlotResolverData(new BurstStrike(), SlotMode.Gcd),
-        new SlotResolverData(new FatedCircle(), SlotMode.Gcd),
-        new SlotResolverData(new Base(), SlotMode.Gcd),
+        new(new DoubleDown(), SlotMode.Gcd),
+        new(new SonicBreak(), SlotMode.Gcd),
+        new(new GnashingFang(), SlotMode.Gcd),
+        new(new LightningShot(), SlotMode.Gcd),
+        new(new LionHeart(), SlotMode.Gcd),
+        new(new BurstStrike(), SlotMode.Gcd),
+        new(new FatedCircle(), SlotMode.Gcd),
+        new(new Base(), SlotMode.Gcd),
 
         // oGCD
-        new SlotResolverData(new SuperBolide(), SlotMode.OffGcd),
-        new SlotResolverData(new Trajectory(), SlotMode.OffGcd),
-        new SlotResolverData(new NoMercy(), SlotMode.OffGcd),
-        new SlotResolverData(new Bloodfest(), SlotMode.OffGcd),
-        new SlotResolverData(new Continuation(), SlotMode.OffGcd),
-        new SlotResolverData(new BlastingZone(), SlotMode.OffGcd),
-        new SlotResolverData(new DangerZone(), SlotMode.OffGcd),
-        new SlotResolverData(new BowShock(), SlotMode.OffGcd),
-        new SlotResolverData(new RoyalGuard(), SlotMode.OffGcd),
-        new SlotResolverData(new Provoke(), SlotMode.OffGcd),
-        new SlotResolverData(new HeartOfCorundum(), SlotMode.OffGcd),
-        new SlotResolverData(new Nebula(), SlotMode.OffGcd),
-        new SlotResolverData(new Camouflage(), SlotMode.OffGcd),
-        new SlotResolverData(new Rampart(), SlotMode.OffGcd),
-        new SlotResolverData(new Aurora(), SlotMode.OffGcd),
-        new SlotResolverData(new Armslength(), SlotMode.OffGcd),
-        new SlotResolverData(new Reprisal(), SlotMode.OffGcd)
+        new(new SuperBolide(), SlotMode.OffGcd),
+        new(new Trajectory(), SlotMode.OffGcd),
+        new(new NoMercy(), SlotMode.OffGcd),
+        new(new Bloodfest(), SlotMode.OffGcd),
+        new(new Continuation(), SlotMode.OffGcd),
+        new(new BlastingZone(), SlotMode.OffGcd),
+        new(new DangerZone(), SlotMode.OffGcd),
+        new(new BowShock(), SlotMode.OffGcd),
+        new(new RoyalGuard(), SlotMode.OffGcd),
+        new(new Provoke(), SlotMode.OffGcd),
+        new(new HeartOfCorundum(), SlotMode.OffGcd),
+        new(new Nebula(), SlotMode.OffGcd),
+        new(new Camouflage(), SlotMode.OffGcd),
+        new(new Rampart(), SlotMode.OffGcd),
+        new(new Aurora(), SlotMode.OffGcd),
+        new(new Armslength(), SlotMode.OffGcd),
+        new(new Reprisal(), SlotMode.OffGcd)
     ];
 
     //public string OverlayTitle { get; } = "EZGnb";
@@ -91,6 +91,7 @@ public class GnbRotationEntry : IRotationEntry
             _ => null
         };
     }
-    public void Dispose() { }
+
+    public void Dispose() => Qt.Instance.Dispose();
 
 }
