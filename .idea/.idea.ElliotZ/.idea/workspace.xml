@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75cabfee-c401-49b3-935b-0458bf4f1bb0" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/RprSub/Common/ModernJobViewFramework/JobView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Common/ModernJobViewFramework/JobView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RprSub/Common/ModernJobViewFramework/MainWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Common/ModernJobViewFramework/MainWindow.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RprSub/Common/ModernJobViewFramework/ModernQtWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Common/ModernJobViewFramework/ModernQtWindow.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RprSub/Common/ModernJobViewFramework/ModernTheme.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Common/ModernJobViewFramework/ModernTheme.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RprSub/Common/ModernJobViewFramework/QtStyle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Common/ModernJobViewFramework/QtStyle.cs" afterDir="false" />
+    <list default="true" id="75cabfee-c401-49b3-935b-0458bf4f1bb0" name="更改" comment="更改">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ElliotZ/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ElliotZ/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Common/Helper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Common/Helper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/EventHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/EventHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/QtUI/DevTab.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/QtUI/DevTab.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/QtUI/ReadmeTab.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/QtUI/ReadmeTab.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RprSub/Rpr/RotationPrioSys.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RprSub/Rpr/RotationPrioSys.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,18 +31,17 @@
     &quot;assignee&quot;: &quot;ElliotZ&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/ElliotZ/AE3-ACR.git",
-    "accountId": "01ba7ad4-dbc5-4bfe-8d2a-d184a1c17ce5"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ElliotZ/AE3-ACR.git&quot;,
+    &quot;accountId&quot;: &quot;01ba7ad4-dbc5-4bfe-8d2a-d184a1c17ce5&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/1aba6e0f3c6547eb9f6e9ce2d83b551116a400/1b/3e1c3054/HotKeyResolver_Potion.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/1aba6e0f3c6547eb9f6e9ce2d83b551116a400/57/d4922053/SlotMode.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/1aba6e0f3c6547eb9f6e9ce2d83b551116a400/ad/48a5c287/SlotResolverData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3f31e7e8aa33de883c2ccfa62a9c81bfc246c36e825b489476f9472032e512/File.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/ElliotZ/Common/TimeLineUpdater.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/ElliotZ/Rpr/RotationPrioSys.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -52,23 +52,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "terminal",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;terminal&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="默认任务">
       <changelist id="75cabfee-c401-49b3-935b-0458bf4f1bb0" name="更改" comment="" />
@@ -80,7 +80,9 @@
       <workItem from="1755858727594" duration="4735000" />
       <workItem from="1755864865684" duration="7941000" />
       <workItem from="1755872860650" duration="20337000" />
-      <workItem from="1755924506056" duration="20457000" />
+      <workItem from="1755924506056" duration="21498000" />
+      <workItem from="1756192014996" duration="6739000" />
+      <workItem from="1756267515347" duration="324000" />
     </task>
     <task id="LOCAL-00001" summary="migrated to Jetbrains Rider and refactored">
       <option name="closed" value="true" />
@@ -154,7 +156,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755957827656</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="UI leak fix">
+      <option name="closed" value="true" />
+      <created>1755959857147</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1755959857147</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -184,7 +194,8 @@
     <MESSAGE value="edit gitignore" />
     <MESSAGE value="test" />
     <MESSAGE value="fix UI" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix UI" />
+    <MESSAGE value="UI leak fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="UI leak fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
