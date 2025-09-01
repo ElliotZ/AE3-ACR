@@ -5,6 +5,7 @@
 
 push2subtree.bat
 pullsubtree.bat
+forcePush2subtree.bat
 
 # User-specific files
 *.rsuser
