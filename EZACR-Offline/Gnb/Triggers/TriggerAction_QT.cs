@@ -5,48 +5,40 @@ using ImGuiNET;
 
 namespace EZACR_Offline.Gnb.Triggers;
 
-public class TriggerAction_QT : ITriggerAction, ITriggerBase
-{
-    public string Key = "";
+public class TriggerAction_QT : ITriggerAction, ITriggerBase {
+  public string Key = "";
 
-    public bool Value;
+  public bool Value;
 
-    private int _selectIndex;
+  private int _selectIndex;
 
-    private string[] _qtArray;
+  private string[] _qtArray;
 
-    public string DisplayName { get; } = "GNB/QT";
+  public string DisplayName { get; } = "GNB/QT";
 
+  public string Remark { get; set; }
 
-    public string Remark { get; set; }
+  public TriggerAction_QT() {
+    _qtArray = Qt.Instance.GetQtArray();
+  }
 
-    public TriggerAction_QT()
-    {
-        _qtArray = Qt.Instance.GetQtArray();
+  public bool Draw() {
+    _selectIndex = Array.IndexOf(_qtArray, Key);
+    if (_selectIndex == -1) _selectIndex = 0;
+
+    ImGuiHelper.LeftCombo("选择Key", ref _selectIndex, _qtArray);
+    Key = _qtArray[_selectIndex];
+    ImGui.SameLine();
+
+    using (new GroupWrapper()) {
+      ImGui.Checkbox("", ref Value);
     }
 
-    public bool Draw()
-    {
-        _selectIndex = Array.IndexOf(_qtArray, Key);
-        if (_selectIndex == -1)
-        {
-            _selectIndex = 0;
-        }
+    return true;
+  }
 
-        ImGuiHelper.LeftCombo("选择Key", ref _selectIndex, _qtArray);
-        Key = _qtArray[_selectIndex];
-        ImGui.SameLine();
-        using (new GroupWrapper())
-        {
-            ImGui.Checkbox("", ref Value);
-        }
-
-        return true;
-    }
-
-    public bool Handle()
-    {
-        Qt.Instance.SetQt(Key, Value);
-        return true;
-    }
+  public bool Handle() {
+    Qt.Instance.SetQt(Key, Value);
+    return true;
+  }
 }

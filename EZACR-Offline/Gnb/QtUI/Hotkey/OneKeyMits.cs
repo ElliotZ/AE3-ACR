@@ -4,40 +4,34 @@ using ElliotZ.Common;
 
 namespace EZACR_Offline.Gnb.QtUI.Hotkey;
 
-public class OneKeyMits() : HotKeyResolver(SpellsDef.Rampart, SpellTargetType.Self, waitCoolDown: false)
-{
-    public override int Check()
-    {
-        if (SpellsDef.Rampart.GetSpell().IsReadyWithCanCast())
-        {
-            SpellId = SpellsDef.HeartOfCorundum;
-            return 0;
-        }
-
-        if (SpellsDef.HeartOfCorundum.GetSpell().IsReadyWithCanCast())
-        {
-            SpellId = SpellsDef.GreatNebula;
-            return 0;
-        }
-
-        if (SpellsDef.GreatNebula.GetSpell().IsReadyWithCanCast())
-        {
-            SpellId = SpellsDef.Camouflage;
-            return 0;
-        }
-
-        if (SpellsDef.Camouflage.GetSpell().IsReadyWithCanCast())
-        {
-            SpellId = SpellsDef.Superbolide;
-            return 0;
-        }
-
-        if (SpellsDef.Superbolide.GetSpell().IsReadyWithCanCast())
-        {
-            SpellId = SpellsDef.Rampart;
-            return 0;
-        }
-
-        return -1;
+public class OneKeyMits()
+    : HotKeyResolver(SpellsDef.Rampart, SpellTargetType.Self, waitCoolDown: false) {
+  public override int Check() {
+    if (SpellsDef.Rampart.GetSpell().IsReadyWithCanCast()) {
+      _spellId = SpellsDef.HeartOfCorundum;
+      return 0;
     }
+
+    if (SpellsDef.HeartOfCorundum.GetSpell().IsReadyWithCanCast()) {
+      _spellId = SpellsDef.GreatNebula;
+      return 0;
+    }
+
+    if (SpellsDef.GreatNebula.GetSpell().IsReadyWithCanCast()) {
+      _spellId = SpellsDef.Camouflage;
+      return 0;
+    }
+
+    if (SpellsDef.Camouflage.GetSpell().IsReadyWithCanCast()) {
+      _spellId = SpellsDef.Superbolide;
+      return 0;
+    }
+
+    if (SpellsDef.Superbolide.GetSpell().IsReadyWithCanCast()) {
+      _spellId = SpellsDef.Rampart;
+      return 0;
+    }
+
+    return -1;
+  }
 }
