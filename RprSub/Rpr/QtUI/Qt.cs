@@ -105,7 +105,7 @@ public static class Qt {
     if (RprSettings.Instance.Debug) LogHelper.Print("QT设置已重载");
   }
 
-  public static void LoadQtStatesNoPot() {
+  public static void LoadQtStatesNoPot() {  // [TODO] Maintain two sets of QT States
     foreach (var qtState in RprSettings.Instance.QtStates
                                        .Where(qtState => 
                                                   qtState.Key is not 

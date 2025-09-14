@@ -13,20 +13,23 @@ using Task = System.Threading.Tasks.Task;
 namespace ElliotZ.Rpr;
 
 public class EventHandler : IRotationEventHandler {
-  public void OnResetBattle() {
+  public void OnResetBattle() {  // When entering or leaving combat
     BattleData.Instance = new BattleData();
+    MeleePosHelper.Clear();
+    BattleData.ReBuildSettings();
 
-    // initialize pull record
+    // When entering combat
     if (AI.Instance.BattleData.CurrBattleTimeInMs >= 0) {
       if (RprSettings.Instance.PullingNoBurst) Qt.MobMan.Reset();
-      //MeleePosHelper.Clear();
+    } else {  // When leaving Combat, load area, countdown, and reload dll
       if (RprSettings.Instance.RestoreQtSet) Qt.LoadQtStatesNoPot();
+
+      if (AI.Instance.TriggerlineData.CurrTriggerLine is not null) {
+        RprHelper.HardCoreMode();
+      } else if (RprSettings.Instance.AutoSetCasual) {
+        RprHelper.CasualMode();
+      }
     }
-
-    //BattleData.Instance.IsPulling = false;
-    MeleePosHelper.Clear();
-
-    BattleData.ReBuildSettings();
   }
 
   public async Task OnNoTarget() {
@@ -146,7 +149,5 @@ public class EventHandler : IRotationEventHandler {
     Qt.MacroMan.Exit();
   }
 
-  public void OnTerritoryChanged() {
-    if (RprSettings.Instance.RestoreQtSet) Qt.LoadQtStatesNoPot();
-  }
+  public void OnTerritoryChanged() { }
 }

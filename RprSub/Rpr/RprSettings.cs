@@ -53,6 +53,7 @@ public class RprSettings {
   public int PosDrawStyle = 2;
 
   public bool RestoreQtSet = true;
+  public bool AutoSetCasual = true;
 
   //public bool SmartAOE = true;
   public bool CommandWindowOpen = true;

@@ -69,6 +69,10 @@ public static class SettingTab {
         if (ImGui.Button("记录当前QT设置")) Qt.SaveQtStates();
         ImGui.Text("会从当前记录过的QT设置重置。");
         ImGui.Text("爆发药、爆发药2分、智能AOE以及自动突进这几个QT不会被重置。");
+        ImGui.Checkbox("无时间轴时自动设置日随模式", ref RprSettings.Instance.AutoSetCasual);
+        ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1f, 0f, 0f, 1f));
+        ImGui.Text("设置日随模式会覆盖自定义QT设置！");
+        ImGui.PopStyleColor();
         ImGui.Separator();
         ImGui.Text("高级设置");
         ImGui.Checkbox("Debug", ref RprSettings.Instance.Debug);
