@@ -80,6 +80,7 @@ public class MacroManager(JobViewWindow instance,
   /// <param name="defVal"></param>
   /// <param name="tooltip"></param>
   /// <param name="callback"></param>
+  // ReSharper disable once MemberCanBePrivate.Global
   public void AddQt(string name, 
                     string en, 
                     bool defVal, 
