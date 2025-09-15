@@ -1,4 +1,5 @@
-﻿using AEAssist;
+﻿using System.Numerics;
+using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Module.Target;
@@ -7,11 +8,10 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
-using System.Numerics;
 
 // ReSharper disable UnusedMember.Local
 
-namespace ElliotZ.Common;
+namespace ElliotZ;
 
 public static class Helper {
   public const string AuthorName = "ElliotZ";
@@ -25,13 +25,11 @@ public static class Helper {
   /// </summary>
   /// <param name="buffId"></param>
   /// <returns></returns>
-  public static int GetAuraTimeLeft(uint buffId) {
-    return Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me, buffId, true);
-  }
+  public static int GetAuraTimeLeft(uint buffId) 
+      => Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me, buffId, true);
 
-  public static int GetAuraTimeLeft(IBattleChara c, uint buffId) {
-    return Core.Resolve<MemApiBuff>().GetAuraTimeleft(c, buffId, true);
-  }
+  public static int GetAuraTimeLeft(IBattleChara c, uint buffId) 
+      => Core.Resolve<MemApiBuff>().GetAuraTimeleft(c, buffId, true);
 
   /// <summary>显示一个文本提示，用于在游戏中显示简短的消息。</summary>
   /// <param name="msg">要显示的消息文本。</param>
@@ -46,7 +44,7 @@ public static class Helper {
   /// <summary>
   /// 全局设置
   /// </summary>
-  public static GeneralSettings GlblSettings => SettingMgr.GetSetting<GeneralSettings>();
+  public static GeneralSettings GlobalSettings => SettingMgr.GetSetting<GeneralSettings>();
 
   /// <summary>
   /// 当前地图id
@@ -56,9 +54,8 @@ public static class Helper {
   /// <summary>
   /// 返回可变技能的当前id
   /// </summary>
-  public static uint GetActionChange(uint spellId) {
-    return Core.Resolve<MemApiSpell>().CheckActionChange(spellId);
-  }
+  public static uint AdaptiveId(this uint spellId) => Core.Resolve<MemApiSpell>()
+                                                          .CheckActionChange(spellId);
 
   /// <summary>
   /// 高优先级插入条件检测函数
@@ -148,6 +145,7 @@ public static class Helper {
   /// 周围8米内目标如果有超过三分之二会在设定TTK内死亡，则返回True
   /// </summary>
   /// <returns></returns>
+  [Obsolete("not needed since introduction of MobPullManager, use that instead")]
   public static bool AoeTTKCheck() {
     int enemyCount = TargetHelper.GetNearbyEnemyCount(8);
     var enemyList = TargetMgr.Instance.EnemysIn12;
@@ -161,6 +159,7 @@ public static class Helper {
     return lowHpCount / (double)enemyCount > 0.667;
   }
 
+  [Obsolete("not needed since introduction of MobPullManager, use that instead")]
   public static bool AoeTTKCheck(int time) {
     int enemyCount = TargetHelper.GetNearbyEnemyCount(8);
     var enemyList = TargetMgr.Instance.EnemysIn12;
@@ -277,14 +276,13 @@ public static class Helper {
   }
 
   public static bool IsUnlockWithRoleSkills(this Spell spell) {
+    // dirty fix for now; need better ways to detect if a role skill is unlocked
     return SpellsDef.RoleSkills.Contains(spell.Id)
-         ||
-           // dirty fix for now; need better ways to detect if a role skill is unlocked
-           spell.IsUnlock();
+         || spell.IsUnlock();
   }
 
   /// <summary>
-  /// 
+  /// check if hp queue contains spell
   /// </summary>
   /// <param name="spell"></param>
   /// <returns>True if spell is in HP queue, false otherwise</returns>
@@ -302,7 +300,7 @@ public static class Helper {
   }
 
   /// <summary>
-  /// 
+  /// check for HP queue top
   /// </summary>
   /// <param name="spell"></param>
   /// <returns>True if spell is at the top of HP queue, false otherwise</returns>

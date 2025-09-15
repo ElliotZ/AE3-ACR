@@ -2,14 +2,13 @@
 using AEAssist.CombatRoutine;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using ElliotZ.Common;
 
 namespace ElliotZ.Rpr.QtUI.Hotkey;
 
 public class SoulSowHvstMnHK()
     : HotKeyResolver(SpellsDef.Soulsow, SpellTargetType.Target, false, false) {
   public override int Check() {
-    uint targetSpellId = Helper.GetActionChange(_spellId);
+    uint targetSpellId = _spellId.AdaptiveId();
     Spell s = targetSpellId == SpellsDef.HarvestMoon
                   ? targetSpellId.GetSpell(_targetType)
                   : targetSpellId.GetSpell();
@@ -27,7 +26,7 @@ public class SoulSowHvstMnHK()
   }
 
   public override void Run() {
-    uint targetSpellId = Helper.GetActionChange(_spellId);
+    uint targetSpellId = _spellId.AdaptiveId();
     Spell spell = targetSpellId == SpellsDef.HarvestMoon
                       ? targetSpellId.GetSpell(_targetType)
                       : targetSpellId.GetSpell();

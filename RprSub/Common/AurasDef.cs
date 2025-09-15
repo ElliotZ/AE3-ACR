@@ -1,8 +1,7 @@
 ﻿// ReSharper disable InconsistentNaming
-
 // ReSharper disable UnusedMember.Global
-
-namespace ElliotZ.Common;
+// ReSharper disable IdentifierTypo
+namespace ElliotZ;
 
 public static class AurasDef {
   public const int Stun = 2,

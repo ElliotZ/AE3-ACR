@@ -6,7 +6,6 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
-using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 using Task = System.Threading.Tasks.Task;
 
@@ -93,8 +92,8 @@ public class EventHandler : IRotationEventHandler {
     bool inTN = Core.Me.HasAura(AurasDef.TrueNorth) && RprSettings.Instance.NoPosDrawInTN;
     bool gibGallowsReady = Core.Me.HasAura(AurasDef.SoulReaver)
                         || Core.Me.HasAura(AurasDef.Executioner);
-    bool gibGallowsJustUsed = Helper.GetActionChange(SpellsDef.Gibbet).RecentlyUsed(500)
-                           || Helper.GetActionChange(SpellsDef.Gallows).RecentlyUsed(500);
+    bool gibGallowsJustUsed = SpellsDef.Gibbet.AdaptiveId().RecentlyUsed(500)
+                           || SpellsDef.Gallows.AdaptiveId().RecentlyUsed(500);
     int staticPosProg = RprSettings.Instance.PosDrawStyle switch {
         0 => 1,
         1 => 70,
@@ -137,7 +136,7 @@ public class EventHandler : IRotationEventHandler {
     LogHelper.Print("欢迎使用EZRpr，如有问题和反馈可以在DC找我。");
 
     //检查全局设置
-    if (Helper.GlblSettings.NoClipGCD3) {
+    if (Helper.GlobalSettings.NoClipGCD3) {
       LogHelper.PrintError("建议在acr全局设置中取消勾选【全局能力技不卡GCD】选项");
     }
 

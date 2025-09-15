@@ -1,16 +1,16 @@
 using System.Diagnostics;
+using System.Numerics;
+using AEAssist;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Trigger;
 using AEAssist.GUI;
-using ImGuiNET;
-using System.Numerics;
-using AEAssist;
 using AEAssist.MemoryApi;
+using ImGuiNET;
 
 // ReSharper disable FieldCanBeMadeReadOnly.Local
 #pragma warning disable CS9113 // 参数未读。
 
-namespace ElliotZ.Common.ModernJobViewFramework;
+namespace ElliotZ.ModernJobViewFramework;
 
 public class MainWindow {
   private bool _smallWindow;

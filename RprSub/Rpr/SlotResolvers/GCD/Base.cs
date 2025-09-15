@@ -2,7 +2,6 @@
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 
 namespace ElliotZ.Rpr.SlotResolvers.GCD;
@@ -16,11 +15,11 @@ public class Base : ISlotResolver {
   private const uint _aoe2 = SpellsDef.NightmareScythe;
 
   public int Check() {
-    if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange) {
+    if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlobalSettings.AttackRange) {
       return -2; // -2 for not in range
     }
 
-    if (Helper.GetActionChange(SpellsDef.BloodStalk).RecentlyUsed()
+    if (SpellsDef.BloodStalk.AdaptiveId().RecentlyUsed()
      || SpellsDef.Gluttony.RecentlyUsed()) {
       return -10;
     }

@@ -11,7 +11,7 @@ using AEAssist.MemoryApi;
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 // ReSharper disable ConvertToConstant.Global
 
-namespace ElliotZ.Common;
+namespace ElliotZ;
 
 public static class StopHelper {
   #region Singular Defs
@@ -39,11 +39,11 @@ public static class StopHelper {
   public const uint Invincibility1570 = 1570u;
   public const uint Invincibility1697 = 1697u;
   public const uint Invincibility1829 = 1829u;
-  public const uint HeartoftheMountain = 328u;
+  public const uint HeartOfTheMountain = 328u;
   public const uint TrueHallowedGround = 2287u;
-  public const uint MightoftheVortex = 3009u;
-  public const uint MightofCrags = 3010u;
-  public const uint MightoftheInferno = 3011u;
+  public const uint MightOfTheVortex = 3009u;
+  public const uint MightOfCrags = 3010u;
+  public const uint MightOfTheInferno = 3011u;
   public const uint VortexBarrier = 3012u;
 
   public const uint NoPos = 3808u;

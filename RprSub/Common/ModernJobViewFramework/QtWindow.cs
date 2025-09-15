@@ -10,7 +10,7 @@ using Keys = AEAssist.Define.HotKey.Keys;
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 // ReSharper disable FieldCanBeMadeReadOnly.Local
 
-namespace ElliotZ.Common.ModernJobViewFramework;
+namespace ElliotZ.ModernJobViewFramework;
 
 /// Qt窗口类
 public class QtWindow : IDisposable {

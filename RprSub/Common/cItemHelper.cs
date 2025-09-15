@@ -2,7 +2,7 @@
 
 // ReSharper disable UnusedMember.Global
 
-namespace ElliotZ.Common;
+namespace ElliotZ;
 
 public static class CItemHelper {
   /// <summary>

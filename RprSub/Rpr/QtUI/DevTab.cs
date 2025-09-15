@@ -5,8 +5,7 @@ using AEAssist.GUI;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
-using ElliotZ.Common;
-using ElliotZ.Common.ModernJobViewFramework;
+using ElliotZ.ModernJobViewFramework;
 using ImGuiNET;
 
 namespace ElliotZ.Rpr.QtUI;
@@ -66,6 +65,16 @@ public static class DevTab {
         if (ImGui.Button("Load Settings")) {
           RprSettings.Build(RprRotationEntry.SettingsFolderPath);
         }
+        ImGui.SameLine();
+        
+        if (ImGui.Button("Load QT No Pot")) {
+          Qt.LoadQtStatesNoPot();
+        }
+        ImGui.SameLine();
+
+        if (ImGui.Button("Load QT all")) {
+          Qt.LoadQtStates();
+        }
       }
 
       if (ImGui.CollapsingHeader("插入技能状态")) {
@@ -121,7 +130,9 @@ public static class DevTab {
                         + "2025/08/27: 现在在切换地图的时候也会重置QT，如果启用了相关设置。\n"
                         + "2025/09/02: 修复4分以后的爆发药QT失效问题。\n"
                         + "2025/09/03: 修复开启三插时的插入问题，祭牲的QT现在可以用了。\n"
-                        + "2025/09/10: 增加职业量谱的轴控Conditions，并调整UI。");
+                        + "2025/09/10: 增加职业量谱的轴控Conditions，并调整UI。\n"
+                        + "2025/09/16: 适配7.3技改，重构QT保存机制和ACR模式机制。“爆发药2分”QT重命"
+                        + "名为“起手药”，并逆转所有相关逻辑。");
         ImGui.EndChild();
       }
     });

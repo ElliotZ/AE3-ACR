@@ -1,4 +1,4 @@
-﻿using ElliotZ.Common;
+﻿using ElliotZ;
 
 namespace EZACR_Offline.Gnb;
 

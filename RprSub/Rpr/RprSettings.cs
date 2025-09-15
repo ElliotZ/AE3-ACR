@@ -1,6 +1,6 @@
 ﻿using AEAssist.Helper;
 using AEAssist.IO;
-using ElliotZ.Common.ModernJobViewFramework;
+using ElliotZ.ModernJobViewFramework;
 
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
@@ -54,6 +54,7 @@ public class RprSettings {
 
   public bool RestoreQtSet = true;
   public bool AutoSetCasual = true;
+  public AcrModeTypes AcrMode = AcrModeTypes.Casual;
 
   //public bool SmartAOE = true;
   public bool CommandWindowOpen = true;
@@ -72,7 +73,7 @@ public class RprSettings {
   public bool AutoFeint = false;
   public float MinMobHpPercent = 0.1f;
   public float ConcentrationThreshold = 0.75f;
-  public int MinTTK = 15;
+  public int MinTTK = 10;
   public bool HandleStopMechs = true;
 
   // Opener Settings
@@ -81,13 +82,68 @@ public class RprSettings {
   public bool PrepullSprint = true;
   public bool PrepullIngress = true;
 
-  //public bool AutoUpdateTimeLines = true;
-  //public bool TimeLinesDebug = false;
+  public Dictionary<string, bool> QtStatesHardCore;
+  public Dictionary<string, bool> QtStatesCasual;
 
-  // QT设置存档
-  public Dictionary<string, bool> QtStates = [];
+  private RprSettings() {
+    ResetQtStates(AcrModeTypes.HardCore);
+    ResetQtStates(AcrModeTypes.Casual);
+  }
 
-  public JobViewSave JobViewSave = new() {
+  public void ResetQtStates(AcrModeTypes mode) {
+    // QT设置存档
+    if (mode is AcrModeTypes.HardCore) {
+      QtStatesHardCore = new Dictionary<string, bool> {
+          ["起手"] = true,
+          ["起手药"] = false,
+          ["单魂衣"] = false,
+          ["爆发"] = true,
+          ["神秘环"] = true,
+          ["魂衣"] = true,
+          ["大丰收"] = true,
+          ["灵魂割"] = true,
+          ["挥割/爪"] = true,
+          ["暴食"] = true,
+          ["完人"] = true,
+          ["真北"] = true,
+          ["收获月"] = true,
+          ["勾刃"] = true,
+          ["AOE"] = false,
+          ["播魂种"] = true,
+          ["祭牲"] = true,
+          ["倾泻资源"] = false,
+          ["真北优化"] = true,
+          ["智能AOE"] = false,
+          ["自动突进"] = false,
+      };
+    } else {
+      QtStatesCasual = new Dictionary<string, bool> {
+          ["起手"] = true,
+          ["起手药"] = false,
+          ["单魂衣"] = false,
+          ["爆发"] = true,
+          ["神秘环"] = true,
+          ["魂衣"] = true,
+          ["大丰收"] = true,
+          ["灵魂割"] = true,
+          ["挥割/爪"] = true,
+          ["暴食"] = true,
+          ["完人"] = true,
+          ["真北"] = true,
+          ["收获月"] = true,
+          ["勾刃"] = true,
+          ["AOE"] = true,
+          ["播魂种"] = true,
+          ["祭牲"] = true,
+          ["倾泻资源"] = false,
+          ["真北优化"] = true,
+          ["智能AOE"] = true,
+          ["自动突进"] = false,
+      };
+    }
+  }
+
+public JobViewSave JobViewSave = new() {
       CurrentTheme = ModernTheme.ThemePreset.RPR,
       QtLineCount = 3,
       QtUnVisibleList = ["挥割/爪", "暴食", "灵魂割", "祭牲"],

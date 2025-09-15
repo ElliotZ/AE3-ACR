@@ -2,7 +2,7 @@ using System.Numerics;
 using AEAssist.Helper;
 using ImGuiNET;
 
-namespace ElliotZ.Common.ModernJobViewFramework;
+namespace ElliotZ.ModernJobViewFramework;
 
 /// <summary>
 /// 现代化Qt窗口组件

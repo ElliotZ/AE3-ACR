@@ -5,8 +5,8 @@ using AEAssist.Define;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
-using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
+using ElliotZ.Rpr.SlotResolvers.FixedSeq;
 
 namespace ElliotZ.Rpr.SlotResolvers.GCD;
 
@@ -19,13 +19,15 @@ public class BuffMaintain : ISlotResolver {
       return -99; // -99 for not usable
     }
 
-    if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange) {
+    if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlobalSettings.AttackRange) {
       return -2; // -2 for not in range
     }
 
     if (Qt.MobMan.Holding) return -3;
 
-    if (SpellsDef.WhorlOfDeath.RecentlyUsed(5000)) return -5; // -5 for Avoiding Spam
+    if (Qt.Instance.GetQt("AOE") && SpellsDef.WhorlOfDeath.RecentlyUsed(5000)) {
+      return -5; // -5 for Avoiding Spam
+    }
 
     if (!Qt.Instance.GetQt("印记")) return -98;
 
@@ -35,6 +37,10 @@ public class BuffMaintain : ISlotResolver {
       return 1; // 1 for buff maintain within a GCD
     }
 
+    if (Qt.Instance.GetQt("AOE") && SpellsDef.WhorlOfDeath.IsUnlock() && AOEAuraCheck()) {
+      return 4;
+    }
+
     if (Qt.Instance.GetQt("暴食")
      && (_gluttonyCD < 10000)
      && Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, _gluttonyCD + 7500)
@@ -42,34 +48,33 @@ public class BuffMaintain : ISlotResolver {
       return 2; // 2 for pre gluttony, earlier use because Gib/Gallows must be covered
     }
 
-    if (Qt.Instance.GetQt("单魂衣")
-     && Core.Me.HasAura(AurasDef.Enshrouded)
-     && Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 10000)) {
-      return 3;
-    }
-
-    if (Core.Me.HasAura(AurasDef.Enshrouded)
-        //&& SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds <= 5000
-     && Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 30000, false)) {
-      return 3; // 3 for burst prep
+//    if (Qt.Instance.GetQt("单魂衣")
+//     && Core.Me.HasAura(AurasDef.Enshrouded)
+//     && Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 10000)) {
+//      return 3;
+//    }
+//    
+//    if (Core.Me.HasAura(AurasDef.Enshrouded) 
+//     && Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 30000, false)) {
+//      return 3; // 3 for burst prep
+//    }
+    
+    if (Qt.Instance.GetQt("神秘环") && 
+        SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds 
+                                                  < 30000 + DblEnshPrep.PreAcEnshTimer
+     && Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 
+                                    30000, 
+                                    false)) {
+      return 3;  // ensure ~30s of DD before Double Enshroud
     }
 
     if ((Core.Resolve<JobApi_Reaper>().SoulGauge == 100)
      && !SpellsDef.Perfectio.GetSpell().IsReadyWithCanCast()
      && !SpellsDef.PlentifulHarvest.GetSpell().IsReadyWithCanCast()
      && Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 30000, false)) {
-      return 5;
+      return 5; // gcd padding
     }
-
-    //if (Qt.Instance.GetQt("神秘环") && 
-    //        SpellsDef.ArcaneCircle.GetSpell().Cooldown.TotalMilliseconds < 11000 && 
-    //        Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, 11000 + GCDHelper.GetGCDDuration(), false))
-    //{
-    //    return 3;
-    //}
-    if (SpellsDef.WhorlOfDeath.IsUnlock() && AOEAuraCheck()) return 4;
-
-    //if (Core.Resolve<JobApi_Reaper>().ShroudGauge >= 50 &&)
+    
     return -1; // -1 for general unmatch
   }
 

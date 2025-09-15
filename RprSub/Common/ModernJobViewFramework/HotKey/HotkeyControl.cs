@@ -1,6 +1,6 @@
 ﻿using AEAssist.CombatRoutine.View.JobView;
 
-namespace ElliotZ.Common.ModernJobViewFramework.HotKey;
+namespace ElliotZ.ModernJobViewFramework.HotKey;
 
 public class HotkeyControl {
   internal readonly string _name;

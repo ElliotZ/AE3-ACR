@@ -1,9 +1,7 @@
-﻿using AEAssist.GUI;
-using Dalamud.Interface.Colors;
-using ElliotZ.Common;
-using ElliotZ.Common.ModernJobViewFramework;
+﻿using Dalamud.Interface.Colors;
 using ImGuiNET;
 using System.Numerics;
+using ElliotZ.ModernJobViewFramework;
 
 namespace ElliotZ.Rpr.QtUI;
 
@@ -14,6 +12,44 @@ public static class SettingTab {
 
   public static void Build(JobViewWindow instance) {
     instance.AddTab("设置", _ => {
+      if (ImGui.CollapsingHeader("模式和QT设置", ImGuiTreeNodeFlags.DefaultOpen)) {
+        ImGui.Dummy(new Vector2(5, 0));
+        ImGui.SameLine();
+        ImGui.BeginGroup();
+        
+        if (ImGui.Button("日随模式", new Vector2(100f, 30f))) {
+          RprHelper.CasualMode();
+          RprSettings.Instance.Save();
+        }
+
+        ImGui.SameLine();
+        if (ImGui.Button("高难模式", new Vector2(100f, 30f))) {
+          RprHelper.HardCoreMode();
+          RprSettings.Instance.Save();
+        }
+
+        ImGui.Text("高难模式会把自回设置全部关闭，如果你有需求就自己开。");
+
+        ImGui.Separator();
+        ImGui.Checkbox("自动重置QT", ref RprSettings.Instance.RestoreQtSet);
+        ImGui.SameLine();
+        if (ImGui.Button("记录当前QT设置")) Qt.SaveQtStates();
+        ImGui.Text("会从当前记录过的QT设置重置。");
+        ImGui.Text("爆发药、智能AOE以及自动突进这几个QT不会被重置。");
+        ImGui.Text("日随和高难模式的默认QT值是分开保存的。\n"
+                 + "记录按钮会把当前的QT状态保存到当前模式的存档中。");
+        ImGui.Checkbox("无时间轴时自动设置日随模式", ref RprSettings.Instance.AutoSetCasual);
+        
+        ImGui.Separator();
+        if (ImGui.Button("重设当前模式默认QT设置")) {
+          RprSettings.Instance.ResetQtStates(RprSettings.Instance.AcrMode);
+          RprSettings.Instance.Save();
+        }
+        
+        ImGui.EndGroup();
+        ImGui.Dummy(new Vector2(0, 10));
+      }
+
       if (ImGui.CollapsingHeader("一般设定")) {
         ImGui.Dummy(new Vector2(5, 0));
         ImGui.SameLine();
@@ -62,17 +98,7 @@ public static class SettingTab {
 
           ImGui.EndCombo();
         }
-
-        ImGui.Separator();
-        ImGui.Checkbox("自动重置QT", ref RprSettings.Instance.RestoreQtSet);
-        ImGui.SameLine();
-        if (ImGui.Button("记录当前QT设置")) Qt.SaveQtStates();
-        ImGui.Text("会从当前记录过的QT设置重置。");
-        ImGui.Text("爆发药、爆发药2分、智能AOE以及自动突进这几个QT不会被重置。");
-        ImGui.Checkbox("无时间轴时自动设置日随模式", ref RprSettings.Instance.AutoSetCasual);
-        ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1f, 0f, 0f, 1f));
-        ImGui.Text("设置日随模式会覆盖自定义QT设置！");
-        ImGui.PopStyleColor();
+        
         ImGui.Separator();
         ImGui.Text("高级设置");
         ImGui.Checkbox("Debug", ref RprSettings.Instance.Debug);
@@ -82,7 +108,7 @@ public static class SettingTab {
         ImGui.Dummy(new Vector2(0, 10));
       }
 
-      if (ImGui.CollapsingHeader("日随QoL设定", ImGuiTreeNodeFlags.DefaultOpen)) {
+      if (ImGui.CollapsingHeader("日随QoL设定")) {
         ImGui.Dummy(new Vector2(5, 0));
         ImGui.SameLine();
         ImGui.BeginGroup();
@@ -242,21 +268,6 @@ public static class SettingTab {
         if (ImGui.Button("查看指令")) RprSettings.Instance.CommandWindowOpen = true;
         ImGui.Checkbox("使用Toast2提示QT状态", ref RprSettings.Instance.ShowToast);
       }
-
-      ImGuiHelper.Separator();
-      ImGui.Text("高难模式会把自回设置全部关闭，如果你有需求就自己开。默认也会关闭AOE。");
-
-      if (ImGui.Button("日随推荐配置", new Vector2(100f, 30f))) {
-        RprHelper.CasualMode();
-        RprSettings.Instance.Save();
-      }
-
-      ImGui.SameLine();
-
-      if (ImGui.Button("高难推荐配置", new Vector2(100f, 30f))) {
-        RprHelper.HardCoreMode();
-        RprSettings.Instance.Save();
-      }
     });
   }
 
@@ -264,7 +275,7 @@ public static class SettingTab {
     int id = (int)potion;
     ImGui.SameLine();
 
-    if (ImGui.Button("复制id###" + id)) {
+    if (ImGui.Button("复制id###药水" + id)) {
       ImGui.SetClipboardText(id.ToString());
     }
   }

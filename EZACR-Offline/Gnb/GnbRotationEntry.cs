@@ -1,7 +1,7 @@
 ﻿using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Module.Opener;
-using ElliotZ.Common;
+using ElliotZ;
 using EZACR_Offline.Gnb.QtUI;
 using EZACR_Offline.Gnb.SlotResolvers.FixedSeq;
 using EZACR_Offline.Gnb.SlotResolvers.GCD;

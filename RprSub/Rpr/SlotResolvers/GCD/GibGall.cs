@@ -4,7 +4,6 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using Dalamud.Game.ClientState.Objects.Types;
-using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 
 namespace ElliotZ.Rpr.SlotResolvers.GCD;
@@ -22,9 +21,7 @@ public class GibGall : ISlotResolver {
     if (Core.Me.HasAura(AurasDef.Enshrouded)) return -14;
 
     if (_target is null
-     && Helper.GetActionChange(SpellsDef.Gibbet)
-              .GetSpell()
-              .IsReadyWithCanCast() is false) {
+     && SpellsDef.Gibbet.AdaptiveId().GetSpell().IsReadyWithCanCast() is false) {
       return -99;
     }
 
@@ -40,20 +37,20 @@ public class GibGall : ISlotResolver {
     //var enemyCount = TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 8, 180);
 
     if (Qt.Instance.GetQt("AOE") && _target is not null) {
-      return Helper.GetActionChange(SpellsDef.Guillotine).GetSpell(_target);
+      return SpellsDef.Guillotine.AdaptiveId().GetSpell(_target);
     }
 
     if (Core.Me.HasAura(AurasDef.EnhancedGallows)) {
-      return Helper.GetActionChange(SpellsDef.Gallows).GetSpell();
+      return SpellsDef.Gallows.AdaptiveId().GetSpell();
     }
 
     if (Core.Me.HasAura(AurasDef.EnhancedGibbet)) {
-      return Helper.GetActionChange(SpellsDef.Gibbet).GetSpell();
+      return SpellsDef.Gibbet.AdaptiveId().GetSpell();
     }
 
     return Helper.AtRear
-               ? Helper.GetActionChange(SpellsDef.Gallows).GetSpell()
-               : Helper.GetActionChange(SpellsDef.Gibbet).GetSpell();
+               ? SpellsDef.Gallows.AdaptiveId().GetSpell()
+               : SpellsDef.Gibbet.AdaptiveId().GetSpell();
   }
 
   public void Build(Slot slot) {

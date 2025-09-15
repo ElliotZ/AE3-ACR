@@ -4,7 +4,6 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using Dalamud.Game.ClientState.Objects.Types;
-using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 
 namespace ElliotZ.Rpr.SlotResolvers.oGCD;
@@ -18,16 +17,12 @@ public class BloodStalk : ISlotResolver {
                                                     Qt.Instance.GetQt("智能AOE"));
 
     if (_target is null
-     && Helper.GetActionChange(SpellsDef.BloodStalk)
-              .GetSpell()
-              .IsReadyWithCanCast() is false) {
+     && SpellsDef.BloodStalk.AdaptiveId().GetSpell().IsReadyWithCanCast() is false) {
       return -99;
     }
 
     if (_target is not null 
-     && SpellsDef.GrimSwathe
-                 .GetSpell(_target)
-                 .IsReadyWithCanCast() is false) {
+     && SpellsDef.GrimSwathe.GetSpell(_target).IsReadyWithCanCast() is false) {
       return -99;
     }
 
@@ -145,7 +140,7 @@ public class BloodStalk : ISlotResolver {
       return SpellsDef.GrimSwathe.GetSpell(_target);
     }
 
-    return Helper.GetActionChange(SpellsDef.BloodStalk).GetSpell();
+    return SpellsDef.BloodStalk.AdaptiveId().GetSpell();
   }
 
   public void Build(Slot slot) {

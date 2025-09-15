@@ -6,7 +6,7 @@ using ImGuiNET;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 
-namespace ElliotZ.Common.ModernJobViewFramework.HotKey;
+namespace ElliotZ.ModernJobViewFramework.HotKey;
 
 public static class HotKeyConfig {
   //public static Dictionary<string, uint> SpellList = HotKeySpellConfig.List;

@@ -2,7 +2,6 @@
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using ElliotZ.Common;
 
 namespace ElliotZ.Rpr.SlotResolvers.oGCD;
 

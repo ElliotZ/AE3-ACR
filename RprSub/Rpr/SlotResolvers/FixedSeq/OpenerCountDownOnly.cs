@@ -5,7 +5,6 @@ using AEAssist.CombatRoutine.Module.Opener;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
-using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 
 namespace ElliotZ.Rpr.SlotResolvers.FixedSeq;
@@ -47,7 +46,7 @@ public class OpenerCountDownOnly : IOpener {
   private static bool PrepullIngressCheck() {
     if (Core.Me.GetCurrTarget() is null) return false;
     float targetRing = Core.Me.GetCurrTarget().HitboxRadius * 2;
-    int atkRange = Helper.GlblSettings.AttackRange;
+    int atkRange = Helper.GlobalSettings.AttackRange;
 
     return SpellsDef.HellsIngress.GetSpell().IsReadyWithCanCast() 
         //&& Core.Me.GetCurrTarget().Distance(Core.Me) < 15 + targetRing + atkRange 

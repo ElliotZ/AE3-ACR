@@ -1,11 +1,11 @@
-﻿using AEAssist.Helper;
+﻿using System.Numerics;
+using AEAssist.CombatRoutine.View.JobView;
+using AEAssist.Helper;
 using Dalamud.Utility;
 using ImGuiNET;
-using System.Numerics;
-using AEAssist.CombatRoutine.View.JobView;
-using JobViewWindow = ElliotZ.Common.ModernJobViewFramework.JobViewWindow;
+using JobViewWindow = ElliotZ.ModernJobViewFramework.JobViewWindow;
 
-namespace ElliotZ.Common; // 改成你需要的Namespace，或者由IDE自动处理
+namespace ElliotZ; // 改成你需要的Namespace，或者由IDE自动处理
 
 /// <summary>
 /// 宏命令控制Hotkey和QT的（希望算是比较易用的）轮子
@@ -17,15 +17,17 @@ namespace ElliotZ.Common; // 改成你需要的Namespace，或者由IDE自动处
 /// <param name="handleAddingQT">是否由MacroManager来帮你把QT和Hotkey加到QT窗口里</param>
 public class MacroManager(JobViewWindow instance,
                           string cmdHandle,
-                          List<(string name, string en, bool defVal, string tooltip)> qtKeys,
-                          List<(string name, string en, IHotkeyResolver hkr)> hkResolvers,
+                          List<QtInfo> qtKeys,
+                          List<HotKeyInfo> hkResolvers,
                           bool handleAddingQT = false) {
   // 用Toast2提示QT状态会用到的东西
   private readonly List<string> _qtToastBuffer = [];
   private static bool _qtToastScheduled;
 
+  private record CommandInfo(string CmdType, string CNCmd, string EnCmd);
+
   // 这三条会自动生成
-  private readonly List<(string cmdType, string CNCmd, string ENCmd)> _cmdList = [];
+  private readonly List<CommandInfo> _cmdList = [];
   private readonly Dictionary<string, string> _qtKeyDict = new(StringComparer.OrdinalIgnoreCase);
 
   private readonly Dictionary<string, IHotkeyResolver> _hotkeyDict =
@@ -45,32 +47,30 @@ public class MacroManager(JobViewWindow instance,
   /// <summary>
   /// 在OnExitRotation()里面需要用到的方法
   /// </summary>
-  public void Exit() {
-    ECHelper.Commands.RemoveHandler(cmdHandle);
-  }
+  public void Exit() => ECHelper.Commands.RemoveHandler(cmdHandle);
 
-  /// <summary>
-  /// 单个QT的添加
-  /// </summary>
-  /// <param name="name"></param>
-  /// <param name="en"></param>
-  /// <param name="defVal"></param>
-  /// <param name="tooltip"></param>
-  // ReSharper disable once MemberCanBePrivate.Global
-  public void AddQt(string name, string en, bool defVal, string tooltip) {
-    if (handleAddingQT) instance.AddQt(name, defVal, tooltip);
-
-    _qtKeyDict.TryAdd(name, name);
-    string cncmd = cmdHandle + " " + name + "_qt";
-    string encmd = "";
-
-    if (!en.IsNullOrEmpty()) {
-      _qtKeyDict.TryAdd(en.ToLower(), name);
-      encmd = cmdHandle + " " + en.ToLower() + "_qt";
-    }
-
-    _cmdList.Add(("QT", cncmd, encmd));
-  }
+//  /// <summary>
+//  /// 单个QT的添加
+//  /// </summary>
+//  /// <param name="name"></param>
+//  /// <param name="en"></param>
+//  /// <param name="defVal"></param>
+//  /// <param name="tooltip"></param>
+//  // ReSharper disable once MemberCanBePrivate.Global
+//  public void AddQt(string name, string en, bool defVal, string tooltip) {
+//    if (handleAddingQT) instance.AddQt(name, defVal, tooltip);
+//
+//    _qtKeyDict.TryAdd(name, name);
+//    string cncmd = cmdHandle + " " + name + "_qt";
+//    string encmd = "";
+//
+//    if (!en.IsNullOrEmpty()) {
+//      _qtKeyDict.TryAdd(en.ToLower(), name);
+//      encmd = cmdHandle + " " + en.ToLower() + "_qt";
+//    }
+//
+//    _cmdList.Add(new CommandInfo("QT", cncmd, encmd));
+//  }
 
   /// <summary>
   /// 单个QT的添加，支持Action callback
@@ -80,9 +80,17 @@ public class MacroManager(JobViewWindow instance,
   /// <param name="defVal"></param>
   /// <param name="tooltip"></param>
   /// <param name="callback"></param>
-  public void AddQt(string name, string en, bool defVal, string tooltip, Action<bool> callback) {
+  public void AddQt(string name, 
+                    string en, 
+                    bool defVal, 
+                    string tooltip, 
+                    Action<bool>? callback = null) {
     if (handleAddingQT) {
-      instance.AddQt(name, defVal, callback);
+      if (callback is not null) {
+        instance.AddQt(name, defVal, callback);
+      } else {
+        instance.AddQt(name, defVal);
+      }
       instance.SetQtToolTip(tooltip);
     }
 
@@ -95,7 +103,7 @@ public class MacroManager(JobViewWindow instance,
       encmd = cmdHandle + " " + en.ToLower() + "_qt";
     }
 
-    _cmdList.Add(("QT", cncmd, encmd));
+    _cmdList.Add(new CommandInfo("QT", cncmd, encmd));
   }
 
   /// <summary>
@@ -117,7 +125,7 @@ public class MacroManager(JobViewWindow instance,
       encmd = cmdHandle + " " + en.ToLower() + "_hk";
     }
 
-    _cmdList.Add(("Hotkey", cncmd, encmd));
+    _cmdList.Add(new CommandInfo("Hotkey", cncmd, encmd));
   }
 
   private void RegisterHandle() {

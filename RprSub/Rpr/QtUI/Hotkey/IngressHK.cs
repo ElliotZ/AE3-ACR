@@ -5,7 +5,6 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
-using ElliotZ.Common;
 using System.Numerics;
 
 namespace ElliotZ.Rpr.QtUI.Hotkey;
@@ -21,7 +20,7 @@ public class IngressHK(int hkType) : // 1 - use current direction, 2 - face targ
 
   public override void Draw(Vector2 size) {
     if (Core.Me.HasAura(AurasDef.RegressReady)) {
-      HotkeyHelper.DrawSpellImage(size, Helper.GetActionChange(_spellId));
+      HotkeyHelper.DrawSpellImage(size, _spellId.AdaptiveId());
     } else {
       switch (hkType) {
         case FaceTarget:

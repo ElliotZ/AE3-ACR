@@ -1,7 +1,7 @@
 using System.Numerics;
 using ImGuiNET;
 
-namespace ElliotZ.Common.ModernJobViewFramework;
+namespace ElliotZ.ModernJobViewFramework;
 
 /// <summary>
 /// 现代化UI主题系统

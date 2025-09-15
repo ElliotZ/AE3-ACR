@@ -4,7 +4,6 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
-using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 using ElliotZ.Rpr.SlotResolvers.FixedSeq;
 
@@ -44,7 +43,7 @@ public class Enshroud : ISlotResolver {
     if (SpellsDef.Enshroud.GetSpell().IsReadyWithCanCast() is false) return -99;
     if (Qt.Instance.GetQt("魂衣") is false) return -98;
 
-    if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange + 2) {
+    if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlobalSettings.AttackRange + 2) {
       return -2; // -2 for not in range
     }
 

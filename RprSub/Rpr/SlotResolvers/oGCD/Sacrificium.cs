@@ -4,7 +4,6 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
-using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 
 namespace ElliotZ.Rpr.SlotResolvers.oGCD;

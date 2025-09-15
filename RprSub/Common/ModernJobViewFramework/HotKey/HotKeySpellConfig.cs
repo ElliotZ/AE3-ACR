@@ -1,6 +1,6 @@
 ﻿// ReSharper disable FieldCanBeMadeReadOnly.Global
 
-namespace ElliotZ.Common.ModernJobViewFramework.HotKey;
+namespace ElliotZ.ModernJobViewFramework.HotKey;
 
 public struct HotKeySpell(string n, uint s, int t) {
   public string Name = n;

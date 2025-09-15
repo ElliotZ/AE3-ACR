@@ -1,13 +1,13 @@
-﻿using AEAssist;
+﻿using System.Numerics;
+using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using ElliotZ.Common.ModernJobViewFramework.HotKey;
-using System.Numerics;
+using ElliotZ.ModernJobViewFramework.HotKey;
 
-namespace ElliotZ.Common;
+namespace ElliotZ;
 
 /// <summary>
 /// 
@@ -29,11 +29,11 @@ public class HotKeyResolver(uint spellId,
       this(spell.Id, target.SpellTargetType) { }
 
   public virtual void Draw(Vector2 size) {
-    HotkeyHelper.DrawSpellImage(size, Helper.GetActionChange(_spellId));
+    HotkeyHelper.DrawSpellImage(size, _spellId.AdaptiveId());
   }
 
   public virtual void DrawExternal(Vector2 size, bool isActive) {
-    uint targetSpellId = Helper.GetActionChange(_spellId);
+    uint targetSpellId = _spellId.AdaptiveId();
     Spell spell = targetSpellId.GetSpell(_targetType);
 
     if (_waitCoolDown && spell.IsUnlockWithRoleSkills()) {
@@ -55,7 +55,7 @@ public class HotKeyResolver(uint spellId,
   }
 
   public virtual int Check() {
-    Spell s = Helper.GetActionChange(_spellId).GetSpell(_targetType);
+    Spell s = _spellId.AdaptiveId().GetSpell(_targetType);
     if (_waitCoolDown && !s.IsUnlockWithRoleSkills()) return -1;
     if (_useHighPrioritySlot && s.CheckInHPQueueTop()) return -3;
     bool isReady = _waitCoolDown 
@@ -65,7 +65,7 @@ public class HotKeyResolver(uint spellId,
   }
 
   public virtual void Run() {
-    uint targetSpellId = Helper.GetActionChange(_spellId);
+    uint targetSpellId = _spellId.AdaptiveId();
     Spell spell = targetSpellId.GetSpell(_targetType);
     double cooldown = spell.Cooldown.TotalMilliseconds;
 

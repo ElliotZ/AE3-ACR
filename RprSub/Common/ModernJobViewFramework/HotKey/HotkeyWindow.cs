@@ -12,7 +12,7 @@ using Keys = AEAssist.Define.HotKey.Keys;
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace ElliotZ.Common.ModernJobViewFramework.HotKey;
+namespace ElliotZ.ModernJobViewFramework.HotKey;
 
 /// 快捷键窗口类
 public class HotkeyWindow(JobViewSave save, string name) : IDisposable {

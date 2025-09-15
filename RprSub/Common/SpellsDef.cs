@@ -1,9 +1,9 @@
 ﻿using AEAssist.CombatRoutine;
-
+// ReSharper disable IdentifierTypo
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
 
-namespace ElliotZ.Common;
+namespace ElliotZ;
 
 public static class SpellsDef {
   public const uint Sprint = 3;
@@ -740,8 +740,6 @@ public static class SpellsDef {
   public const uint ThirdEye = 7498;
 
   public const uint MeikyoShisui = 7499;
-
-  //public const uint HissatsuSeigan = 7501;
   public const uint Meditation = 3546;
   public const uint ShohaIi = 25779;
   public const uint Fuko = 25780;
@@ -810,7 +808,7 @@ public static class SpellsDef {
   public const uint SchBroil3 = 16541;
   public const uint SchBroil4 = 25865;
 
-  //GCDAOE-破阵法-裂阵法
+  //GCD AOE-破阵法-裂阵法
   public const uint ArtOfWar = 16539;
   public const uint ArtOfWarIi = 25866;
 
