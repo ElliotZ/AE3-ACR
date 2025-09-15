@@ -212,12 +212,12 @@ public class MacroManager(JobViewWindow instance,
   public void BuildCommandList() {
     if (_cmdList.Count > 0) return; // protect against multiple calls
 
-    foreach ((string name, string en, bool defVal, string tooltip) in qtKeys) {
-      AddQt(name, en, defVal, tooltip);
+    foreach (QtInfo v in qtKeys) {
+      AddQt(v.Name, v.EnName, v.DefVal, v.Tooltip, v.Callback);
     }
 
-    foreach ((string name, string en, IHotkeyResolver hkr) in hkResolvers) {
-      AddHotkey(name, en, hkr);
+    foreach (HotKeyInfo v in hkResolvers) {
+      AddHotkey(v.Name, v.EnName, v.Hkr);
     }
   }
 
