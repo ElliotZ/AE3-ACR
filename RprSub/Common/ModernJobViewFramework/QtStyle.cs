@@ -1,6 +1,6 @@
 using System.Numerics;
 using AEAssist.CombatRoutine;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 // ReSharper disable MemberCanBeMadeStatic.Global
 // ReSharper disable FieldCanBeMadeReadOnly.Global

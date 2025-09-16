@@ -4,9 +4,9 @@ using AEAssist.Extension;
 using AEAssist.GUI;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Game.ClientState.Objects.Types;
 using ElliotZ.ModernJobViewFramework;
-using ImGuiNET;
 
 namespace ElliotZ.Rpr.QtUI;
 
@@ -119,20 +119,21 @@ public static class DevTab {
                          new System.Numerics.Vector2(0f, 300f),
                          true,
                          ImGuiWindowFlags.HorizontalScrollbar);
-        ImGui.TextWrapped("更新日志：\n\n"
-                        + "2025/08/03: 初版。\n"
-                        + "2025/08/10: 重构宏命令系统。\n"
-                        + "2025/08/14: 重构，以及加入爆发总控QT。\n"
-                        + "2025/08/16：加入印记QT。\n"
-                        + "2025/08/17: UI重做，感谢HSS老师。\n"
-                        + "2025/08/20: 优化技能和爆发窗口逻辑，轻度重构。\n"
-                        + "2025/08/23: 重构，迁移至新工作流。\n"
-                        + "2025/08/27: 现在在切换地图的时候也会重置QT，如果启用了相关设置。\n"
-                        + "2025/09/02: 修复4分以后的爆发药QT失效问题。\n"
-                        + "2025/09/03: 修复开启三插时的插入问题，祭牲的QT现在可以用了。\n"
-                        + "2025/09/10: 增加职业量谱的轴控Conditions，并调整UI。\n"
-                        + "2025/09/16: 适配7.3技改，重构QT保存机制和ACR模式机制。“爆发药2分”QT重命"
-                        + "名为“起手药”，并逆转所有相关逻辑。");
+        ImGui.TextWrapped(
+            "更新日志：\n\n"
+          + "2025/08/03: 初版。\n"
+          + "2025/08/10: 重构宏命令系统。\n"
+          + "2025/08/14: 重构，以及加入爆发总控QT。\n"
+          + "2025/08/16：加入印记QT。\n"
+          + "2025/08/17: UI重做，感谢HSS老师。\n"
+          + "2025/08/20: 优化技能和爆发窗口逻辑，轻度重构。\n"
+          + "2025/08/23: 重构，迁移至新工作流。\n"
+          + "2025/08/27: 现在在切换地图的时候也会重置QT，如果启用了相关设置。\n"
+          + "2025/09/02: 修复4分以后的爆发药QT失效问题。\n"
+          + "2025/09/03: 修复开启三插时的插入问题，祭牲的QT现在可以用了。\n"
+          + "2025/09/10: 增加职业量谱的轴控Conditions，并调整UI。\n"
+          + "2025/09/16: 适配7.3技改，重构QT保存机制和ACR模式机制。“爆发药2分”QT重命名为“起手药”，"
+          + "并逆转所有相关逻辑。");
         ImGui.EndChild();
       }
     });

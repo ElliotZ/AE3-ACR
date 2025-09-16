@@ -1,8 +1,7 @@
 ﻿using System.Numerics;
 using AEAssist.CombatRoutine.Trigger;
-using AEAssist.GUI;
+using Dalamud.Bindings.ImGui;
 using ElliotZ.Rpr.QtUI;
-using ImGuiNET;
 
 namespace ElliotZ.Rpr.Triggers;
 

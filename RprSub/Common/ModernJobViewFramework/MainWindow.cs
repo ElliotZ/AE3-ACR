@@ -5,7 +5,7 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Trigger;
 using AEAssist.GUI;
 using AEAssist.MemoryApi;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 // ReSharper disable FieldCanBeMadeReadOnly.Local
 #pragma warning disable CS9113 // 参数未读。

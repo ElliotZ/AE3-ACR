@@ -6,8 +6,8 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Helper;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility.Raii;
-using ImGuiNET;
 using HotkeyWindow = ElliotZ.ModernJobViewFramework.HotKey.HotkeyWindow;
 
 // ReSharper disable FieldCanBeMadeReadOnly.Local
@@ -156,11 +156,10 @@ public class JobViewWindow : IRotationUI, IDisposable {
   public bool ReverseQt(string qtName) {
     return _qtWindow.ReverseQt(qtName);
   }
-
-  /// 重置所有qt为默认值
-  public void Reset() {
-    _qtWindow.Reset();
-  }
+  
+//  public void Reset() {
+//    _qtWindow.Reset();
+//  }
 
   /// 给指定qt设置新的默认值
   public void NewDefault(string qtName, bool newDefault) {

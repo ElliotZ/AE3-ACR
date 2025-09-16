@@ -1,6 +1,6 @@
 ﻿using Dalamud.Interface.Colors;
-using ImGuiNET;
 using System.Numerics;
+using Dalamud.Bindings.ImGui;
 using ElliotZ.ModernJobViewFramework;
 
 namespace ElliotZ.Rpr.QtUI;

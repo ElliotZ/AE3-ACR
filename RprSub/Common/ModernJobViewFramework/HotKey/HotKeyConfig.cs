@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using AEAssist.CombatRoutine;
 using AEAssist.Helper;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable FieldCanBeMadeReadOnly.Global

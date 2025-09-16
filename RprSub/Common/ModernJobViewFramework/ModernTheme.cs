@@ -1,5 +1,5 @@
 using System.Numerics;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 namespace ElliotZ.ModernJobViewFramework;
 
@@ -285,7 +285,7 @@ public class ModernTheme {
   private void SaveOriginalStyle(ImGuiStylePtr style) {
     // 保存颜色
     _savedColors.Clear();
-    for (int i = 0; i < (int)ImGuiCol.COUNT; i++) _savedColors[(ImGuiCol)i] = style.Colors[i];
+    for (int i = 0; i < (int)ImGuiCol.Count; i++) _savedColors[(ImGuiCol)i] = style.Colors[i];
 
     // 保存圆角设置
     _savedWindowRounding = style.WindowRounding;

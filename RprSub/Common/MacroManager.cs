@@ -1,8 +1,8 @@
 ﻿using System.Numerics;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Helper;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Utility;
-using ImGuiNET;
 using JobViewWindow = ElliotZ.ModernJobViewFramework.JobViewWindow;
 
 namespace ElliotZ; // 改成你需要的Namespace，或者由IDE自动处理
@@ -75,33 +75,25 @@ public class MacroManager(JobViewWindow instance,
   /// <summary>
   /// 单个QT的添加，支持Action callback
   /// </summary>
-  /// <param name="name"></param>
-  /// <param name="en"></param>
-  /// <param name="defVal"></param>
-  /// <param name="tooltip"></param>
-  /// <param name="callback"></param>
+  /// <param name="item">包含QT信息的QtInfo类型</param>
   // ReSharper disable once MemberCanBePrivate.Global
-  public void AddQt(string name, 
-                    string en, 
-                    bool defVal, 
-                    string tooltip, 
-                    Action<bool>? callback = null) {
+  public void AddQt(QtInfo item) {
     if (handleAddingQT) {
-      if (callback is not null) {
-        instance.AddQt(name, defVal, callback);
+      if (item.Callback is not null) {
+        instance.AddQt(item.Name, item.DefVal, item.Callback);
       } else {
-        instance.AddQt(name, defVal);
+        instance.AddQt(item.Name, item.DefVal);
       }
-      instance.SetQtToolTip(tooltip);
+      instance.SetQtToolTip(item.Tooltip);
     }
 
-    _qtKeyDict.TryAdd(name, name);
-    string cncmd = cmdHandle + " " + name + "_qt";
+    _qtKeyDict.TryAdd(item.Name, item.Name);
+    string cncmd = cmdHandle + " " + item.Name + "_qt";
     string encmd = "";
 
-    if (!en.IsNullOrEmpty()) {
-      _qtKeyDict.TryAdd(en.ToLower(), name);
-      encmd = cmdHandle + " " + en.ToLower() + "_qt";
+    if (!item.EnName.IsNullOrEmpty()) {
+      _qtKeyDict.TryAdd(item.EnName.ToLower(), item.Name);
+      encmd = cmdHandle + " " + item.EnName.ToLower() + "_qt";
     }
 
     _cmdList.Add(new CommandInfo("QT", cncmd, encmd));
@@ -110,20 +102,18 @@ public class MacroManager(JobViewWindow instance,
   /// <summary>
   /// 单个Hotkey的添加
   /// </summary>
-  /// <param name="name"></param>
-  /// <param name="en"></param>
-  /// <param name="hkr"></param>
+  /// <param name="item">包含Hotkey信息的HotkeyInfo类型</param>
   // ReSharper disable once MemberCanBePrivate.Global
-  public void AddHotkey(string name, string en, IHotkeyResolver hkr) {
-    if (handleAddingQT) instance.AddHotkey(name, hkr);
+  public void AddHotkey(HotKeyInfo item) {
+    if (handleAddingQT) instance.AddHotkey(item.Name, item.Hkr);
 
-    _hotkeyDict.TryAdd(name, hkr);
-    string cncmd = cmdHandle + " " + name + "_hk";
+    _hotkeyDict.TryAdd(item.Name, item.Hkr);
+    string cncmd = cmdHandle + " " + item.Name + "_hk";
     string encmd = "";
 
-    if (!en.IsNullOrEmpty()) {
-      _hotkeyDict.TryAdd(en.ToLower(), hkr);
-      encmd = cmdHandle + " " + en.ToLower() + "_hk";
+    if (!item.EnName.IsNullOrEmpty()) {
+      _hotkeyDict.TryAdd(item.EnName.ToLower(), item.Hkr);
+      encmd = cmdHandle + " " + item.EnName.ToLower() + "_hk";
     }
 
     _cmdList.Add(new CommandInfo("Hotkey", cncmd, encmd));
@@ -213,12 +203,12 @@ public class MacroManager(JobViewWindow instance,
   public void BuildCommandList() {
     if (_cmdList.Count > 0) return; // protect against multiple calls
 
-    foreach (QtInfo v in qtKeys) {
-      AddQt(v.Name, v.EnName, v.DefVal, v.Tooltip, v.Callback);
+    foreach (QtInfo item in qtKeys) {
+      AddQt(item);
     }
 
-    foreach (HotKeyInfo v in hkResolvers) {
-      AddHotkey(v.Name, v.EnName, v.Hkr);
+    foreach (HotKeyInfo item in hkResolvers) {
+      AddHotkey(item);
     }
   }
 
@@ -237,7 +227,7 @@ public class MacroManager(JobViewWindow instance,
     ImGui.TextWrapped("通过 " + cmdHandle + " 使用快捷指令。"
                     + "结合游戏内宏使用可以方便手柄用户的操作。");
     ImGui.Separator();
-    ImGui.Columns(3, "CommandColumns", true);
+    ImGui.Columns(3, "CommandColumns");
     ImGui.SetColumnWidth(0, mainViewport.Size.X / 10f);
     ImGui.SetColumnWidth(1, mainViewport.Size.X / 5f);
     ImGui.SetColumnWidth(2, mainViewport.Size.X / 5f);
@@ -262,7 +252,7 @@ public class MacroManager(JobViewWindow instance,
       ImGui.NextColumn();
     }
 
-    ImGui.Columns(1);
+    ImGui.Columns();
     ImGui.Separator();
     if (ImGui.Button("关闭")) windowOpenSettings = false;
     ImGui.End();

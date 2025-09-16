@@ -5,7 +5,7 @@ using AEAssist.Define.HotKey;
 using AEAssist.GUI;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Keys = AEAssist.Define.HotKey.Keys;
 
 // ReSharper disable FieldCanBeMadeReadOnly.Local
@@ -234,7 +234,7 @@ public class HotkeyWindow(JobViewSave save, string name) : IDisposable {
 
       //排序        
       if (ImGui.IsItemActive() && !ImGui.IsItemHovered()) {
-        int nNext = i + (ImGui.GetMouseDragDelta(0).Y < 0f ? -1 : 1);
+        int nNext = i + (ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Y < 0f ? -1 : 1);
 
         if ((nNext < 0) || (nNext >= HotkeyNameList.Count)) {
           continue;

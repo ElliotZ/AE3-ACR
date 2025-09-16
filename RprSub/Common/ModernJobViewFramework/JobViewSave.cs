@@ -36,7 +36,7 @@ public class JobViewSave {
   public List<string> HotkeyNameList = [];
   ///hotkey按钮一行有几个
   public int HotkeyLineCount = 4;
-  public bool AutoReset = false;
+  //public bool AutoReset = false;
   public bool LockQtWindow = false;
   public bool LockHotkeyWindow = false;
   public bool ShowQt = true;
