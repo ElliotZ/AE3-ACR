@@ -20,4 +20,9 @@
         <PackageReference Include="AEAssist.NET" Version="*" ExcludeAssets="runtime"/>
     </ItemGroup>
 
+
+    <ItemGroup>
+      <None Remove="ElliotZ.csproj.DotSettings" />
+    </ItemGroup>
+
 </Project>

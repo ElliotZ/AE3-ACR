@@ -1,7 +1,7 @@
 ﻿using AEAssist.CombatRoutine.Trigger;
 using AEAssist.GUI;
-using ImGuiNET;
 using System.Numerics;
+using Dalamud.Bindings.ImGui;
 
 namespace EZACR_Offline.Gnb.Triggers;
 

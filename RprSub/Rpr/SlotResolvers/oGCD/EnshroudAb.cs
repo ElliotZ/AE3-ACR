@@ -5,7 +5,6 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using Dalamud.Game.ClientState.Objects.Types;
-using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 
 namespace ElliotZ.Rpr.SlotResolvers.oGCD;
@@ -21,7 +20,7 @@ public class EnshroudAb : ISlotResolver {
     if (Core.Me.HasAura(AurasDef.Enshrouded) is false) return -3; // -3 for Unmet Prereq Conditions
 
     if (_target is null
-     && (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange)) {
+     && (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlobalSettings.AttackRange)) {
       return -2; // -2 for not in range
     }
 

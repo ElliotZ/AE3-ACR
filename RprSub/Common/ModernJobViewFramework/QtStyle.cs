@@ -1,13 +1,13 @@
 using System.Numerics;
 using AEAssist.CombatRoutine;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 // ReSharper disable MemberCanBeMadeStatic.Global
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable ConvertToConstant.Global
 
-namespace ElliotZ.Common.ModernJobViewFramework;
+namespace ElliotZ.ModernJobViewFramework;
 
 public class QtStyle {
   // 保存对JobViewSave的引用

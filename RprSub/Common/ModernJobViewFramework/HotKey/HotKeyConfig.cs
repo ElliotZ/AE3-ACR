@@ -1,12 +1,12 @@
 ﻿using System.Numerics;
 using AEAssist.CombatRoutine;
 using AEAssist.Helper;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 
-namespace ElliotZ.Common.ModernJobViewFramework.HotKey;
+namespace ElliotZ.ModernJobViewFramework.HotKey;
 
 public static class HotKeyConfig {
   //public static Dictionary<string, uint> SpellList = HotKeySpellConfig.List;

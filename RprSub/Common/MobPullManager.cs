@@ -1,16 +1,16 @@
-﻿using AEAssist;
+﻿using System.Numerics;
+using AEAssist;
 using AEAssist.CombatRoutine.Module.Target;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Utility;
-using ElliotZ.Common.ModernJobViewFramework;
-using System.Numerics;
+using ElliotZ.ModernJobViewFramework;
 
 // ReSharper disable UnusedMember.Global
 
-namespace ElliotZ.Common;
+namespace ElliotZ;
 
 public class MobPullManager(JobViewWindow qtInstance, string holdQT = "") {
   private IBattleChara? _currTank;

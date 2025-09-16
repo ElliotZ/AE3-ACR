@@ -1,14 +1,14 @@
 using System.Diagnostics;
+using System.Numerics;
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View;
-using AEAssist.Helper;
-using Dalamud.Interface.Utility.Raii;
-using ImGuiNET;
-using System.Numerics;
 using AEAssist.CombatRoutine.View.JobView;
-using HotkeyWindow = ElliotZ.Common.ModernJobViewFramework.HotKey.HotkeyWindow;
+using AEAssist.Helper;
+using Dalamud.Bindings.ImGui;
+using Dalamud.Interface.Utility.Raii;
+using HotkeyWindow = ElliotZ.ModernJobViewFramework.HotKey.HotkeyWindow;
 
 // ReSharper disable FieldCanBeMadeReadOnly.Local
 // ReSharper disable MemberCanBePrivate.Global
@@ -16,7 +16,7 @@ using HotkeyWindow = ElliotZ.Common.ModernJobViewFramework.HotKey.HotkeyWindow;
 // ReSharper disable UnusedMember.Global
 #pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
 
-namespace ElliotZ.Common.ModernJobViewFramework;
+namespace ElliotZ.ModernJobViewFramework;
 
 public class JobViewWindow : IRotationUI, IDisposable {
   private bool _disposed;
@@ -32,6 +32,7 @@ public class JobViewWindow : IRotationUI, IDisposable {
 
   public Dictionary<string, Action<JobViewWindow>> ExternalTab = new();
   public Action? UpdateAction;
+  public AcrModeTypes AcrMode = AcrModeTypes.Casual;
 
   /// <summary>
   /// 在当前职业循环插件中创建一个gui视图
@@ -155,11 +156,10 @@ public class JobViewWindow : IRotationUI, IDisposable {
   public bool ReverseQt(string qtName) {
     return _qtWindow.ReverseQt(qtName);
   }
-
-  /// 重置所有qt为默认值
-  public void Reset() {
-    _qtWindow.Reset();
-  }
+  
+//  public void Reset() {
+//    _qtWindow.Reset();
+//  }
 
   /// 给指定qt设置新的默认值
   public void NewDefault(string qtName, bool newDefault) {
@@ -397,10 +397,13 @@ public class JobViewWindow : IRotationUI, IDisposable {
         }";
       }
 
+      string acrModeCN = AcrMode is AcrModeTypes.HardCore ? "高难" : "日随";
       string title = $"{
         GlobalSetting.Title
       } | {
         AI.Instance.BattleData.CurrBattleTimeInSec
+      } | { 
+        acrModeCN 
       } {
         triggerlineName
       } ###aeassist";

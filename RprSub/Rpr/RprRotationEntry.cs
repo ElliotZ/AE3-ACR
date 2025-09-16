@@ -1,8 +1,8 @@
 ﻿using AEAssist.CombatRoutine;
-using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 using ElliotZ.Rpr.SlotResolvers.FixedSeq;
 using ElliotZ.Rpr.Triggers;
+// ReSharper disable ClassNeverInstantiated.Global
 
 namespace ElliotZ.Rpr;
 
@@ -51,6 +51,19 @@ public class RprRotationEntry : IRotationEntry {
   public void OnDrawSetting() { }
 
   public void Dispose() {
-    Qt.Instance.Dispose();
+    Dispose(true);
+    GC.SuppressFinalize(this);
+  }
+  
+  protected virtual void Dispose(bool disposing) {
+    if (_disposed) {
+      return;
+    }
+
+    if (disposing) {
+      Qt.Instance.Dispose();
+    }
+    
+    _disposed = true;
   }
 }

@@ -4,7 +4,6 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
-using ElliotZ.Common;
 using System.Numerics;
 
 namespace ElliotZ.Rpr.QtUI.Hotkey;
@@ -17,7 +16,7 @@ public class EgressHK(int hkType, // 1 - use current direction, 2 - face target,
                      waitForCD) {
   public override void Draw(Vector2 size) {
     if (Core.Me.HasAura(AurasDef.RegressReady)) {
-      HotkeyHelper.DrawSpellImage(size, Helper.GetActionChange(_spellId));
+      HotkeyHelper.DrawSpellImage(size, _spellId.AdaptiveId());
     } else {
       switch (hkType) {
         case IngressHK.FaceTarget:

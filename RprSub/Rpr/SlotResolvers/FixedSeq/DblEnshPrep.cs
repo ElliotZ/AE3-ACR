@@ -5,7 +5,6 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
-using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 
 // ReSharper disable RedundantBoolCompare
@@ -14,7 +13,7 @@ namespace ElliotZ.Rpr.SlotResolvers.FixedSeq;
 
 public class DblEnshPrep : ISlotSequence {
   //private static bool needShadow(int t) => Helper.TgtAuraTimerLessThan(AurasDef.DeathsDesign, t, false);
-  public static double PreAcEnshTimer => GCDHelper.GetGCDDuration() * 2.5 + 800;
+  public static double PreAcEnshTimer => GCDHelper.GetGCDDuration() * 1.5 + 800;
 
   public int StartCheck() {
     if (Core.Me.Level < 88) return -99;
@@ -34,7 +33,7 @@ public class DblEnshPrep : ISlotSequence {
       return -97;
     }
 
-    if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange) {
+    if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlobalSettings.AttackRange) {
       return -2; // -2 for not in range
     }
 
@@ -59,7 +58,7 @@ public class DblEnshPrep : ISlotSequence {
 
   private static void Step0(Slot slot) {
     slot.Add(SpellsDef.Enshroud.GetSpell());
-    slot.Add(GCD.BuffMaintain.Solve().GetSpell());
+    //slot.Add(GCD.BuffMaintain.Solve().GetSpell());
   }
 
   private static void Step1(Slot slot) {
@@ -67,14 +66,14 @@ public class DblEnshPrep : ISlotSequence {
   }
 
   private static void Step2(Slot slot) {
-    if (Helper.TgtAuraTimerMoreThan(AurasDef.DeathsDesign, 30000)
-     && SpellsDef.HarvestMoon.GetSpell().IsReadyWithCanCast()
-     && Qt.Instance.GetQt("收获月")) {
-      slot.Add(SpellsDef.HarvestMoon.GetSpell());
-    } else {
-      slot.Add(GCD.BuffMaintain.Solve().GetSpell());
-    }
-
+//    if (Helper.TgtAuraTimerMoreThan(AurasDef.DeathsDesign, 30000)
+//     && SpellsDef.HarvestMoon.GetSpell().IsReadyWithCanCast()
+//     && Qt.Instance.GetQt("收获月")) {
+//      slot.Add(SpellsDef.HarvestMoon.GetSpell());
+//    } else {
+//      slot.Add(GCD.BuffMaintain.Solve().GetSpell());
+//    }
+    slot.Add(GCD.BuffMaintain.Solve().GetSpell());
     if (Qt.Instance.GetQt("爆发药") && ItemHelper.CheckCurrJobPotion()) {
       if (BattleData.Instance.NumBurstPhases == 0) {
         slot.Add(Spell.CreatePotion());

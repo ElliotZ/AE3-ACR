@@ -2,7 +2,7 @@
 using FFXIVClientStructs.FFXIV.Common.Math;
 using CSFramework = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework;
 
-namespace ElliotZ.Common;
+namespace ElliotZ;
 
 public static class CameraHelper {
   private static unsafe RaptureAtkModule* _raptureAtkModule =>

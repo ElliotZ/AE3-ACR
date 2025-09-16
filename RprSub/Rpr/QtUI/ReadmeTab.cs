@@ -1,8 +1,8 @@
 ﻿using System.Numerics;
 using AEAssist.GUI;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Colors;
-using ElliotZ.Common.ModernJobViewFramework;
-using ImGuiNET;
+using ElliotZ.ModernJobViewFramework;
 
 namespace ElliotZ.Rpr.QtUI;
 
@@ -50,6 +50,9 @@ public static class ReadmeTab {
                              ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 0f, 0f, 1f)));
         ImGui.Text("播魂种和收获月的Hotkey不要一直猛点，否则后果自负，You have been warned.");
         ImGui.PopStyleColor();
+        ImGui.Indent();
+        ImGui.Text("倾泻收获月建议是用倾泻资源QT，就不会电。");
+        ImGui.Unindent();
         ImGui.Bullet();
         ImGui.SameLine();
         ImGui.Text("因为镰刀的读条还挺多的，推荐安装OrbWalker。");

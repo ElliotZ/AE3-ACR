@@ -1,13 +1,12 @@
-﻿using AEAssist.CombatRoutine.View.JobView;
-using AEAssist.GUI;
+﻿using AEAssist.GUI;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Colors;
-using ImGuiNET;
-using JobViewWindow = ElliotZ.Common.ModernJobViewFramework.JobViewWindow;
+using JobViewWindow = ElliotZ.ModernJobViewFramework.JobViewWindow;
 
 namespace EZACR_Offline.Gnb.QtUI;
 
 public static class ReadmeTab {
-  private static readonly InfoBox Box = new() {
+  private static readonly InfoBox _box = new() {
       AutoResize = true,
       BorderColor = ImGuiColors.ParsedGold,
       ContentsAction = () => {
@@ -66,7 +65,7 @@ public static class ReadmeTab {
                       ImGui.Dummy(new System.Numerics.Vector2(0, 1));
                       ImGui.Dummy(new System.Numerics.Vector2(5, 0));
                       ImGui.SameLine();
-                      Box.DrawStretched();
+                      _box.DrawStretched();
                     });
   }
 }

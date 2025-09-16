@@ -6,27 +6,29 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
-using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 using Task = System.Threading.Tasks.Task;
 
 namespace ElliotZ.Rpr;
 
 public class EventHandler : IRotationEventHandler {
-  public void OnResetBattle() {
+  public void OnResetBattle() {  // When entering or leaving combat
     BattleData.Instance = new BattleData();
+    MeleePosHelper.Clear();
+    BattleData.ReBuildSettings();
 
-    // initialize pull record
+    // When entering combat
     if (AI.Instance.BattleData.CurrBattleTimeInMs >= 0) {
       if (RprSettings.Instance.PullingNoBurst) Qt.MobMan.Reset();
-      //MeleePosHelper.Clear();
+    } else {  // When leaving Combat, load area, countdown, and reload dll
       if (RprSettings.Instance.RestoreQtSet) Qt.LoadQtStatesNoPot();
+
+      if (AI.Instance.TriggerlineData.CurrTriggerLine is not null) {
+        RprHelper.HardCoreMode();
+      } else if (RprSettings.Instance.AutoSetCasual) {
+        RprHelper.CasualMode();
+      }
     }
-
-    //BattleData.Instance.IsPulling = false;
-    MeleePosHelper.Clear();
-
-    BattleData.ReBuildSettings();
   }
 
   public async Task OnNoTarget() {
@@ -90,8 +92,8 @@ public class EventHandler : IRotationEventHandler {
     bool inTN = Core.Me.HasAura(AurasDef.TrueNorth) && RprSettings.Instance.NoPosDrawInTN;
     bool gibGallowsReady = Core.Me.HasAura(AurasDef.SoulReaver)
                         || Core.Me.HasAura(AurasDef.Executioner);
-    bool gibGallowsJustUsed = Helper.GetActionChange(SpellsDef.Gibbet).RecentlyUsed(500)
-                           || Helper.GetActionChange(SpellsDef.Gallows).RecentlyUsed(500);
+    bool gibGallowsJustUsed = SpellsDef.Gibbet.AdaptiveId().RecentlyUsed(500)
+                           || SpellsDef.Gallows.AdaptiveId().RecentlyUsed(500);
     int staticPosProg = RprSettings.Instance.PosDrawStyle switch {
         0 => 1,
         1 => 70,
@@ -130,11 +132,13 @@ public class EventHandler : IRotationEventHandler {
 
   public void OnEnterRotation() //切换到当前ACR
   {
-    Helper.SendTips("欢迎使用EZRpr，使用前请把左上角悬浮窗拉大查看README。");
-    LogHelper.Print("欢迎使用EZRpr，如有问题和反馈可以在DC找我。");
+    Helper.SendTips("欢迎使用EZRpr，使用前请把左上角悬浮窗拉大查看README。\n"
+                  + "如果是在7.3更新后第一次更新本ACR，建议删除原有设置文件重新保存。");
+    LogHelper.Print("欢迎使用EZRpr，如有问题和反馈可以在DC找我。"
+                  + "如果是在7.3更新后第一次更新本ACR，建议删除原有设置文件重新保存。");
 
     //检查全局设置
-    if (Helper.GlblSettings.NoClipGCD3) {
+    if (Helper.GlobalSettings.NoClipGCD3) {
       LogHelper.PrintError("建议在acr全局设置中取消勾选【全局能力技不卡GCD】选项");
     }
 
@@ -146,7 +150,5 @@ public class EventHandler : IRotationEventHandler {
     Qt.MacroMan.Exit();
   }
 
-  public void OnTerritoryChanged() {
-    if (RprSettings.Instance.RestoreQtSet) Qt.LoadQtStatesNoPot();
-  }
+  public void OnTerritoryChanged() { }
 }

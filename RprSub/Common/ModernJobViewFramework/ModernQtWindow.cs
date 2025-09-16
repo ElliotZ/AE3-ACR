@@ -1,8 +1,8 @@
 using System.Numerics;
 using AEAssist.Helper;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
-namespace ElliotZ.Common.ModernJobViewFramework;
+namespace ElliotZ.ModernJobViewFramework;
 
 /// <summary>
 /// 现代化Qt窗口组件

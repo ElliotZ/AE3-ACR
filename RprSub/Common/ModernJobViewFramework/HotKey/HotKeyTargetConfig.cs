@@ -2,7 +2,7 @@
 
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 
-namespace ElliotZ.Common.ModernJobViewFramework.HotKey;
+namespace ElliotZ.ModernJobViewFramework.HotKey;
 
 public static class HotKeyTargetConfig {
   public static readonly Dictionary<int, HotKeyTarget> List = new() {

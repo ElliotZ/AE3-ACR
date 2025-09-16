@@ -1,6 +1,6 @@
 ﻿using EZACR_Offline.Gnb.QtUI;
-using ImGuiNET;
 using System.Numerics;
+using Dalamud.Bindings.ImGui;
 
 namespace EZACR_Offline.Gnb.Triggers;
 

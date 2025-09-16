@@ -2,15 +2,11 @@
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 
 namespace ElliotZ.Rpr.SlotResolvers.oGCD;
 
 public class TrueNorth : ISlotResolver {
-  //private static uint currGibbet => Helper.GetActionChange(SpellsDef.Gibbet);
-  //private static uint currGallows => Helper.GetActionChange(SpellsDef.Gallows);
-
   public int Check() {
     if (SpellsDef.TrueNorth.GetSpell().IsReadyWithCanCast() is false) {
       return -99;

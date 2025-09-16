@@ -6,7 +6,7 @@ using Keys = AEAssist.Define.HotKey.Keys;
 // ReSharper disable UnusedMember.Global
 #pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
 
-namespace ElliotZ.Common.ModernJobViewFramework;
+namespace ElliotZ.ModernJobViewFramework;
 
 public class HotkeyConfig {
   public string Name;
@@ -36,7 +36,7 @@ public class JobViewSave {
   public List<string> HotkeyNameList = [];
   ///hotkey按钮一行有几个
   public int HotkeyLineCount = 4;
-  public bool AutoReset = false;
+  //public bool AutoReset = false;
   public bool LockQtWindow = false;
   public bool LockHotkeyWindow = false;
   public bool ShowQt = true;

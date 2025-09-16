@@ -2,7 +2,7 @@
 using AEAssist.Extension;
 using AEAssist.Helper;
 
-namespace ElliotZ.Common.Hotkey;
+namespace ElliotZ.Hotkey;
 
 public class SelectSelf() : HotKeyResolver(7385u,
                                            useHighPrioritySlot: false,

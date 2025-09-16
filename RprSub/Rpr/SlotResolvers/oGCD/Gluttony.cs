@@ -4,7 +4,6 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using Dalamud.Game.ClientState.Objects.Types;
-using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 
 namespace ElliotZ.Rpr.SlotResolvers.oGCD;
@@ -26,7 +25,7 @@ public class Gluttony : ISlotResolver {
 
     if (Qt.Instance.GetQt("暴食") is false) return -98;
 
-    if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange) {
+    if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlobalSettings.AttackRange) {
       return -2; // -2 for not in range
     }
 

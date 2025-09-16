@@ -5,7 +5,6 @@ using AEAssist.CombatRoutine.Module.Opener;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
-using ElliotZ.Common;
 using ElliotZ.Rpr.QtUI;
 
 // ReSharper disable RedundantBoolCompare
@@ -21,7 +20,7 @@ public class Opener100 : IOpener {
     if (SpellsDef.SoulSlice.IsMaxChargeReady(0.0f) is false) return -99;
     if (SpellsDef.ArcaneCircle.GetSpell().IsReadyWithCanCast() is false) return -99;
 
-    if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlblSettings.AttackRange) {
+    if (Core.Me.Distance(Core.Me.GetCurrTarget()) > Helper.GlobalSettings.AttackRange) {
       return -2; // -2 for not in range
     }
 
@@ -65,7 +64,7 @@ public class Opener100 : IOpener {
   private static bool PrepullIngressCheck() {
     if (Core.Me.GetCurrTarget() is null) return false;
     float targetRing = Core.Me.GetCurrTarget().HitboxRadius * 2;
-    int atkRange = Helper.GlblSettings.AttackRange;
+    int atkRange = Helper.GlobalSettings.AttackRange;
 
     return SpellsDef.HellsIngress.GetSpell().IsReadyWithCanCast() 
         //&& Core.Me.GetCurrTarget().Distance(Core.Me) < 15 + targetRing + atkRange 
@@ -88,7 +87,7 @@ public class Opener100 : IOpener {
 
     if (Qt.Instance.GetQt("爆发药")
      && ItemHelper.CheckCurrJobPotion()
-     && !Qt.Instance.GetQt("爆发药2分")
+     && Qt.Instance.GetQt("起手药")
      && !RprSettings.Instance.TripleWeavePot) {
       slot.Add(new SlotAction(SlotAction.WaitType.WaitInMs,
                               GCDHelper.GetGCDDuration() - RprSettings.Instance.AnimLock * 2,
@@ -102,7 +101,7 @@ public class Opener100 : IOpener {
     if (RprSettings.Instance.TripleWeavePot
      && Qt.Instance.GetQt("爆发药")
      && ItemHelper.CheckCurrJobPotion()
-     && !Qt.Instance.GetQt("爆发药2分")) {
+     && Qt.Instance.GetQt("起手药")) {
       slot.Add(new SlotAction(SlotAction.WaitType.None,
                               0,
                               //GCDHelper.GetGCDDuration() - RprSettings.Instance.AnimLock * 4,
@@ -117,8 +116,6 @@ public class Opener100 : IOpener {
       slot.Add(new SlotAction(SlotAction.WaitType.WaitInMs,
                               700 - RprSettings.Instance.AnimLock,
                               SpellsDef.Gluttony.GetSpell()));
-      //slot.Add(SpellsDef.Gluttony.GetSpell());
-      //LogHelper.Error("why does this not work");
     }
   }
 

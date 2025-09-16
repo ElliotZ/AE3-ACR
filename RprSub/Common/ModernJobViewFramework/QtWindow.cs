@@ -3,14 +3,14 @@ using AEAssist;
 using AEAssist.GUI;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Keys = AEAssist.Define.HotKey.Keys;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 // ReSharper disable FieldCanBeMadeReadOnly.Local
 
-namespace ElliotZ.Common.ModernJobViewFramework;
+namespace ElliotZ.ModernJobViewFramework;
 
 /// Qt窗口类
 public class QtWindow : IDisposable {
@@ -186,18 +186,17 @@ public class QtWindow : IDisposable {
     value.QtValue = !value.QtValue;
     return true;
   }
-
-  /// 重置所有qt为默认值
-  public void Reset() {
-    if (!Save.AutoReset) {
-      return;
-    }
-
-    foreach (QtControl qt in _qtDict.Select(qt => qt.Value)) {
-      qt.Reset();
-      LogHelper.Info("重置所有qt为默认值");
-    }
-  }
+  
+//  public void Reset() {
+//    if (!Save.AutoReset) {
+//      return;
+//    }
+//
+//    foreach (QtControl qt in _qtDict.Select(qt => qt.Value)) {
+//      qt.Reset();
+//      LogHelper.Info("重置所有qt为默认值");
+//    }
+//  }
 
   /// 给指定qt设置新的默认值
   public void NewDefault(string qtName, bool newDefault) {
@@ -260,7 +259,7 @@ public class QtWindow : IDisposable {
 
       //排序        
       if (ImGui.IsItemActive() && !ImGui.IsItemHovered()) {
-        int nNext = i + (ImGui.GetMouseDragDelta(0).Y < 0f ? -1 : 1);
+        int nNext = i + (ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Y < 0f ? -1 : 1);
 
         if ((nNext < 0) || (nNext >= QtNameList.Count)) {
           continue;

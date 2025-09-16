@@ -10,8 +10,8 @@
       },
       "AEAssist.NET": {
         "type": "Transitive",
-        "resolved": "1.1.8",
-        "contentHash": "oGDsPwnXtH2DNWlZSVIMVIG1c9IrRADUf2EQ3eg/wSkMgt5SffMDMD7X4+njQmLTN/BuKfW3N6SvNwd/rVOiwg=="
+        "resolved": "1.1.12",
+        "contentHash": "1mDjTGlcJEVDme2GPx0XIGCIEeP/uoYRMVNrH4WCVohNPfwuWNj580wEUkUsJn0brU4hYRK1J8xjCneuJQtrnw=="
       },
       "elliotz": {
         "type": "Project",
