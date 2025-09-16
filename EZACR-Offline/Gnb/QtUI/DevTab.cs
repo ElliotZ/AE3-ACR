@@ -2,8 +2,8 @@
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
-using ImGuiNET;
 using System.Numerics;
+using Dalamud.Bindings.ImGui;
 using JobViewWindow = ElliotZ.ModernJobViewFramework.JobViewWindow;
 
 namespace EZACR_Offline.Gnb.QtUI;

@@ -132,8 +132,10 @@ public class EventHandler : IRotationEventHandler {
 
   public void OnEnterRotation() //切换到当前ACR
   {
-    Helper.SendTips("欢迎使用EZRpr，使用前请把左上角悬浮窗拉大查看README。");
-    LogHelper.Print("欢迎使用EZRpr，如有问题和反馈可以在DC找我。");
+    Helper.SendTips("欢迎使用EZRpr，使用前请把左上角悬浮窗拉大查看README。\n"
+                  + "如果是在7.3更新后第一次更新本ACR，建议删除原有设置文件重新保存。");
+    LogHelper.Print("欢迎使用EZRpr，如有问题和反馈可以在DC找我。"
+                  + "如果是在7.3更新后第一次更新本ACR，建议删除原有设置文件重新保存。");
 
     //检查全局设置
     if (Helper.GlobalSettings.NoClipGCD3) {

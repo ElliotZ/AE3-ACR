@@ -1,5 +1,5 @@
 ﻿using AEAssist.CombatRoutine.Trigger;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 namespace EZACR_Offline.Gnb.Triggers;
 

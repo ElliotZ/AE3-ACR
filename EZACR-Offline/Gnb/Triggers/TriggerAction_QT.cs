@@ -1,7 +1,7 @@
 ﻿using AEAssist.CombatRoutine.Trigger;
 using AEAssist.GUI;
+using Dalamud.Bindings.ImGui;
 using EZACR_Offline.Gnb.QtUI;
-using ImGuiNET;
 
 namespace EZACR_Offline.Gnb.Triggers;
 

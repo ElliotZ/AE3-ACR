@@ -1,7 +1,6 @@
-﻿using AEAssist.CombatRoutine.View.JobView;
-using AEAssist.GUI;
+﻿using AEAssist.GUI;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Colors;
-using ImGuiNET;
 using JobViewWindow = ElliotZ.ModernJobViewFramework.JobViewWindow;
 
 namespace EZACR_Offline.Gnb.QtUI;

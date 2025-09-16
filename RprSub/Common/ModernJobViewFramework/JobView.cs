@@ -397,12 +397,13 @@ public class JobViewWindow : IRotationUI, IDisposable {
         }";
       }
 
+      string acrModeCN = AcrMode is AcrModeTypes.HardCore ? "高难" : "日随";
       string title = $"{
         GlobalSetting.Title
       } | {
         AI.Instance.BattleData.CurrBattleTimeInSec
       } | { 
-        AcrMode 
+        acrModeCN 
       } {
         triggerlineName
       } ###aeassist";
