@@ -1,9 +1,6 @@
 ﻿using System.Runtime.InteropServices;
-using AEAssist.Helper;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
-using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Common.Math;
-using CSFramework = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework;
 
 namespace ElliotZ;
 
@@ -25,7 +22,7 @@ public static class CameraHelper {
 //    }
 //  }
 
-  internal static unsafe float GetCameraRotation() {
+  public static unsafe float GetCameraRotation() {
     float cameraRotation = ((CameraEx*)CameraManager.Instance() -> GetActiveCamera()) -> DirH;
     int sign = Math.Sign(cameraRotation) == -1 ? -1 : 1;
     return (float)(Math.Abs(cameraRotation) - Math.PI) * sign;
