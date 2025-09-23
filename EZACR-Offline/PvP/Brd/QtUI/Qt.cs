@@ -1,5 +1,6 @@
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
+using Dalamud.Bindings.ImGui;
 using ElliotZ;
 using ElliotZ.ModernJobViewFramework;
 
@@ -7,7 +8,6 @@ namespace EZACR_Offline.PvP.Brd.QtUI;
 
 public static class Qt {
   public static JobViewWindow Instance { get; private set; }
-  private static readonly PvPBrdOverlay _lazyOverlay = new();
   public static MacroManager MacroMan;
 
   private static readonly List<QtInfo> _qtKeys = [
@@ -27,8 +27,8 @@ public static class Qt {
       new("疾跑", "", new HotKeyResolver_NormalSpell(29057U, SpellTargetType.Self)),
       new("龟壳", "", new HotKeyResolver_NormalSpell(29054U, SpellTargetType.Self)),
       new("热水", "", new HotKeyResolver_NormalSpell(29711U, SpellTargetType.Self)),
-      new("LB", "", new HotkeyData.诗人LB()),
-      new("后跳", "", new HotkeyData.后射()),
+      new("LB", "", new HotkeyBardLB()),
+      new("后射", "", new HotKeyRepellingShot()),
   ];
 
   public static void Build() {
@@ -44,14 +44,24 @@ public static class Qt {
                                 true);
     MacroMan.BuildCommandList();
 
-    Instance.AddTab("职业配置", _lazyOverlay.DrawGeneral);
-    Instance.AddTab("监控", PVPHelper.监控);
-    Instance.AddTab("共通配置", PVPHelper.配置);
+    Instance.AddTab("职业配置", PvPBrdOverlay.DrawGeneral);
+    Instance.AddTab("监控", CommonUI.BuildMonitorWindow);
+    Instance.AddTab("共通配置", CommonUI.BuildCommonSettings);
+    Instance.AddTab("Dev", DevTab);
   }
 
   private static void OnUIUpdate() {
     if (PvPBrdSettings.Instance.CommandWindowOpen) {
       MacroMan.DrawCommandWindow(ref PvPBrdSettings.Instance.CommandWindowOpen);
     }
+
+    if (PvPSettings.Instance.监控) {
+      CommonUI.MonitorWindow(ref PvPSettings.Instance.监控);
+    }
+  }
+
+  private static void DevTab(JobViewWindow instance) {
+    ImGui.Text(BattleData.Instance.ToString());
+    //CommonUI.BuildPvPDebug(instance);
   }
 }

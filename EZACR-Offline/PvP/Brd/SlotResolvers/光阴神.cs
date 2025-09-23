@@ -9,12 +9,10 @@ using EZACR_Offline.PvP.Brd.QtUI;
 namespace EZACR_Offline.PvP.Brd.SlotResolvers;
 
 public class 光阴神 : ISlotResolver {
-  public SlotMode SlotMode { get; } = SlotMode.Always;
-
   public int Check() {
     bool 光阴队友 = PvPBrdSettings.Instance.光阴队友;
     if (!Qt.Instance.GetQt("光阴神")) return -3;
-    if (!PVPHelper.CanActive()) return -1;
+    if (!PvPHelper.CanActive()) return -1;
     if (!29400U.GetSpell().IsReadyWithCanCast()) return -2;
 
     if (光阴队友) {

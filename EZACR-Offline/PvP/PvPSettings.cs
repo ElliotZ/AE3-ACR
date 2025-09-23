@@ -18,7 +18,7 @@ public class PvPSettings {
   public int 长臂猿 = 0;
   public int 坐骑cd = 5;
   public bool 无目标坐骑 = true;
-  public int 无目标坐骑范围 = 50;
+  public int 无目标坐骑范围 = 30;
   public int 冲刺 = 5;
   public int Volume = 100;
   public int 语音cd = 1;

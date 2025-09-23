@@ -28,6 +28,18 @@ public static class CameraHelper {
     return (float)(Math.Abs(cameraRotation) - Math.PI) * sign;
   }
   
+  public static float GetCameraRotationReversed() {
+    float result = GetCameraRotation() + (float)Math.PI;
+
+    if (result > Math.PI) {
+      result -= (float)(2 * Math.PI);
+    } else if (result < -1.0 * Math.PI) {
+      result += (float)(2 * Math.PI);
+    }
+
+    return result;
+  }
+  
   internal static unsafe CameraEx GetCameraExData() {
     CameraEx cameraStats = *(CameraEx*)CameraManager.Instance() -> GetActiveCamera();
     return cameraStats;
@@ -85,7 +97,13 @@ public static class CameraHelper {
     float dx = (float)(Math.Sin(facingRadians) * distance);
     float dz = (float)(Math.Cos(facingRadians) * distance);
 
-    return new Vector3(position.X + dx, position.Y, position.Z + dz);
+    return new Vector3(position.X + dx, position.Y + 5f, position.Z + dz);
+  }
+  
+  public static Vector3 向量位移反向(Vector3 position, float facingRadians, float distance) {
+    float dx = (float)(Math.Sin(facingRadians) * -(double)distance);
+    float dz = (float)(Math.Cos(facingRadians) * -(double)distance);
+    return new Vector3(position.X + dx, position.Y + 5f, position.Z + dz);
   }
 }
 

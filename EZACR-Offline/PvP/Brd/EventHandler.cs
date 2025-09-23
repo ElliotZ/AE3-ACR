@@ -1,6 +1,9 @@
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
+using AEAssist.Extension;
+using Dalamud.Game.ClientState.Objects.Types;
+using EZACR_Offline.PvP.Brd.QtUI;
 
 namespace EZACR_Offline.PvP.Brd;
 
@@ -40,16 +43,21 @@ public class EventHandler : IRotationEventHandler {
   }
 
   public void OnBattleUpdate(int currTime) {
-    PVPHelper.战斗状态();
+    PvPHelper.CommonBattleUpdate(currTime, BattleData.Instance);
     PvPTargetHelper.自动选中();
   }
 
   public void OnEnterRotation() {
-    PVPHelper.进入ACR();
+    PvPHelper.AcrInit();
+    Qt.MacroMan.Init();
     Share.Pull = true;
+    
+    //force mappy
+    
   }
 
   public void OnExitRotation() {
+    Qt.MacroMan.Exit();
     Share.Pull = false;
   }
 }

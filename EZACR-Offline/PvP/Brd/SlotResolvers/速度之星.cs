@@ -11,8 +11,6 @@ public class 速度之星 : ISlotResolver {
   public uint 速度之星u = 43249;
   public uint 速度之星buff = 4489;
 
-  public SlotMode SlotMode { get; } = SlotMode.Always;
-
   public int Check() {
     if (!Qt.Instance.GetQt("职能技能")) {
       return -9;
@@ -22,11 +20,11 @@ public class 速度之星 : ISlotResolver {
       return -2;
     }
 
-    if (!PVPHelper.CanActive() || !速度之星u.GetSpell().IsReadyWithCanCast()) {
+    if (!PvPHelper.CanActive() || !速度之星u.GetSpell().IsReadyWithCanCast()) {
       return -1;
     }
 
-    return PVPHelper.Check坐骑() ? -5 : 0;
+    return MountHandler.IsMounted() ? -5 : 0;
   }
 
   public void Build(Slot slot) {
