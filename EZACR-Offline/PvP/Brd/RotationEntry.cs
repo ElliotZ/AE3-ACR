@@ -16,7 +16,7 @@ public class RotationEntry : IRotationEntry {
       new SlotResolverData(new 光阴神(), SlotMode.Always),
       new SlotResolverData(new 速度之星(), SlotMode.Always),
       new SlotResolverData(new 勇气(), SlotMode.Always),
-      new SlotResolverData(new 九天连箭(), SlotMode.Always),
+      new SlotResolverData(new 和弦箭(), SlotMode.Always),
       new SlotResolverData(new 英雄的返场余音(), SlotMode.Always),
       new SlotResolverData(new 默者的夜曲(), SlotMode.Always),
       new SlotResolverData(new 爆破箭(), SlotMode.Always),

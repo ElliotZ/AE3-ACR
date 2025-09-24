@@ -20,6 +20,7 @@ public static class Qt {
       new("喝热水", "", true, null, ""),
       new("职能技能", "", true, null, ""),
       new("自动净化", "", true, null, ""),
+      new("龟壳", "", true, null, ""),
       new("冲刺", "", true, null, ""),
   ];
 

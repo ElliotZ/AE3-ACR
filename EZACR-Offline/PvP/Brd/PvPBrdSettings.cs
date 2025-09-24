@@ -13,6 +13,9 @@ public class PvPBrdSettings {
   public bool 光阴队友 = true;
   public int 光阴对象 = 0;
   public string 优先对象 = "梅友仁";
+  public float TargetingHpThreshold = 0.5f;
+  public int TargetingDistance = 25;
+  
   public bool CommandWindowOpen = true;
   public JobViewSave JobViewSave = new() {
       CurrentTheme = ModernTheme.ThemePreset.森林绿,

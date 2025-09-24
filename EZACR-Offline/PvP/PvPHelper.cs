@@ -53,11 +53,11 @@ public static class PvPHelper {
   public static bool CanDispelMe() => Core.Me.HasCanDispel();
 
   public static Spell SpellNoWaitAcq(uint id, IBattleChara target) {
-    return new Spell(id, target) { WaitServerAcq = false };
+    return new Spell(id, target) { WaitServerAcq = false, DontUseGcdOpt = true};
   }
 
   public static Spell SpellWaitAcq(uint id, IBattleChara target) {
-    return new Spell(id, target) { WaitServerAcq = true };
+    return new Spell(id, target) { WaitServerAcq = true, DontUseGcdOpt = true};
   }
 
   public static bool 通用码权限 =>
@@ -96,25 +96,26 @@ public static class PvPHelper {
   }
 
   public static Spell? CommonSkillCheck(uint skillid, int distance) {
+    IBattleChara? target =
+        PvPTargetHelper.TargetSelector.GetSkillTargetSmart(distance + PvPSettings.Instance.长臂猿,
+                                                           skillid);
+    IBattleChara? nearTarget = PvPTargetHelper.TargetSelector.GetNearestTarget();
+    
     switch (skillid) {
       case 29402U or 29403U or 29408U or 29406U or 29407U or 29404U
           when PvPTargetHelper.TargetSelector.GetWildFireTargetSmart() != null:
         return SpellWaitAcq(skillid, PvPTargetHelper.TargetSelector.GetWildFireTargetSmart()!);
 
-      case 29405U when PvPSettings.Instance.技能自动选中: {
+      case 29405U when PvPSettings.Instance.技能自动选中: {  // Drill
         if (PvPSettings.Instance.最合适目标
-         && (PvPTargetHelper.TargetSelector.GetSkillTargetSmart(distance + PvPSettings.Instance.长臂猿, 29405U) != null)
-         && (PvPTargetHelper.TargetSelector.GetSkillTargetSmart(distance + PvPSettings.Instance.长臂猿, 29405U)
-          != Core.Me)) {
-          return SpellWaitAcq(skillid,
-                           PvPTargetHelper.TargetSelector.GetSkillTargetSmart(
-                               distance + PvPSettings.Instance.长臂猿,
-                               29405U)!);
+         && target != null
+         && target != Core.Me) {
+          return SpellWaitAcq(skillid, target);
         }
 
-        if ((PvPTargetHelper.TargetSelector.GetNearestTarget() != null)
-         && (PvPTargetHelper.TargetSelector.GetNearestTarget() != Core.Me)) {
-          return SpellWaitAcq(skillid, PvPTargetHelper.TargetSelector.GetNearestTarget()!);
+        if ((nearTarget != null)
+         && (nearTarget != Core.Me)) {
+          return SpellWaitAcq(skillid, nearTarget);
         }
 
         break;
@@ -123,18 +124,14 @@ public static class PvPHelper {
 
     if (PvPSettings.Instance.技能自动选中) {
       if (PvPSettings.Instance.最合适目标
-       && (PvPTargetHelper.TargetSelector.GetSkillTargetSmart(distance + PvPSettings.Instance.长臂猿, skillid) != null)
-       && (PvPTargetHelper.TargetSelector.GetSkillTargetSmart(distance + PvPSettings.Instance.长臂猿, skillid)
-        != Core.Me)) {
-        return SpellWaitAcq(skillid,
-                         PvPTargetHelper.TargetSelector.GetSkillTargetSmart(
-                             distance + PvPSettings.Instance.长臂猿,
-                             skillid)!);
+       && target != null
+       && target != Core.Me) {
+        return SpellWaitAcq(skillid, target);
       }
 
-      if ((PvPTargetHelper.TargetSelector.GetNearestTarget() != null)
-       && (PvPTargetHelper.TargetSelector.GetNearestTarget() != Core.Me)) {
-        return SpellWaitAcq(skillid, PvPTargetHelper.TargetSelector.GetNearestTarget()!);
+      if (nearTarget != null
+       && nearTarget != Core.Me) {
+        return SpellWaitAcq(skillid, nearTarget);
       }
     }
 
@@ -144,7 +141,7 @@ public static class PvPHelper {
   }
 
   public static void CommonSkillCast(Slot slot, uint skillid, int 距离) {
-    slot.Add(CommonSkillCheck(skillid, 距离));
+    slot.Add(CommonSkillCheck(skillid, 距离)!);
   }
 
   public static bool CommonDistanceCheck(int distance) {

@@ -17,7 +17,8 @@ public class EventHandler : IRotationEventHandler {
   }
 
   public async Task OnPreCombat() {
-    PvPTargetHelper.自动选中();
+    PvPTargetHelper.自动选中(PvPBrdSettings.Instance.TargetingDistance, 
+                         PvPBrdSettings.Instance.TargetingHpThreshold);
 
     if (PvPSettings.Instance.无目标坐骑) {
       MountHandler.无目标坐骑();
@@ -28,7 +29,8 @@ public class EventHandler : IRotationEventHandler {
 
   public async Task OnNoTarget() {
 //    Slot slot = new Slot();
-    PvPTargetHelper.自动选中();
+    PvPTargetHelper.自动选中(PvPBrdSettings.Instance.TargetingDistance, 
+                         PvPBrdSettings.Instance.TargetingHpThreshold);
 
     if (PvPSettings.Instance.无目标坐骑) {
       MountHandler.无目标坐骑();
@@ -44,7 +46,8 @@ public class EventHandler : IRotationEventHandler {
 
   public void OnBattleUpdate(int currTime) {
     PvPHelper.CommonBattleUpdate(currTime, BattleData.Instance);
-    PvPTargetHelper.自动选中();
+    PvPTargetHelper.自动选中(PvPBrdSettings.Instance.TargetingDistance, 
+                         PvPBrdSettings.Instance.TargetingHpThreshold);
   }
 
   public void OnEnterRotation() {

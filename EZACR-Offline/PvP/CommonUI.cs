@@ -231,7 +231,7 @@ public static class CommonUI {
                             (ImGuiCond)4);
     ImGui.Begin("###targetMe_Window");
     var battleCharaList = PvPTargetHelper.Get看着目标的人(Group.敌人, Core.Me);
-    string path = $"Resources\\Images\\Number\\{
+    string path = $@"Resources\Images\Number\{
       (battleCharaList.Count <= 4 ? battleCharaList.Count : "4+")
     }.png";
 

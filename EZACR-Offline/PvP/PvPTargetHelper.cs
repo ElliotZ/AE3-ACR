@@ -12,14 +12,15 @@ public static class PvPTargetHelper {
   private static long 上一次AOE目标搜索时间点;
 */
 
-  public static void 自动选中() {
+  public static void 自动选中(int range, float threshold) {
     if (!Core.Me.IsPvP()
      || (!PvPHelper.通用码权限 && !PvPHelper.高级码)
      || !PvPSettings.Instance.自动选中) {
       return;
     }
 
-    IBattleChara? tar = TargetSelector.GetLowestHPTarget() ?? TargetSelector.GetNearestTarget();
+    IBattleChara? tar = TargetSelector.GetLowestHPTarget(range, threshold) 
+                     ?? TargetSelector.GetNearestTarget();
 
     if ((tar != Core.Me.GetCurrTarget())
      && (tar != Core.Me)
@@ -28,6 +29,7 @@ public static class PvPTargetHelper {
     }
   }
 
+/*
   public static IBattleChara? 目标模式(int 距离, uint 技能id) {
     if (PvPSettings.Instance.最合适目标 && PvPSettings.Instance.技能自动选中) {
       return TargetSelector.GetSkillTargetSmart(距离 + PvPSettings.Instance.长臂猿, 技能id);
@@ -37,6 +39,7 @@ public static class PvPTargetHelper {
                ? TargetSelector.GetNearestTarget()
                : Core.Me.GetCurrTarget();
   }
+*/
 
   private static bool Check目标罩子(IBattleChara? target) {
     return PvPHelper.HasBuff(target, 3054U);
@@ -106,7 +109,7 @@ public static class PvPTargetHelper {
 
           break;
 
-        case Group.全部:
+        default:  // Group.全部
           AddUnitToDict(dict, unit);
           break;
       }
@@ -152,28 +155,26 @@ public static class PvPTargetHelper {
   public static class TargetSelector {
     public static IBattleChara? GetSkillTargetSmart(int range, uint skillId) {
       if (!Core.Me.IsPvP()) return null;
-
-      IBattleChara? result = GetWildFireTargetSmart();
-
-      if (result is not null) return result;
-
-      float num = float.MaxValue;
+      IBattleChara? result = null;
+      
+      float targetHp = float.MaxValue;
 
       foreach (IBattleChara t in TargetMgr.Instance.Units.Values) {
         if (t is not { IsTargetable: true }
          || !t.IsEnemy()
          || PvPHelper.LoSBlocked(t)
             // (double) PvPGNBSettings.Instance.爆破血量 / 100.0
-         || ((skillId == 29128U) && !(t.CurrentHpPercent() < 0.25))) {
+         || skillId == 29128U && t.CurrentHpPercent() > 0.25
+         || skillId == 43251u && t.CurrentHp > 12000) {
           continue;
         }
 
         try {
-          if (IsValidTarget(t)
+          if (IsValidTarget(t, skillId == 43251u)
            && (t.DistanceToPlayer() <= (double)range)
-           && (t.CurrentHp < (double)num)) {
+           && (t.CurrentHp < (double)targetHp)) {
             result = t;
-            num = t.CurrentHp;
+            targetHp = t.CurrentHp;
           }
         } catch (Exception) {
           LogHelper.Error($"血量目标报错:{t.Name ?? "未知目标"}");
@@ -212,10 +213,10 @@ public static class PvPTargetHelper {
       return result;
     }
     
-    public static IBattleChara? GetLowestHPTarget(float threshold = 0.5f) {
+    public static IBattleChara? GetLowestHPTarget(int range, float threshold = 0.5f) {
       if (!Core.Me.IsPvP()) return null;
 
-      const int range = 25;
+      //const int range = 25;
       IBattleChara? result = null;
       float minHpPercentage = threshold;
 
@@ -361,14 +362,14 @@ public static class PvPTargetHelper {
     }
   }
 
-  private static bool IsValidTarget(IBattleChara t) {
+  private static bool IsValidTarget(IBattleChara t, bool eagleEyeShot = false) {
     return !t.IsDead
         && !t.HasAura(3039U)
         && !t.HasAura(2413U)
         && !t.HasAura(1301U)
         && !t.HasAura(1302U)
         && (!PvPSettings.Instance.不选冰 || (t.CurrentJob() != Jobs.Any))
-        && (Core.Me.HasAura(4315U) || !t.HasAura(3054U))
+        && (Core.Me.HasAura(4315U) || eagleEyeShot || !t.HasAura(3054U))
         && !t.HasAura(1240U);
   }
 }

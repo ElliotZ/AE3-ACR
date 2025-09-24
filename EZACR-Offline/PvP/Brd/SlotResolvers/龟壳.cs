@@ -1,7 +1,9 @@
 using AEAssist;
+using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
+using EZACR_Offline.Gnb.QtUI;
 
 namespace EZACR_Offline.PvP.Brd.SlotResolvers;
 
@@ -14,6 +16,8 @@ public class 龟壳 : ISlotResolver{
     if (_技能龟壳.GetSpell().IsReadyWithCanCast() is false) {
       return -99;
     }
+
+    if (Qt.Instance.GetQt("龟壳") is false) return -98;
 
     if (battleCharaList.Count >= PvPSettings.Instance.警报数量 && Danger()) {
       return 0;
@@ -33,6 +37,6 @@ public class 龟壳 : ISlotResolver{
   }
 
   public void Build(Slot slot) {
-    slot.Add(_技能龟壳.GetSpell());
+    slot.Add(new Spell(_技能龟壳, Core.Me) {DontUseGcdOpt = true});
   }
 }

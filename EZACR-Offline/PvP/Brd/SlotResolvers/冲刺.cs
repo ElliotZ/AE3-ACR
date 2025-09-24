@@ -27,6 +27,6 @@ public class 冲刺 : ISlotResolver {
   }
 
   public void Build(Slot slot) {
-    slot.Add(new Spell(29057U, Core.Me));
+    slot.Add(new Spell(29057U, Core.Me) { DontUseGcdOpt = true });
   }
 }

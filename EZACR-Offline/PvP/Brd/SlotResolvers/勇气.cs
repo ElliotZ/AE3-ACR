@@ -20,6 +20,6 @@ public class 勇气 : ISlotResolver {
   }
 
   public void Build(Slot slot) {
-    slot.Add(new Spell(勇气u, Core.Me));
+    slot.Add(new Spell(勇气u, Core.Me) { DontUseGcdOpt = true });
   }
 }

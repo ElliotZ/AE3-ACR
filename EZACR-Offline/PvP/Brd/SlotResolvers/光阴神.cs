@@ -51,7 +51,7 @@ public class 光阴神 : ISlotResolver {
       target = Core.Me;
     }
 
-    slot.Add(new Spell(29400U, target));
+    slot.Add(new Spell(29400U, target) {DontUseGcdOpt = true});
 
     if (!光阴播报) {
       return;

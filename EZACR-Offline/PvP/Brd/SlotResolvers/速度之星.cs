@@ -28,6 +28,6 @@ public class 速度之星 : ISlotResolver {
   }
 
   public void Build(Slot slot) {
-    slot.Add(new Spell(速度之星u, Core.Me));
+    slot.Add(new Spell(速度之星u, Core.Me) {DontUseGcdOpt = true});
   }
 }

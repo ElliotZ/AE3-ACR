@@ -4,7 +4,7 @@ using EZACR_Offline.PvP.Brd.QtUI;
 
 namespace EZACR_Offline.PvP.Brd.SlotResolvers;
 
-public class 九天连箭 : ISlotResolver {
+public class 和弦箭 : ISlotResolver {
   public int Check() {
     if (!Qt.Instance.GetQt("和弦箭")) return -9;
 

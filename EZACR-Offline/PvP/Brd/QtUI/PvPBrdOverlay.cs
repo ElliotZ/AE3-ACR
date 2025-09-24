@@ -10,6 +10,17 @@ public static class PvPBrdOverlay {
   public static void DrawGeneral(JobViewWindow jobViewWindow) {
     Share.Pull = true;
     UIHelper.权限获取();
+
+    ImGui.Separator();
+    ImGui.Text("职业PvP目标选择设定");
+    ImGui.PushItemWidth(50f);
+    ImGui.InputInt($"米内##228", ref PvPBrdSettings.Instance.TargetingDistance);
+    ImGui.SameLine();
+    ImGui.InputFloat($"比例血量以下最低血量目标##{229}", ref PvPBrdSettings.Instance.TargetingHpThreshold);
+    ImGui.PopItemWidth();
+    ImGui.Text("如果指定范围内不存在血量低于设定比例的目标则会默认按照共通配置中的范围\n"
+             + "寻找最近的目标。如果共通配置中关闭目标选择，则此选项无效。");
+    
     PvPBrdSettings.Instance.药血量 = Math.Clamp(PvPBrdSettings.Instance.药血量, 1, 100);
     UIHelper.ConfigureSkillInt(29711U,
                                "喝热水",
