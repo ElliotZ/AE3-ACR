@@ -9,9 +9,13 @@ public class TriggerActionQt : ITriggerAction {
   public string DisplayName { get; } = "Reaper/QT";
   public string Remark { get; set; } = "";
 
-  private readonly Dictionary<string, bool> _qtValues = new();
+  public Dictionary<string, bool> _qtValues = new();
 
-  private readonly string[] _qtArray = Qt.Instance.GetQtArray();
+  private readonly string[] _qtArray;
+  
+  public TriggerActionQt() {
+    _qtArray = Qt.Instance.GetQtArray();
+  }
 
   public bool Draw() {
     ImGui.NewLine();
