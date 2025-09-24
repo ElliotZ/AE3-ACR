@@ -24,14 +24,14 @@ public static class CommonUI {
       ImGui.Text($"是否55:{PvPHelper.是否55()}");
       SeString targetName = PvPTargetHelper.TargetSelector.GetNearestTarget()?.Name ?? "无";
       ImGui.Text($"最近目标: {targetName}");
-      ImGui.Text($"最合适25米目标: {
-        PvPTargetHelper.TargetSelector.GetSkillTargetSmart(25, 1U)?.Name ?? "无"
+      ImGui.Text($"最低hp 25米目标: {
+        PvPTargetHelper.TargetSelector.GetLowestHPTarget(25)?.Name ?? "无"
       }");
       ImGui.Text($"自己：{Core.Me.Name},{Core.Me.DataId},{Core.Me.Position}");
       ImGui.Text($"坐骑状态：{Svc.Condition[ConditionFlag.Mounted]}");
       ImGui.Text($"血量百分比：{Core.Me.CurrentHpPercent()}");
       ImGui.Text($"盾值百分比：{Core.Me.ShieldPercentage / 100f}");
-      ImGui.Text($"血量百分比：{Core.Me.CurrentHpPercent() + Core.Me.ShieldPercentage / 100.0 <= 1.0}");
+      //ImGui.Text($"血量百分比：{Core.Me.CurrentHpPercent() + Core.Me.ShieldPercentage / 100.0 <= 1.0}");
       ImGui.Text($"是否移动：{MoveHelper.IsMoving()}");
       ImGui.Text($"小队人数：{PartyHelper.CastableParty.Count}");
       if (Core.Me.GetCurrTarget() is { } t) {
@@ -40,7 +40,7 @@ public static class CommonUI {
         ImGui.Text($"目标5米内人数：{TargetHelper.GetNearbyEnemyCount(t, 25, 5)}");
       }
       
-      ImGui.Text($"25米内敌方人数：{TargetHelper.GetNearbyEnemyCount(Core.Me, 1, 25)}");
+      ImGui.Text($"25米内敌方人数：{TargetHelper.GetNearbyEnemyCount(25)}");
       ImGui.Text($"20米内小队人数：{PartyHelper.CastableAlliesWithin20.Count}");
       ImGui.Text($"LB槽当前数值：{Core.Me.LimitBreakCurrentValue()}");
 //      ImGui.Text($"上个技能：{Core.Resolve<MemApiSpellCastSuccess>().LastSpell}");
@@ -55,21 +55,21 @@ public static class CommonUI {
 //      ImGui.Text($"IsUnlockWithCDCheck：{29649U.IsUnlockWithCDCheck()}");
 //      ImGui.Text($"IsReadyWithCanCast：{29649U.GetSpell().IsReadyWithCanCast()}");
 
-      if (ImGui.Button("null")) {
-        Svc.Targets.Target = null;
-      }
-
-      if (ImGui.Button("最远")) {
-        Svc.Targets.Target = PvPTargetHelper.TargetSelector.GetFarthestTarget();
-      }
-
-      if (ImGui.Button("1")) {
-        Core.Resolve<MemApiMove>().SetRot(CameraHelper.GetCameraRotationReversed());
-      }
-
-      if (ImGui.Button("21")) {
-        Core.Resolve<MemApiMove>().SetRot(CameraHelper.GetCameraRotation());
-      }
+//      if (ImGui.Button("null")) {
+//        Svc.Targets.Target = null;
+//      }
+//
+//      if (ImGui.Button("最远")) {
+//        Svc.Targets.Target = PvPTargetHelper.TargetSelector.GetFarthestTarget();
+//      }
+//
+//      if (ImGui.Button("1")) {
+//        Core.Resolve<MemApiMove>().SetRot(CameraHelper.GetCameraRotationReversed());
+//      }
+//
+//      if (ImGui.Button("21")) {
+//        Core.Resolve<MemApiMove>().SetRot(CameraHelper.GetCameraRotation());
+//      }
 
       ImGui.Text($"？：{MountHandler.CanUseMount()}");
       

@@ -181,6 +181,8 @@ public static class PvPHelper {
   }
 
   public static void AcrInit() {
+    LogHelper.Print("如未下载，请下载ElliotZ的镰刀ACR，本ACR需要的公用库有一部分在那边。");
+    
     if (通用码权限 || 高级码) {
       return;
     }

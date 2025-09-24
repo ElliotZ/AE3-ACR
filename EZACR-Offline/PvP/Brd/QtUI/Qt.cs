@@ -63,6 +63,6 @@ public static class Qt {
 
   private static void DevTab(JobViewWindow instance) {
     ImGui.Text(BattleData.Instance.ToString());
-    //CommonUI.BuildPvPDebug(instance);
+    CommonUI.BuildPvPDebug(instance);
   }
 }
