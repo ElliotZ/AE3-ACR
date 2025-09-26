@@ -1,8 +1,6 @@
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
-using AEAssist.Extension;
-using Dalamud.Game.ClientState.Objects.Types;
 using EZACR_Offline.PvP.Brd.QtUI;
 
 namespace EZACR_Offline.PvP.Brd;
@@ -53,6 +51,7 @@ public class EventHandler : IRotationEventHandler {
   public void OnEnterRotation() {
     PvPHelper.AcrInit();
     Qt.MacroMan.Init();
+    Qt.LoadQtStates();
     Share.Pull = true;
     
     //force mappy

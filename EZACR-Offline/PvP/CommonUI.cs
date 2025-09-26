@@ -10,7 +10,6 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Interface.Textures.TextureWraps;
 using ECommons.DalamudServices;
-using ElliotZ;
 using ElliotZ.ModernJobViewFramework;
 
 namespace EZACR_Offline.PvP;
@@ -171,9 +170,10 @@ public static class CommonUI {
       ImGui.Text("警报数量人数");
       ImGui.SameLine();
       ImGui.InputInt($"##{34}", ref PvPSettings.Instance.警报数量);
-      ImGui.Checkbox($"DevList##{31 /*0x1F*/}", ref PvPSettings.Instance.窗口开关);
+      ImGui.Checkbox($"DevList##{31 /*0x1F*/}", ref PvPSettings.Instance.DevTargetListOpen);
 
-      if (PvPSettings.Instance.窗口开关) {
+      if (PvPSettings.Instance.DevTargetListOpen 
+       && Svc.ClientState.LocalContentId == 19014409518809162UL) {
         DrawUnitList();
       }
       PvPSettings.Instance.Save();
@@ -229,7 +229,7 @@ public static class CommonUI {
 
     ImGui.SetNextWindowSize(new Vector2(PvPSettings.Instance.宽1, PvPSettings.Instance.高1),
                             (ImGuiCond)4);
-    ImGui.Begin("###targetMe_Window");
+    ImGui.Begin("###targetMe_Window", ref windowOpen);
     var battleCharaList = PvPTargetHelper.Get看着目标的人(Group.敌人, Core.Me);
     string path = $@"Resources\Images\Number\{
       (battleCharaList.Count <= 4 ? battleCharaList.Count : "4+")

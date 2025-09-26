@@ -32,7 +32,7 @@ public class PvPSettings {
   public bool 紧凑 = true;
   public int 紧凑数量 = 3;
   public int 警报数量 = 4;
-  public bool 窗口开关 = true;
+  public bool DevTargetListOpen = false;
   public int 监控数量 = 6;
   public bool 名字 = true;
   public bool 血量 = true;

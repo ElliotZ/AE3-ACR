@@ -10,8 +10,17 @@ public static class PvPBrdOverlay {
   public static void DrawGeneral(JobViewWindow jobViewWindow) {
     Share.Pull = true;
     UIHelper.权限获取();
-
     ImGui.Separator();
+
+    if (ImGui.Button("保存QT")) {
+      Qt.SaveQtStates();
+    }
+    ImGui.SameLine();
+    if (ImGui.Button("读取QT")) {
+      Qt.LoadQtStates();
+    }
+    ImGui.Separator();
+    
     ImGui.Text("职业PvP目标选择设定");
     ImGui.PushItemWidth(50f);
     ImGui.InputInt($"米内##228", ref PvPBrdSettings.Instance.TargetingDistance);
@@ -39,6 +48,11 @@ public static class PvPBrdOverlay {
                                87);
     自定义光阴神();
     //PvPBrdSettings.Instance.Save();
+    ImGui.Separator();
+
+    if (ImGui.Button("宏命令列表")) {
+      PvPBrdSettings.Instance.CommandWindowOpen = true;
+    }
   }
 
   private static void 自定义光阴神() {

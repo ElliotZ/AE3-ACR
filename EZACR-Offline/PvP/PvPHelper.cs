@@ -1,9 +1,7 @@
 using System.Numerics;
 using AEAssist;
 using AEAssist.CombatRoutine;
-using AEAssist.CombatRoutine.Log;
 using AEAssist.CombatRoutine.Module;
-using AEAssist.CombatRoutine.View.Setting;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
@@ -12,6 +10,7 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Interface.Textures.TextureWraps;
 using ECommons.DalamudServices;
 using ECommons.GameFunctions;
+using ElliotZ;
 
 namespace EZACR_Offline.PvP;
 
@@ -87,6 +86,7 @@ public static class PvPHelper {
 
   public static void SkillIcon(uint id) {
     var vector2 = new Vector2(60f, 60f);
+    vector2 *= Helper.GlobalSettings.OverlayScale;
 
     if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out IDalamudTextureWrap? textureWrap)) {
       return;

@@ -1,5 +1,6 @@
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
+using AEAssist.Helper;
 using Dalamud.Bindings.ImGui;
 using ElliotZ;
 using ElliotZ.ModernJobViewFramework;
@@ -31,11 +32,31 @@ public static class Qt {
       new("LB", "", new HotkeyBardLB()),
       new("后射", "", new HotKeyRepellingShot()),
   ];
+  
+  public static void SaveQtStates() {
+    string[] qtArray = Instance.GetQtArray();
+
+    foreach (string name in qtArray) {
+      bool state = Instance.GetQt(name);
+      PvPBrdSettings.Instance.QtStates[name] = state;
+    }
+
+    PvPBrdSettings.Instance.Save();
+    LogHelper.Print("QT设置已保存");
+  }
+
+  public static void LoadQtStates() {
+    foreach (var qtState in PvPBrdSettings.Instance.QtStates) {
+      Instance.SetQt(qtState.Key, qtState.Value);
+    }
+
+    LogHelper.Print("QT设置已重载");
+  }
 
   public static void Build() {
     Instance = new JobViewWindow(PvPBrdSettings.Instance.JobViewSave,
                                  PvPBrdSettings.Instance.Save,
-                                 "EzPvP");
+                                 "EzPvPBrd");
     Instance.SetUpdateAction(OnUIUpdate);
 
     MacroMan = new MacroManager(Instance,
