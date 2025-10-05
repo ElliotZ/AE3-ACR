@@ -17,8 +17,6 @@ public class EventHandler : IRotationEventHandler {
     MeleePosHelper.Clear();
     BattleData.RebuildSettings();
     
-
-    
     if (RprSettings.Instance.PullingNoBurst) Qt.MobMan.Reset();
     if (RprSettings.Instance.RestoreQtSet) Qt.LoadQtStatesNoPot();
   }
