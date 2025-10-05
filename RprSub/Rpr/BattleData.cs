@@ -1,6 +1,4 @@
-﻿using AEAssist.CombatRoutine.Module;
-
-namespace ElliotZ.Rpr;
+﻿namespace ElliotZ.Rpr;
 
 public class BattleData {
   public static BattleData Instance = new();
@@ -12,7 +10,7 @@ public class BattleData {
   public int NumBurstPhases = 0;
   public int HoldCommunio = 0;
   
-  private static bool _timelineLoaded = false;
+  private static bool _timelineLoaded;
   public static bool TimelineLoaded {
     get => _timelineLoaded;
     set {
