@@ -1,4 +1,4 @@
-﻿<Project Sdk="Dalamud.CN.Net.Sdk/12.0.2">
+﻿<Project Sdk="Dalamud.CN.Net.Sdk/13.1.0">
 
     <PropertyGroup>
         <TargetFramework>net9.0-windows</TargetFramework>
@@ -46,10 +46,6 @@
         </Reference>
         <Reference Include="FFXIVClientStructs">
             <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="ImGui.NET">
-            <HintPath>$(DalamudLibPath)ImGui.NET.dll</HintPath>
             <Private>False</Private>
         </Reference>
     </ItemGroup>

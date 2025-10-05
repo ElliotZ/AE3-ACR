@@ -157,7 +157,7 @@ public static class PvPTargetHelper {
       if (!Core.Me.IsPvP()) return null;
       IBattleChara? result = null;
       
-      float targetHp = float.MaxValue;
+      float minTargetHp = float.MaxValue;
 
       foreach (IBattleChara t in TargetMgr.Instance.Units.Values) {
         if (t is not { IsTargetable: true }
@@ -169,12 +169,18 @@ public static class PvPTargetHelper {
           continue;
         }
 
+        if (skillId == 43251u 
+         && IsValidTarget(t, true) 
+         && t.DistanceToPlayer() <= (double)range) {
+          return t;
+        }
+
         try {
-          if (IsValidTarget(t, skillId == 43251u)
-           && (t.DistanceToPlayer() <= (double)range)
-           && (t.CurrentHp < (double)targetHp)) {
+          if (IsValidTarget(t)
+           && t.DistanceToPlayer() <= (double)range
+           && t.CurrentHp < (double)minTargetHp) {
             result = t;
-            targetHp = t.CurrentHp;
+            minTargetHp = t.CurrentHp;
           }
         } catch (Exception) {
           LogHelper.Error($"血量目标报错:{t.Name ?? "未知目标"}");
@@ -200,8 +206,8 @@ public static class PvPTargetHelper {
 
         try {
           if (IsValidTarget(t)
-           && (t.DistanceToPlayer() <= (double)自动选中自定义范围)
-           && (t.DistanceToPlayer() < (double)closestDistance)) {
+           && t.DistanceToPlayer() <= (double)自动选中自定义范围
+           && t.DistanceToPlayer() < (double)closestDistance) {
             result = t;
             closestDistance = t.DistanceToPlayer();
           }
@@ -229,8 +235,8 @@ public static class PvPTargetHelper {
 
         try {
           if (IsValidTarget(t)
-           && (t.DistanceToPlayer() <= (double)range)
-           && (t.CurrentHpPercent() < (double)minHpPercentage)) {
+           && t.DistanceToPlayer() <= (double)range
+           && t.CurrentHpPercent() < (double)minHpPercentage) {
             result = t;
             minHpPercentage = t.CurrentHpPercent();
           }
@@ -258,8 +264,8 @@ public static class PvPTargetHelper {
 
           try {
             if (IsValidTarget(t)
-             && (t.DistanceToPlayer() <= (double)自动选中自定义范围)
-             && (t.DistanceToPlayer() > (double)maxDistance)) {
+             && t.DistanceToPlayer() <= (double)自动选中自定义范围
+             && t.DistanceToPlayer() > (double)maxDistance) {
               result = t;
               maxDistance = t.DistanceToPlayer();
             }
@@ -292,8 +298,8 @@ public static class PvPTargetHelper {
           try {
             if (IsValidTarget(t)
              && t.HasLocalPlayerAura(1323U)
-             && (t.DistanceToPlayer() <= (double)自动选中自定义范围)
-             && (t.DistanceToPlayer() < (double)closestDistance)) {
+             && t.DistanceToPlayer() <= (double)自动选中自定义范围
+             && t.DistanceToPlayer() < (double)closestDistance) {
               result = t;
               closestDistance = t.DistanceToPlayer();
             }

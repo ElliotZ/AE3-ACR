@@ -6,6 +6,7 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
+using ElliotZ;
 using EZACR_Offline.Gnb.QtUI;
 
 namespace EZACR_Offline.Gnb.SlotResolvers.Mits;
@@ -59,7 +60,7 @@ public class Nebula : ISlotResolver {
 
     if (Qt.Instance.GetQt("自动拉怪")) return -7;
 
-    if (Core.Me.GetCurrTarget().IsBoss() && (Core.Me.Level > 50)) return -10;
+    if (Helper.TargetIsBossOrDummy && (Core.Me.Level > 50)) return -10;
 
     if (!Qt.Instance.GetQt("自动拉怪")) {
       if ((Core.Me.CurrentHpPercent() < GnbSettings.Instance.星云阈值)

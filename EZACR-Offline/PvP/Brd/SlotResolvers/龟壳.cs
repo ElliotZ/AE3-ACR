@@ -3,7 +3,7 @@ using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using EZACR_Offline.Gnb.QtUI;
+using EZACR_Offline.PvP.Brd.QtUI;
 
 namespace EZACR_Offline.PvP.Brd.SlotResolvers;
 

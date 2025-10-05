@@ -23,6 +23,10 @@ public static class CommonUI {
       ImGui.Text($"是否55:{PvPHelper.是否55()}");
       SeString targetName = PvPTargetHelper.TargetSelector.GetNearestTarget()?.Name ?? "无";
       ImGui.Text($"最近目标: {targetName}");
+      SeString eagleShotTargetName = PvPTargetHelper.TargetSelector
+                                                    .GetSkillTargetSmart(40, 43251u)?
+                                                    .Name ?? "无";
+      ImGui.Text($"锐眼目标: {eagleShotTargetName}");
       ImGui.Text($"最低hp 25米目标: {
         PvPTargetHelper.TargetSelector.GetLowestHPTarget(25)?.Name ?? "无"
       }");
