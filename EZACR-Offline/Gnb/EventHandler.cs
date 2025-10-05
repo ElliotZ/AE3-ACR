@@ -92,8 +92,8 @@ public class EventHandler : IRotationEventHandler {
     IBattleChara? currTarget = Core.Me.GetCurrTarget();
 
     if ((currTarget != null)
-     && currTarget.IsBoss()
-     && !currTarget.IsDummy()
+     && Helper.TargetIsBoss
+     && !Helper.TargetIsDummy
      && Qt.Instance.GetQt("自动拉怪"))
         //Qt.Instance.NewDefault("自动拉怪", newDefault: false);
     {
