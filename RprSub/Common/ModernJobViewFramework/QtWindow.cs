@@ -23,7 +23,7 @@ public class QtWindow : IDisposable {
     // 自定义按钮颜色（优先于默认颜色）
     public Vector4 Color { get; set; }
     // 是否使用自定义颜色
-    public bool UseColor { get; }
+    public bool UseColor { get; set; }
 
     public QtControl(string name, bool qtValueDefault, bool useColor) {
       Name = name;
@@ -159,6 +159,7 @@ public class QtWindow : IDisposable {
   }
 
   public void SetQtColor(string name, Vector4 color) {
+    _qtDict[name].UseColor = true;
     _qtDict[name].Color = color;
   }
 
