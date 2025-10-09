@@ -1,5 +1,6 @@
 ﻿using Dalamud.Interface.Colors;
 using System.Numerics;
+using AEAssist.Helper;
 using Dalamud.Bindings.ImGui;
 using ElliotZ.ModernJobViewFramework;
 
@@ -328,9 +329,9 @@ public static class SettingTab {
         ImGui.Separator();
 
         if (ImGui.Button("获取爆发药情况")) {
-          _8幻药 = CItemHelper.FindItem((uint)Potion._8级刚力之幻药);
-          _宝药 = CItemHelper.FindItem((uint)Potion.刚力之宝药);
-          _2宝药 = CItemHelper.FindItem((uint)Potion._2级刚力之宝药);
+          _8幻药 = ItemHelperExtension.FindItem((uint)Potion._8级刚力之幻药);
+          _宝药 = ItemHelperExtension.FindItem((uint)Potion.刚力之宝药);
+          _2宝药 = ItemHelperExtension.FindItem((uint)Potion._2级刚力之宝药);
         }
 
         if (_8幻药 > 0) {
