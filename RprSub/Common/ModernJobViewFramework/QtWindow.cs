@@ -21,7 +21,7 @@ public class QtWindow : IDisposable {
     public string ToolTip { get; set; } = "";
     public Action<bool> OnClick { get; }
     // 自定义按钮颜色（优先于默认颜色）
-    public Vector4 Color { get; }
+    public Vector4 Color { get; set; }
     // 是否使用自定义颜色
     public bool UseColor { get; }
 
@@ -156,6 +156,10 @@ public class QtWindow : IDisposable {
   /// 设置上一次add添加的hotkey的toolTip
   public void SetQtToolTip(string toolTip) {
     _qtDict[_qtDict.Keys.ToArray()[^1]].ToolTip = toolTip;
+  }
+
+  public void SetQtColor(string name, Vector4 color) {
+    _qtDict[name].Color = color;
   }
 
   /// 获取指定名称qt的控件
